@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Patrick's Mindgarden — Homepage</title>
+
+<!-- Fonts: Fraunces (variable, opsz + SOFT) + Manrope + JetBrains Mono for monospace annot -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="styles.css" />
+
+<style>
+  body { background: #E8E4D3; overflow: hidden; }
+  .canvas-host { position: fixed; inset: 0; }
+
+  /* Section title styling inside the design canvas */
+  :root {
+    --dc-section-title-font: 'Fraunces', serif;
+  }
+
+  /* Tweaks panel — override positioning so it doesn't fight the canvas */
+  .tweaks-launcher { z-index: 100; }
+</style>
+</head>
+<body>
+  <div id="root" class="canvas-host"></div>
+
+  <!-- React + Babel (pinned) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Starter components -->
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+
+  <!-- App pieces -->
+  <script type="text/babel" src="thumbnails.jsx"></script>
+  <script type="text/babel" src="polaroid.jsx"></script>
+  <script type="text/babel" src="scene.jsx"></script>
+  <script type="text/babel" src="cluster-pages.jsx"></script>
+
+  <!-- App -->
+  <script type="text/babel" data-presets="react">
+    // All hooks come from React namespace to avoid redeclaration collisions
+    // with helpers files that also destructure from React.
+
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "motionOn": true,
+      "rotationRange": 13,
+      "spreadAmount": 1.15,
+      "bgWarmth": 0.2,
+      "showAnnotations": true
+    }/*EDITMODE-END*/;
+
+    function App() {
+      const [values, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+      // Apply bg warmth as CSS var on the root so all .garden-bg pick it up
+      React.useEffect(() => {
+        document.documentElement.style.setProperty('--bg-warmth', String(values.bgWarmth));
+      }, [values.bgWarmth]);
+
+      return (
+        <>
+          <DesignCanvas>
+            <DCSection id="home" title="01 · Homepage" subtitle="Resting → peek-card open. Click Visuals / Music Video / Side-quests thumbs to open peek overlay.">
+              <DCArtboard id="desktop" label="Desktop · 1440×900" width={1440} height={900}>
+                <DesktopScene
+                  motionOn={values.motionOn}
+                  rotationRange={values.rotationRange}
+                  spreadAmount={values.spreadAmount}
+                  showAnnotations={values.showAnnotations && !values.motionOn}
+                />
+              </DCArtboard>
+              <DCArtboard id="mobile" label="Mobile · 375×812" width={375} height={812}>
+                <MobileScene
+                  motionOn={values.motionOn}
+                  rotationRange={values.rotationRange}
+                  spreadAmount={values.spreadAmount}
+                />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="playing" title="02 · Playing" subtitle="Masonry of side quests. 5 tile types: video stills, photos, code snippets, animated loops, quote cards.">
+              <DCArtboard id="playing-desktop" label="Desktop · 1440×1350" width={1440} height={1350}>
+                <PlayingPage />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="creating" title="03 · Creating" subtitle="Structured scatter of 11 project tiles. Click the Nachtgarten LP card (top-left) to open the detail view in the next section.">
+              <DCArtboard id="creating-desktop" label="Desktop · 1440×1200" width={1440} height={1200}>
+                <CreatingPage />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="creating-detail" title="04 · Creating — Detail" subtitle="Project page for Nachtgarten LP. 2×2 image grid left, sticky body right.">
+              <DCArtboard id="detail-desktop" label="Desktop · 1440×1000" width={1440} height={1000}>
+                <CreatingDetailPage />
+              </DCArtboard>
+              <DCArtboard id="detail-mobile" label="Mobile · 375×1100" width={375} height={1100}>
+                <CreatingDetailMobile />
+              </DCArtboard>
+            </DCSection>
+
+            <DCSection id="thinking" title="05 · Thinking" subtitle="Essays & notes. Equal 3-column grid. 6 tile variants to give rhythm — quote card, coral, butter, pencil-lined, plus the two default treatments.">
+              <DCArtboard id="thinking-desktop" label="Desktop · 1440×1100" width={1440} height={1100}>
+                <ThinkingPage />
+              </DCArtboard>
+            </DCSection>
+          </DesignCanvas>
+
+          <TweaksPanel title="Tweaks">
+            <TweakSection label="Motion" />
+            <TweakToggle
+              label="Enable motion (float, drag, hover)"
+              value={values.motionOn}
+              onChange={(v) => setTweak('motionOn', v)}
+            />
+            <TweakToggle
+              label="Show motion annotations"
+              value={values.showAnnotations}
+              onChange={(v) => setTweak('showAnnotations', v)}
+            />
+
+            <TweakSection label="Scatter" />
+            <TweakSlider
+              label="Rotation range"
+              value={values.rotationRange}
+              onChange={(v) => setTweak('rotationRange', v)}
+              min={0} max={14} step={0.5}
+              unit="°"
+            />
+            <TweakSlider
+              label="Spread"
+              value={values.spreadAmount}
+              onChange={(v) => setTweak('spreadAmount', v)}
+              min={0.75} max={1.25} step={0.01}
+            />
+
+            <TweakSection label="Background warmth" />
+            <TweakSlider
+              label="Parchment ↔ sage"
+              value={values.bgWarmth}
+              onChange={(v) => setTweak('bgWarmth', v)}
+              min={0} max={1} step={0.01}
+            />
+          </TweaksPanel>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
