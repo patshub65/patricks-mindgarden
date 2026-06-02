@@ -1,0 +1,51 @@
+---
+title: "Sponti"
+kind: "case-study"
+category: "ux-ui"
+summary: "A mobile-first app for finding spontaneous local events — designed, built, and shipped solo. Because sometimes the best brief is the one you write yourself."
+tags: ["product design", "UX research", "mobile app", "Next.js", "solo project"]
+externalUrl: "https://sponti.app"
+date: "2024"
+---
+
+## The problem
+
+Berlin runs on spontaneous plans. A friend texts: *there's something at Klunkerkranich tonight, want to come?* But finding those things yourself — without already being in the right group chat — is weirdly hard. Ticketing platforms optimise for planned events. Social networks optimise for followers. The gap is today, near me, low commitment.
+
+Sponti is an attempt to fill that gap.
+
+## The role
+
+I designed and built this one end-to-end: user research, product strategy, visual design, frontend engineering. The dual role isn't incidental to the project — it's part of why it exists. A lot of the decisions that made Sponti what it is came from being able to move fluidly between design and code without a handoff in between.
+
+## Research
+
+I started by talking to people who go out regularly in Berlin: artists, freelancers, the chronically online. The consistent finding: they weren't missing information, they were missing *signal*. There's too much on every event aggregator, and none of it tells you how spontaneous, how casual, how worth leaving the couch this specific thing is.
+
+Secondary insight: people are more likely to go to things that start soon. Temporal proximity is its own kind of filter. If it's happening in three hours, indecision doesn't have time to compound.
+
+## Design
+
+The core UX principle was immediacy: show me what's happening *now* or *tonight*, nearby, without login friction. The browsing experience was designed to feel more like flipping through vinyl than searching a database — you see a card, you get a feel, you decide.
+
+Key decisions:
+
+**Radius-first navigation** — The default view isn't "Berlin" as a city, it's a radius from where you are. Events three blocks away feel different from events across town, and the interface should reflect that.
+
+**Temporal sorting by default** — Soonest first, always. Not popularity, not rating — when it starts. The filter exists if you need it, but most users never touch it.
+
+**Low-friction submission** — Organizers can post an event in under a minute. No venue database, no tag taxonomy, no required cover image. The friction for discovery is deliberately higher than the friction for submission.
+
+**Mobile as primary** — The entire design assumes you're making a decision while you're already on your way somewhere. Typography is large, tap targets are generous, loading states are invisible.
+
+## Build
+
+Sponti is built with Next.js and Tailwind. The stack was chosen for speed of iteration more than anything else — I can design something in Figma at noon and have it deployed by evening. No separate API layer, no multi-environment pipeline to manage. Pragmatic, not precious.
+
+Being the designer and the engineer meant I could prototype at code-speed rather than mockup-speed. The real interaction felt different from the Figma prototype in ways that mattered, and I could respond to that immediately rather than writing a spec.
+
+## Live
+
+Sponti is live at [sponti.app](https://sponti.app). It started as a Berlin-specific experiment. The codebase is on GitHub.
+
+The experience of building it changed how I think about product work: shipping something real, however small, teaches you things no user interview or design critique ever will.

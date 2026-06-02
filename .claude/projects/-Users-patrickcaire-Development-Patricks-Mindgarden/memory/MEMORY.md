@@ -1,0 +1,2 @@
+- [User Profile](user_profile.md) — Patrick Caire: product/UX/UI designer who codes, job searching Berlin + remote-EU
+- [Mindgarden Architecture](project_mindgarden_architecture.md) — Single-page + peeks + detail pages, 9 cards, 3 tiers, decided 2026-06-01

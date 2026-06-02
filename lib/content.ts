@@ -2,13 +2,14 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 
-export type Cluster = 'creating' | 'playing' | 'thinking'
+export type ProjectKind = 'case-study' | 'showcase' | 'external-link'
+export type ProjectCategory = 'ux-ui' | 'web' | 'brand'
 
-export interface ContentMeta {
+export interface ProjectMeta {
   slug: string
-  cluster: Cluster
   title: string
-  kind: string
+  kind: ProjectKind
+  category?: ProjectCategory
   heroImage?: string
   summary?: string
   tags?: string[]
@@ -16,29 +17,28 @@ export interface ContentMeta {
   date?: string
 }
 
-const CONTENT_DIR = path.join(process.cwd(), 'content')
+const CONTENT_DIR = path.join(process.cwd(), 'content', 'creating')
 
-export function getContentSlugs(cluster: Cluster): string[] {
-  const dir = path.join(CONTENT_DIR, cluster)
-  if (!fs.existsSync(dir)) return []
+export function getProjectSlugs(): string[] {
+  if (!fs.existsSync(CONTENT_DIR)) return []
   return fs
-    .readdirSync(dir)
+    .readdirSync(CONTENT_DIR)
     .filter((f) => f.endsWith('.mdx'))
     .map((f) => f.replace(/\.mdx$/, ''))
 }
 
-export function getContentMeta(cluster: Cluster, slug: string): ContentMeta {
-  const filePath = path.join(CONTENT_DIR, cluster, `${slug}.mdx`)
+export function getProjectMeta(slug: string): ProjectMeta {
+  const filePath = path.join(CONTENT_DIR, `${slug}.mdx`)
   const raw = fs.readFileSync(filePath, 'utf-8')
   const { data } = matter(raw)
-  return { slug, cluster, ...data } as ContentMeta
+  return { slug, ...data } as ProjectMeta
 }
 
-export function getAllContentMeta(cluster: Cluster): ContentMeta[] {
-  return getContentSlugs(cluster).map((slug) => getContentMeta(cluster, slug))
+export function getAllProjectMeta(): ProjectMeta[] {
+  return getProjectSlugs().map(getProjectMeta)
 }
 
-export function getContentRaw(cluster: Cluster, slug: string): string {
-  const filePath = path.join(CONTENT_DIR, cluster, `${slug}.mdx`)
+export function getProjectSource(slug: string): string {
+  const filePath = path.join(CONTENT_DIR, `${slug}.mdx`)
   return fs.readFileSync(filePath, 'utf-8')
 }

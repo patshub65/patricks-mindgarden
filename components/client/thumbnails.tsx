@@ -1,8 +1,5 @@
 "use client"
 
-// Abstract SVG/CSS thumbnail compositions for each home card.
-// Uses --coral, --butter etc. shorthand aliases defined in globals.css.
-
 const wrap: React.CSSProperties = {
   position: 'absolute', inset: 0,
   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -28,7 +25,7 @@ export function ThumbWebDesign() {
   )
 }
 
-export function ThumbCode() {
+export function ThumbProduct() {
   return (
     <div style={{
       ...wrap, background: '#1b1f1a', padding: 10,
@@ -45,62 +42,26 @@ export function ThumbCode() {
   )
 }
 
-export function ThumbSideQuests() {
+export function ThumbBrand() {
   return (
-    <div style={{ ...wrap, background: '#B88A5A', padding: 0 }}>
+    <div style={{ ...wrap, background: '#2a1f14', padding: 0 }}>
       <div style={{
         position: 'absolute', inset: 0,
-        backgroundImage:
-          'radial-gradient(rgba(80,50,20,0.25) 1px, transparent 1.5px), radial-gradient(rgba(255,230,190,0.15) 1px, transparent 1.2px)',
-        backgroundSize: '5px 5px, 9px 9px',
-        backgroundPosition: '0 0, 2px 3px',
-        mixBlendMode: 'multiply',
-      }} />
-      <div style={{
-        position: 'absolute', left: '12%', top: '16%',
-        width: '38%', height: '40%', background: 'var(--coral)',
-        transform: 'rotate(-6deg)', boxShadow: '0 3px 6px rgba(40,20,0,0.25)',
-      }}>
-        <div style={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', width: 5, height: 5, borderRadius: 999, background: 'var(--ink)', boxShadow: '0 1px 1px rgba(0,0,0,0.4)' }} />
-      </div>
-      <div style={{
-        position: 'absolute', right: '10%', top: '10%',
-        width: '40%', height: '32%', background: 'var(--butter)',
-        transform: 'rotate(5deg)', boxShadow: '0 3px 6px rgba(40,20,0,0.25)',
-      }}>
-        <div style={{ position: 'absolute', top: 3, left: '50%', transform: 'translateX(-50%)', width: 5, height: 5, borderRadius: 999, background: 'var(--ink)', boxShadow: '0 1px 1px rgba(0,0,0,0.4)' }} />
-        <div style={{ position: 'absolute', left: 6, right: 6, top: 14, height: 1, background: 'rgba(40,20,0,0.25)' }} />
-        <div style={{ position: 'absolute', left: 6, right: 16, top: 22, height: 1, background: 'rgba(40,20,0,0.2)' }} />
-        <div style={{ position: 'absolute', left: 6, right: 10, top: 30, height: 1, background: 'rgba(40,20,0,0.2)' }} />
-      </div>
-      <div style={{
-        position: 'absolute', left: '22%', bottom: '10%',
-        width: '44%', height: '38%', background: 'var(--surface)',
-        transform: 'rotate(3deg)', boxShadow: '0 3px 6px rgba(40,20,0,0.3)', padding: 3,
-      }}>
-        <div style={{ width: '100%', height: '75%', background: 'var(--moss)' }} />
-      </div>
-      <svg viewBox="0 0 100 100" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }} preserveAspectRatio="none">
-        <path d="M 15 20 Q 50 45 80 18" stroke="rgba(30,15,0,0.35)" strokeWidth="0.6" fill="none" strokeDasharray="1.5 2" />
-      </svg>
-    </div>
-  )
-}
-
-export function ThumbArtBlog() {
-  return (
-    <div style={{ ...wrap, background: 'linear-gradient(180deg, #D4B88A 0%, #A88B5C 60%, #6B5433 100%)' }}>
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 3px)',
-        mixBlendMode: 'multiply',
+        backgroundImage: 'radial-gradient(rgba(247,223,160,0.15) 1px, transparent 1px)',
+        backgroundSize: '6px 6px',
       }} />
       <svg viewBox="0 0 100 100" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-        <circle cx="32" cy="38" r="14" fill="rgba(30,20,10,0.5)" />
-        <rect x="30" y="50" width="4" height="22" fill="rgba(30,20,10,0.5)" />
-        <ellipse cx="50" cy="95" rx="60" ry="8" fill="rgba(30,20,10,0.4)" />
+        <circle cx="50" cy="42" r="26" fill="none" stroke="var(--butter)" strokeWidth="1.2" />
+        <text x="50" y="46" textAnchor="middle"
+          fontFamily="var(--font-display)" fontStyle="italic" fontSize="16" fill="var(--butter)">
+          AFAR
+        </text>
+        <line x1="12" y1="72" x2="88" y2="72" stroke="rgba(247,223,160,0.3)" strokeWidth="0.8" />
+        <text x="50" y="84" textAnchor="middle"
+          fontFamily="var(--font-mono)" fontSize="6.5" fill="rgba(247,223,160,0.6)" letterSpacing="3">
+          IDENTITY
+        </text>
       </svg>
-      <div style={{ position: 'absolute', bottom: 6, left: 8, fontFamily: 'var(--font-mono)', fontSize: 7, color: 'rgba(255,240,210,0.8)' }}>MMIX</div>
     </div>
   )
 }
@@ -213,7 +174,7 @@ export function ThumbVisuals() {
   )
 }
 
-export function ThumbUX() {
+export function ThumbUXUI() {
   return (
     <div style={{ ...wrap, background: '#3a4a6e', padding: 0 }}>
       <div style={{
@@ -260,14 +221,13 @@ export function ThumbUX() {
 }
 
 export const THUMBS: Record<string, React.ComponentType> = {
-  web:        ThumbWebDesign,
-  code:       ThumbCode,
-  sidequests: ThumbSideQuests,
-  artblog:    ThumbArtBlog,
-  writing:    ThumbWriting,
-  music:      ThumbMusic,
-  dj:         ThumbDJ,
-  video:      ThumbMusicVideo,
-  visuals:    ThumbVisuals,
-  ux:         ThumbUX,
+  web:      ThumbWebDesign,
+  product:  ThumbProduct,
+  brand:    ThumbBrand,
+  writing:  ThumbWriting,
+  music:    ThumbMusic,
+  dj:       ThumbDJ,
+  video:    ThumbMusicVideo,
+  visuals:  ThumbVisuals,
+  'ux-ui':  ThumbUXUI,
 }

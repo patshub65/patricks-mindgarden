@@ -2,7 +2,6 @@
 
 import { motion, useMotionValue, useReducedMotion } from "framer-motion"
 import { useState, useRef } from "react"
-import Link from "next/link"
 import type { CardBehavior } from "@/lib/cards"
 
 const SPRING = { type: "spring" as const, stiffness: 180, damping: 22 }
@@ -71,17 +70,6 @@ export default function PolaroidCard({
       }
 
   function LabelEl() {
-    if (behavior === 'navigate' && destination) {
-      return (
-        <Link
-          href={destination}
-          onClick={(e) => { if (hasDragged.current) e.preventDefault() }}
-          style={LABEL_STYLE}
-        >
-          {label}
-        </Link>
-      )
-    }
     if (behavior === 'external' && destination) {
       return (
         <a

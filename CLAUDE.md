@@ -1,282 +1,220 @@
 # CLAUDE.md
 
-Operating guide for Claude Code working in this repo. Companion to `SKILL.md` (aesthetic + engineering stance) and `01_technical_brief.md` (full spec).
+Operating guide for Claude Code in this repo. Skills in `.claude/skills/` provide detailed conventions — this file is the architectural source of truth.
 
 ## Project
 
-Patrick Caire's portfolio — Berlin-based designer/developer. Concept: "mindgarden." Homepage is an exploded scatter of draggable polaroid cards; three clusters (Playing / Creating / Thinking) organize deeper content.
+Patrick Caire's portfolio — Berlin-based product/UX/UI designer who codes. Domain: `patrickcaire.me`. Concept: "mindgarden." A single-page homepage with an exploded scatter of draggable polaroid cards. Each card opens a peek overlay; design projects link through to detail pages.
 
 **Not a blog. Not a SaaS site. Not a landing page.** It's a scene you explore.
 
+**Context**: This site is a job search artifact. Patrick is targeting Product Designer / UX/UI Designer roles in Berlin + remote-EU, positioning as a designer with a technical and AI-native edge. The site must ship fast, look distinctive, and work flawlessly.
+
 ## Stack
 
-- **Next.js 15** (App Router, RSC default)
+- **Next.js 15** (App Router, RSC default) — use `next dev --turbopack` for local dev
+- **React 19**
 - **Tailwind v4** (`@theme` block for tokens; no legacy `tailwind.config.js`)
-- **Framer Motion v11** — primary motion library
-- **MDX** — content in `/content/{cluster}/{slug}.mdx`
+- **Framer Motion v12** — primary motion library
+- **MDX** — content in `/content/creating/{slug}.mdx`
 - **`next/font/google`** — Fraunces + Manrope
 - **`@phosphor-icons/react`** — icons, strokeWidth 1.5 globally
-- **Vercel** deploy
+- **Vercel** deploy to `patrickcaire.me`
 
-**No GSAP in v1.** Framer Motion covers everything we need. Add only if a specific scroll effect demands it (document the reason).
+**No GSAP in v1.** Framer Motion covers everything needed.
 
-## Critical architecture rules
+## Architecture
 
-1. **RSC by default.** Every file is a Server Component unless it has a genuine reason to be client.
-2. **Isolate motion in leaf client components.** The home page is a Server Component that imports `<MindgardenScene />` as a client leaf (`"use client"` at its top). Never mark a layout or page-level file as client.
-3. **One shared `layoutId` vocabulary** across Home ↔ cluster ↔ detail pages so card morphs work. Naming: `card-{slug}`.
-4. **No `window.addEventListener('scroll')`.** Use Framer's `useScroll` / `useMotionValue`.
-5. **No `h-screen`.** Use `min-h-[100dvh]` always.
-6. **No CSS `calc()` width math.** Use CSS Grid.
+### Single-page + detail pages
+
+There are no cluster pages. The site has two route types:
+
+1. **`/`** — Homepage. Single-page with polaroid card scatter. All cards open peek overlays.
+2. **`/creating/[slug]`** — Detail pages for projects. Rendered from MDX in `/content/creating/`.
+
+No `/playing`, `/creating`, `/thinking` index routes. No NavPill component. The homepage IS the navigation.
+
+### RSC by default
+
+Every file is a Server Component unless it needs client APIs. Page and layout files are never `"use client"`. Interactive components are leaf client files in `components/client/`.
+
+### Critical rules
+
+1. **No `h-screen`.** Use `min-h-[100dvh]` always.
+2. **No CSS `calc()` width math.** Use CSS Grid.
+3. **No `window.addEventListener('scroll')`.** Use Framer's `useScroll` / `useMotionValue`.
+4. **No inline hex colors.** Use CSS variables from `globals.css @theme`.
+5. **Use `next/image`** for all images — automatic lazy loading, format conversion, sizing.
 
 ## Design tokens
 
-Source of truth: `globals.css` `@theme` block. Do not inline hex values in components.
-
-```css
-@theme {
-  --color-base: #F5EFE1;
-  --color-surface: #FAF4E8;
-  --color-surface-raised: #FFFFFF;
-  --color-ink: #141814;
-  --color-ink-muted: rgb(20 24 20 / 0.55);
-  --color-moss: #4F6B28;
-  --color-sage: #C5D4A8;
-  --color-coral: #F0A488;
-  --color-butter: #F7DFA0;
-
-  --font-display: 'Fraunces', serif;
-  --font-body: 'Manrope', sans-serif;
-
-  --shadow-sm: 0 2px 8px rgb(76 60 30 / 0.06);
-  --shadow-md: 0 8px 24px -4px rgb(76 60 30 / 0.10);
-  --shadow-lg: 0 20px 48px -12px rgb(76 60 30 / 0.14);
-  --shadow-drag: 0 32px 64px -16px rgb(76 60 30 / 0.22);
-
-  --radius-card: 20px;
-  --radius-tile: 24px;
-  --radius-detail: 32px;
-}
-```
-
-## Motion defaults
-
-Spring config used everywhere unless overridden:
-```ts
-const spring = { type: "spring", stiffness: 180, damping: 22 };
-```
-
-Page transitions: ease `cubic-bezier(0.16, 1, 0.3, 1)`, ~600–800ms. Idle card float: CSS `animation` (pure CSS, no JS per card). Respect `prefers-reduced-motion`.
+Source of truth: `globals.css` `@theme` block. Full reference in `.claude/skills/design-tokens.md`.
 
 ## Directory layout
 
 ```
 app/
   (site)/
-    page.tsx                  # Home (RSC) → imports <MindgardenScene />
-    playing/page.tsx          # RSC → <MasonryGrid cluster="playing" />
+    page.tsx                  # Home (RSC) → imports <HomeSceneLoader />
     creating/
-      page.tsx                # RSC → <ProjectGrid />
-      [slug]/page.tsx         # RSC → <CaseStudy /> from MDX
-    thinking/page.tsx         # RSC → <FeedGrid />
+      [slug]/page.tsx         # Detail page (RSC) → renders MDX
   layout.tsx                  # RSC — fonts, <CornerNav /> client leaf
   globals.css                 # @theme tokens + reset
+  api/
+    chat/route.ts             # Claude Haiku streaming + Resend email forwarding
 components/
   client/                     # all "use client" components
-    mindgarden-scene.tsx
-    polaroid-card.tsx
-    corner-nav.tsx
-    music-player.tsx
-    chat-input.tsx
-    nav-pill.tsx
+    mindgarden-scene.tsx      # Card scatter, peeks, chat bar
+    polaroid-card.tsx         # Individual draggable card
+    corner-nav.tsx            # CV download (top-right), contact (bottom-left), music (bottom-right)
+    music-player.tsx          # HTML5 Audio corner player
+    peek-overlay.tsx          # Overlay for card content
+    thumbnails.tsx            # Card thumbnail renderers
+    home-scene-loader.tsx     # Dynamic import wrapper
+    nav-pill.tsx              # DEPRECATED — no longer used, remove when cleaning up
   server/                     # RSC components
+    cluster-header.tsx        # DEPRECATED — no cluster pages, remove when cleaning up
 content/
-  creating/
-  playing/
-  thinking/
+  creating/                   # All MDX project files
+  raw/                        # Source PDFs for content migration (not deployed)
 lib/
   content.ts                  # MDX loader helpers
-  cards.ts                    # home card manifest (positions, slugs, destinations)
+  cards.ts                    # Home card manifest (positions, slugs, behaviors)
 public/
+  images/creating/{slug}/     # Project images
 ```
 
-## Content authoring
+## Homepage cards (9 cards)
 
-MDX with frontmatter. Example:
-```mdx
----
-title: "Boutique 65"
-slug: "boutique-65"
-cluster: "creating"
-kind: "case-study"
-heroImage: "/images/boutique-65/hero.jpg"
-summary: "Art direction for a Paris furniture label."
-tags: ["art direction", "brand"]
-externalUrl: null
----
+| # | ID | Label | Behavior | Peek content |
+|---|---|---|---|---|
+| 1 | `ux-ui` | UX/UI Design | peek | Autonomies + Sponti → detail pages |
+| 2 | `web` | Web Design | peek | Frachtwerk, MXC, S&W, Green Visions → detail pages |
+| 3 | `brand` | Art & Brand | peek | AFAR, Chikai, Keyko, Loominate, Bananas Are Berries → detail short pages |
+| 4 | `product` | Product Building | peek | Sponti (GitHub + live), bootcamp work, mindgarden |
+| 5 | `writing` | Written Things | peek | LinkedIn post cards |
+| 6 | `music` | Music Production | peek | Originals / embedded player |
+| 7 | `video` | Music Video | peek | YouTube iframe (Nachtgarten: `Rk2tmIkQnAw`) |
+| 8 | `visuals` | Visual Gallery | peek | Image grid |
+| 9 | `dj` | DJ Sets | external | → soundcloud.com/uferkind |
 
-Body content here.
-```
+Note: Sponti appears in both UX/UI (design story) and Product Building (code/shipping story). This is intentional — it proves both halves of "designer who codes."
 
-Home card manifest lives in `lib/cards.ts` as a typed array. Includes position (`{x, y, rotation}`), label, destination. Position values are percentages of viewport so they stay responsive.
+## Content tiers
 
-## Workflow for new work
+| Tier | Layout | Route | Projects |
+|---|---|---|---|
+| **Peek only** | Thumbnail + label in overlay | None | Bootcamp projects, LinkedIn posts, music, visuals, video |
+| **Detail short** (`kind: "showcase"`) | Hero, 2-3 paragraphs, skills, a few images | `/creating/[slug]` | AFAR, Chikai, Keyko, Loominate, Bananas Are Berries, Green Visions, Stetig & Wandel |
+| **Detail full** (`kind: "case-study"`) | Full narrative: brief → approach → decisions → outcome | `/creating/[slug]` | Sponti, Autonomies, Frachtwerk, MXC |
 
-1. Read the relevant section of `01_technical_brief.md` first.
-2. Check `SKILL.md` for the aesthetic/engineering stance.
-3. Before importing any package, run `cat package.json` — never assume a package is installed.
-4. Use existing tokens; don't introduce new colors or radii without adding them to `@theme`.
-5. For any component with motion, perpetual animation, or drag — `"use client"` at the top and keep it a leaf.
-6. Before committing, pre-flight checklist (from `SKILL.md`).
+## Project categories
 
-## What NOT to build
-
-- No dark mode toggle in v1 (tokens should still be written with theming in mind — use semantic CSS vars — but no toggle UI).
-- No contact form. Bottom-left corner icon fans out to email + LinkedIn only.
-- No live LinkedIn embeds. Thinking cards are styled-static MDX.
-- No analytics/tracking in v1.
-- No login, no CMS, no comments.
-- No generic SaaS patterns: feature grids, testimonial carousels, CTA hero stacks, logo cloud.
-- No scatter-canvas layout for Creating in v1 — use responsive CSS Grid (scatter canvas is a v2 upgrade once content is richer).
-- No shared-element card morph on page transition in v1 — use clean fade + staggered card entry. Morph is v2.
-- No LinkedIn UI mimicry in Thinking — use site's own design system for post cards.
-- No SocialPill sidebar — `components/client/social-pill.tsx` is deleted; social links surface contextually in content.
+| Category | `category` frontmatter | Projects |
+|---|---|---|
+| UX/UI Design | `ux-ui` | Autonomies, Sponti |
+| Web Design | `web` | Frachtwerk, MXC, Stetig & Wandel, Green Visions |
+| Art & Brand | `brand` | AFAR, Chikai, Keyko, Loominate, Bananas Are Berries |
 
 ## Resolved design decisions
 
-### Homepage intro animation
-First-class feature — not a placeholder. The existing `intro-animation.tsx` is a rough skeleton; rebuild it properly.
-- Letters of "Patrick's Mindgarden" rise from baseline one by one
-- Polaroid cards bloom from *behind* the title while it is still on screen
-- Title fades out, scene is revealed — immersive, mind-like, not a generic loader
-- Skipped on repeat visits (`sessionStorage`) and for `prefers-reduced-motion`
+### About peek
+Clicking the "Patrick" wordmark opens a peek overlay with:
+- Styled "P" initial in moss-green circle (photo placeholder — swap when asset arrives)
+- Bio copy (approved):
 
-### Nav pill
-- **Hidden on `/`** — the polaroid cards are the navigation on the homepage
-- **Fades in on cluster pages** (`/playing`, `/creating`, `/thinking`, detail pages) as part of the page entrance
-
-### Page transitions (v1)
-Clean fade + staggered card entry on cluster pages. No shared-element morph until v2.
-
-### Chat bar (homepage)
-Real functional AI chat, not decorative.
-- Model: **Claude Haiku** (keep costs low)
-- Answers questions about Patrick (work, background, availability)
-- Can forward a message to Patrick via email on request
-- System prompt to be written when domain/bio details are finalised
-- `readOnly` on the current input is a placeholder — needs full implementation
-
-### About
-No separate `/about` page. Instead: clicking the "Patrick" wordmark (or a small avatar near it) opens a **peek overlay** containing:
-- A photo of Patrick
-- A short bio blurb
-- A nudge: "Want to know more? Ask below ↓" pointing at the chat bar
-
-**Draft bio copy (Patrick to edit):**
 > I'm Patrick — a designer, creative developer, and music nerd living in Berlin. I work across UX, web, brand, and code, usually at the point where the brief gets interesting and the tools start feeling like instruments.
 >
-> When I'm not designing, I'm making music, pressing vinyl, and DJing as Uferkind. This site is my mindgarden — everything I make, think about, and play with, kept in the same place without being filed into folders.
+> Currently open to new opportunities — especially teams where design and engineering sit at the same table.
 >
 > Want to know more? Ask below ↓
 
-### Music player (bottom-right corner)
-- **Corner player**: HTML5 Audio, plays a hardcoded MP3 from `/public` (unreleased original music)
-- **DJ sets card on homepage**: external link to `soundcloud.com/uferkind` (already wired in `cards.ts`)
-- These are two separate things — do not conflate them
-
-### Peek behavior (homepage cards)
-Three cards use `behavior: 'peek'`:
-- **`video`** — embed (YouTube or Vimeo iframe)
-- **`visuals`** — image grid inside peek overlay
-- **`sidequests`** — floating masonry peek window, no navigation link, no cluster page behind it
-
-### Cluster ownership
-- **Creating** (`/creating`): professional projects — UX / Code / Web / Brand filter tabs. Source: old site projects (10 total). Has case study detail pages. Code tab launches thin (Mindgarden site, movie decision app, bootcamp final project ~May 25).
-- **Playing** (`/playing`): music, DJ, personal/cultural work. Masonry layout. Content types: YouTube embeds (videos/reels/shorts), music original tiles, DJ embed tiles, and cultural/design projects (e.g. Bananas Are Berries) which get their own detail pages. DJ sets homepage card links to `soundcloud.com/uferkind`.
-- **Thinking** (`/thinking`): LinkedIn post replicas (own design system, small "Originally posted on LinkedIn ↗" attribution link per card), bookmarks, and inspiration. Pure curation — no original long-form authoring.
-
-### Creating cluster layout
-Responsive **CSS Grid** with mixed aspect-ratio tiles and filter tabs (UX / Code / Web / Brand).
-Filter is a client component; grid reflow animated with Framer Motion `layout`.
-
-### Detail pages
-One shared `<DetailPage>` base template with a `cluster` prop. Creating detail pages are tighter/process-focused. Playing detail pages are looser/more image-heavy. `kind` field in MDX frontmatter controls what renders inside the template (e.g. `case-study` shows full body; `external-link` shows a "View project →" link instead). No separate route structures per kind.
+### Chat bar (homepage)
+Real functional AI chat, not decorative.
+- Model: **Claude Haiku** (fast, cheap)
+- Answers questions about Patrick (work, background, availability, projects)
+- "Contact Patrick" flow: visitor asks → Haiku confirms → Resend sends email to Patrick
+- Guardrails: refuses off-topic, short system prompt grounded in bio + project facts
+- No memory between sessions, no conversation persistence
+- `ANTHROPIC_API_KEY` and `RESEND_API_KEY` in `.env.local` (both available)
+- Domain for system prompt: `patrickcaire.me`
 
 ### Corner nav
-- **Top-right**: download CV (`/public/cv-patrick-caire.pdf`) — single PDF in v1, no one-pager yet
-- **Bottom-left**: contact hub — tap to fan out email (`mailto:`) then LinkedIn. No other social links in the corner.
+- **Top-right**: download CV (`/public/cv-patrick-caire.pdf`)
+- **Bottom-left**: contact hub — tap to fan out email (`mailto:patrick.caire@gmail.com`) then LinkedIn
 - **Bottom-right**: music player — HTML5 Audio, hardcoded MP3 from `/public`
 
-### Chat API
-- Route: `/api/chat` — Claude Haiku, streaming responses
-- Email forwarding via **Resend** when visitor asks to contact Patrick
-- System prompt: TBD (blocked on domain + bio finalisation)
-- `ANTHROPIC_API_KEY` and `RESEND_API_KEY` required in `.env.local`
+### Music player
+- Corner player: HTML5 Audio, plays a hardcoded MP3 (unreleased original music, file TBD)
+- DJ sets card: external link to `soundcloud.com/uferkind`
+- These are two separate things
 
-### Music video peek
-YouTube embed: `https://www.youtube.com/watch?v=Rk2tmIkQnAw` (Nachtgarten). Real iframe, not placeholder.
+### Intro animation
+- Cards bloom from center outward to scattered positions (already implemented in `mindgarden-scene.tsx`)
+- Patrick wordmark fades in after cards settle
+- Skipped on repeat visits (`sessionStorage`) and for `prefers-reduced-motion`
 
-### Content source
-Projects migrated from `patrickcaire.framer.website`. Known projects:
-Loominate, Autonomies, Chikai, AFAR, Keyko, Bananas Are Berries, MXC, Frachtwerk, Green Visions, Stetig & Wandel.
-Case studies: Autonomies (decentralized music marketplace), MXC Foundation, Frachtwerk, Stetig & Wandel.
-Gallery content: art direction, print/digital, illustration, photography, posters, album covers, event materials.
+### Detail page template
+One shared `<DetailPage>` component. `kind` field in MDX frontmatter controls layout:
+- `case-study`: full narrative with sections
+- `showcase`: lighter — hero, paragraphs, images, skills
+- `external-link`: shows "View project →" link (reserved, not used in v1)
 
-### Domain / deployment
-**TBD** — resolve before writing the chat system prompt. Final domain affects metadata, OG tags, and the AI's self-description.
+## Content source
 
-## Build roadmap — target launch Friday 2026-05-08
+Projects migrated from `patrickcaire.framer.website`. PDF case study decks in `/content/raw/`.
 
-### Phase 1 — Homepage (Monday 05-04)
-- Rebuild intro animation: letters rise from baseline, cards bloom from behind title, title fades to reveal scene
-- Hide NavPill on `/`, fade it in on cluster pages
-- Refactor CornerNav: bottom-left becomes email + LinkedIn fan-out; delete `social-pill.tsx`
-- Wire video peek with real YouTube iframe (`Rk2tmIkQnAw`)
-- Build About peek overlay (bio draft + photo placeholder until asset arrives)
-- Wire MusicPlayer with HTML5 Audio (placeholder MP3 until file arrives)
+| Project | Category | Kind | Source |
+|---|---|---|---|
+| Sponti | ux-ui | case-study | Write from scratch (GitHub + live app) |
+| Autonomies | ux-ui | case-study | PDF deck |
+| Frachtwerk | web | case-study | PDF deck |
+| MXC | web | case-study | PDF deck |
+| Stetig & Wandel | web | showcase | PDF deck |
+| Green Visions | web | showcase | Framer site text |
+| AFAR | brand | showcase | Framer site text |
+| Chikai | brand | showcase | Framer site text |
+| Keyko | brand | showcase | Framer site text |
+| Loominate | brand | showcase | Framer site text |
+| Bananas Are Berries | brand | showcase | Framer site text |
 
-### Phase 2 — Chat API (Tuesday 05-05)
-- `/api/chat` server route — Claude Haiku, streaming
-- Resend email forwarding when visitor asks to contact Patrick
-- Remove `readOnly` from chat bar input, wire up submission
-- Placeholder system prompt (finalise when domain is confirmed)
+## What NOT to build
 
-### Phase 3 — Cluster pages (Tuesday–Wednesday 05-05/06)
-- Creating: CSS Grid + filter tabs (UX/Code/Web/Brand) + MDX content migration from old site
-- Playing: Masonry + YouTube embed tiles + music tiles
-- Thinking: LinkedIn post cards in site design system with "Originally posted on LinkedIn ↗" attribution
+- No dark mode toggle in v1
+- No contact form — bottom-left corner fans to email + LinkedIn
+- No analytics/tracking in v1
+- No login, no CMS, no comments
+- No generic SaaS patterns: feature grids, testimonial carousels, CTA hero stacks
+- No cluster index pages (`/playing`, `/creating`, `/thinking`)
+- No NavPill — homepage cards are the navigation
+- No shared-element card morph on page transition — clean fade only in v1
 
-### Phase 4 — Detail pages (Wednesday 05-06)
-- Shared `<DetailPage>` template with `cluster` prop variations
-- Wire `/creating/[slug]` page
-- Add `/playing/[slug]` route for Bananas Are Berries etc.
-- Populate with migrated content from `patrickcaire.framer.website`
+## Skills reference
 
-### Phase 5 — Polish + deploy (Thursday 05-07)
-- Mobile layout pass across all pages
-- Page transitions: fade + staggered card entry on cluster pages
-- Accessibility pass (focus rings, aria labels, reduced motion)
-- Vercel deploy + domain wiring + OG tags + metadata
+| Skill | Location | Auto-invoke | Purpose |
+|---|---|---|---|
+| `component-scaffold` | `.claude/skills/` | yes | File structure, naming, RSC/client split |
+| `design-tokens` | `.claude/skills/` | yes | Color, type, shadow, radius, motion system |
+| `editorial-frontend` | `.claude/skills/` | yes | Aesthetic stance, anti-patterns, pre-flight checklist |
+| `mdx-page` | `.claude/skills/` | user-invocable | MDX content template and frontmatter schema |
+| `project-page` | `.claude/skills/` | user-invocable | Writing/migrating project detail pages |
+| `grill-me` | `.claude/skills/` | user-invocable | Decision-tree interview for plans |
 
-### Friday 05-08 — content fill, smoke test, ship
+## Workflow for new work
 
-## Assets needed from Patrick (content blockers)
+1. Check this file and relevant skills before starting.
+2. Before importing any package, run `cat package.json` — never assume a package is installed.
+3. Use existing tokens; don't introduce new colors or radii without adding them to `@theme`.
+4. For any component with motion, state, or browser APIs — `"use client"` at the top, keep it a leaf.
+5. Use `next/image` for all images.
+6. Before committing, run the pre-flight checklist from `editorial-frontend` skill.
 
-| Asset | Blocks |
-|---|---|
-| Photo for About peek | About overlay |
-| MP3 file for music player | Corner player |
-| Hero images for projects | Creating grid tiles |
-| Bio copy approval | About peek + chat system prompt |
-| Domain confirmed | Chat system prompt, OG tags, metadata |
-| LinkedIn posts to include | Thinking cluster |
-| YouTube video IDs for Playing | Playing masonry embeds |
-| Bananas Are Berries detail content | Playing [slug] page |
+## Assets still needed from Patrick
 
-## Open questions (resolve with Patrick before affected work)
-
-- Domain / primary URL for the live site
-- Which MP3 file to use for the corner music player
-- Patrick's photo asset for the About peek overlay
-- Bio copy approval (draft is in the About section above)
-- LinkedIn posts and YouTube video IDs for cluster content
+| Asset | Blocks | Status |
+|---|---|---|
+| Photo for About peek | About overlay | Using "P" placeholder |
+| MP3 file for music player | Corner player | TBD |
+| Hero images for projects | Detail pages | Export from PDF decks |
+| LinkedIn posts to include | Written Things peek | TBD |
+| YouTube video IDs for Playing | Music Production peek | TBD |

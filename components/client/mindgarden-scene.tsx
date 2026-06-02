@@ -1,11 +1,57 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { useState, useEffect, useMemo, useRef, FormEvent, useCallback } from "react"
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion"
 import { HOME_CARDS, DESIGN_W, DESIGN_H } from "@/lib/cards"
 import { THUMBS } from "@/components/client/thumbnails"
 import PolaroidCard from "@/components/client/polaroid-card"
 import PeekOverlay from "@/components/client/peek-overlay"
+
+interface ChatMessage { id: string; role: "user" | "assistant"; content: string }
+
+function useStreamingChat() {
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [input, setInput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+
+  const submit = useCallback(async (text: string) => {
+    if (!text.trim() || isLoading) return
+    const userMsg: ChatMessage = { id: Date.now().toString(), role: "user", content: text }
+    const allMessages = [...messages, userMsg]
+    setMessages(allMessages)
+    setInput("")
+    setIsLoading(true)
+
+    const assistantId = (Date.now() + 1).toString()
+    setMessages(prev => [...prev, { id: assistantId, role: "assistant", content: "" }])
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: allMessages.map(m => ({ role: m.role, content: m.content })) }),
+      })
+      if (!res.body) throw new Error("No response body")
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let done = false
+      while (!done) {
+        const { value, done: streamDone } = await reader.read()
+        done = streamDone
+        if (value) {
+          const chunk = decoder.decode(value, { stream: true })
+          setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: m.content + chunk } : m))
+        }
+      }
+    } catch {
+      setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: "Something went wrong. Please try again." } : m))
+    } finally {
+      setIsLoading(false)
+    }
+  }, [messages, isLoading])
+
+  return { messages, input, setInput, isLoading, submit }
+}
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 const SPRING_POP = { type: "spring" as const, stiffness: 180, damping: 18, mass: 0.9 }
@@ -15,12 +61,15 @@ const TOTAL_CARDS = HOME_CARDS.length
 const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 1200
 
 export default function MindgardenScene() {
-  const [peekId, setPeekId]     = useState<string | null>(null)
-  const [isMobile, setIsMobile] = useState(false)
-  const [viewSize, setViewSize] = useState({ w: DESIGN_W, h: DESIGN_H })
-  // Start in "intro" — useEffect transitions to "done" after animation or immediately if already seen
-  const [phase, setPhase]       = useState<"intro" | "done">("intro")
-  const prefersReducedMotion    = useReducedMotion()
+  const [peekId, setPeekId]       = useState<string | null>(null)
+  const [isMobile, setIsMobile]   = useState(false)
+  const [viewSize, setViewSize]   = useState({ w: DESIGN_W, h: DESIGN_H })
+  const [chatOpen, setChatOpen]   = useState(false)
+  const [phase, setPhase]         = useState<"intro" | "done">("intro")
+  const prefersReducedMotion      = useReducedMotion()
+  const messagesEndRef             = useRef<HTMLDivElement>(null)
+
+  const { messages, input, setInput, isLoading, submit } = useStreamingChat()
 
   useEffect(() => {
     const update = () => {
@@ -31,6 +80,20 @@ export default function MindgardenScene() {
     window.addEventListener("resize", update)
     return () => window.removeEventListener("resize", update)
   }, [])
+
+  // Re-open card peek when returning from a detail page via ?open=CARD_ID
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const open = params.get("open")
+    if (open) {
+      setPeekId(open)
+      window.history.replaceState({}, "", "/")
+    }
+  }, [])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
 
   useEffect(() => {
     // Skip intro if reduced motion or already seen this session
@@ -256,35 +319,106 @@ export default function MindgardenScene() {
           </div>
         )}
 
-        {/* Chat bar */}
+        {/* Chat area */}
         <div style={{
           position: "absolute",
           bottom: isMobile ? 28 : 32,
           left: 0,
           right: 0,
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
           zIndex: 20,
           padding: "0 60px",
+          gap: 10,
         }}>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={introDone ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
             transition={{ duration: 0.5, ease: EASE_OUT, delay: introDone ? 0.3 : 0 }}
-            style={{ width: isMobile ? "100%" : "auto" }}
+            style={{ width: isMobile ? "100%" : 420, display: "flex", flexDirection: "column", gap: 10 }}
           >
-            <div className="chatbar" style={isMobile ? { width: "100%" } : undefined}>
-              <input
-                placeholder="What would you like to know?"
-                readOnly
-                style={isMobile ? { fontSize: 13 } : undefined}
-              />
-              <button className="chatbar-send" aria-label="Send">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 19V5" /><path d="M5 12l7-7 7 7" />
-                </svg>
-              </button>
-            </div>
+            {/* Message thread */}
+            <AnimatePresence initial={false}>
+              {chatOpen && messages.length > 0 && (
+                <motion.div
+                  key="chat-thread"
+                  initial={{ opacity: 0, height: 0, y: 10 }}
+                  animate={{ opacity: 1, height: "auto", y: 0 }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: EASE_OUT }}
+                  style={{
+                    background: "var(--color-surface-raised)",
+                    borderRadius: 20,
+                    padding: 16,
+                    boxShadow: "var(--shadow-lg)",
+                    maxHeight: 300,
+                    overflowY: "auto",
+                    scrollbarWidth: "none",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                  }}
+                >
+                  {messages.map(m => (
+                    <div key={m.id} style={{
+                      display: "flex",
+                      justifyContent: m.role === "user" ? "flex-end" : "flex-start",
+                    }}>
+                      <div style={{
+                        maxWidth: "80%",
+                        padding: "8px 12px",
+                        borderRadius: m.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                        background: m.role === "user" ? "var(--color-moss)" : "var(--color-surface)",
+                        color: m.role === "user" ? "white" : "var(--color-ink)",
+                        fontFamily: "var(--font-body)",
+                        fontSize: 13,
+                        lineHeight: 1.55,
+                        border: m.role === "assistant" ? "1px solid var(--color-ink-hair)" : "none",
+                      }}>
+                        {m.content}
+                      </div>
+                    </div>
+                  ))}
+                  {isLoading && (
+                    <div style={{ display: "flex", gap: 4, paddingLeft: 8 }}>
+                      {[0, 1, 2].map(i => (
+                        <motion.div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-ink-muted)" }}
+                          animate={{ y: [0, -4, 0] }}
+                          transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Input bar */}
+            <form
+              onSubmit={(e: FormEvent<HTMLFormElement>) => {
+                e.preventDefault()
+                setChatOpen(true)
+                submit(input)
+              }}
+            >
+              <div className="chatbar" style={isMobile ? { width: "100%" } : undefined}>
+                <input
+                  placeholder="What would you like to know?"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  style={isMobile ? { fontSize: 13 } : undefined}
+                  onFocus={() => setChatOpen(true)}
+                  disabled={isLoading}
+                />
+                <button className="chatbar-send" aria-label="Send" type="submit" disabled={isLoading || !input.trim()}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 19V5" /><path d="M5 12l7-7 7 7" />
+                  </svg>
+                </button>
+              </div>
+            </form>
           </motion.div>
         </div>
       </div>
