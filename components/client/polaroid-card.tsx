@@ -38,26 +38,32 @@ interface PolaroidCardProps {
   onPeek: (id: string) => void
 }
 
-const LABEL_STYLE: React.CSSProperties = {
-  position: 'absolute',
-  left: 0, right: 0, bottom: 0,
-  height: 30,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '0 10px',
-  fontFamily: 'var(--font-display)',
-  fontStyle: 'italic',
-  fontVariationSettings: '"opsz" 14, "SOFT" 100',
-  fontSize: 14,
-  color: 'var(--color-ink)',
-  textAlign: 'center',
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  cursor: 'pointer',
-  textDecoration: 'none',
-  userSelect: 'none',
+// Label sizing tracks the card so long names ("Music Production") wrap to two
+// lines on small cards instead of truncating with an ellipsis.
+function labelStyle(size: number): React.CSSProperties {
+  const fontSize = Math.max(11, Math.min(size * 0.092, 14))
+  return {
+    position: 'absolute',
+    left: 0, right: 0, bottom: 0,
+    height: 32,
+    padding: '0 8px',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    alignContent: 'center',
+    fontFamily: 'var(--font-display)',
+    fontStyle: 'italic',
+    fontVariationSettings: '"opsz" 14, "SOFT" 100',
+    fontSize,
+    lineHeight: 1.08,
+    color: 'var(--color-ink)',
+    textAlign: 'center',
+    textWrap: 'balance',
+    overflow: 'hidden',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    userSelect: 'none',
+  } as React.CSSProperties
 }
 
 export default function PolaroidCard({
@@ -82,7 +88,9 @@ export default function PolaroidCard({
   const cardW = size
   const cardH = size + 34
 
-  const constraints = physics
+  // Keep the whole card inside the stage walls — applies on touch too, so a
+  // flung card can't be dragged off-screen. Only the throw inertia is gated on `physics`.
+  const constraints = canvasW > 0 && canvasH > 0
     ? {
         left: -homeX,
         top: -homeY,
@@ -160,7 +168,7 @@ export default function PolaroidCard({
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => { if (hasDragged.current) e.preventDefault() }}
-          style={LABEL_STYLE}
+          style={labelStyle(size)}
         >
           {label}
         </a>
@@ -169,7 +177,7 @@ export default function PolaroidCard({
     return (
       <button
         onClick={() => { if (!hasDragged.current) onPeek(id) }}
-        style={{ ...LABEL_STYLE, background: 'none', border: 'none' }}
+        style={{ ...labelStyle(size), background: 'none', border: 'none' }}
       >
         {label}
       </button>
