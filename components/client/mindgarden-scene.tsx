@@ -56,9 +56,10 @@ function useStreamingChat() {
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 const SPRING_POP = { type: "spring" as const, stiffness: 180, damping: 18, mass: 0.9 }
 
-const CARD_STAGGER_S = 0.18
+// Deck-deal stagger — cards leave the center stack one after another
+const CARD_STAGGER_S = 0.1
 const TOTAL_CARDS = HOME_CARDS.length
-const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 1200
+const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 1400
 
 export default function MindgardenScene() {
   const [peekId, setPeekId]       = useState<string | null>(null)
@@ -210,22 +211,20 @@ export default function MindgardenScene() {
               const entrance = card.entrance
               const delay    = entrance.rank * CARD_STAGGER_S
 
-              // Cards emanate FROM center outward to their scattered positions
+              // Deck deal: every card starts stacked at center, then is flung out
+              // spinning to its scattered spot, overshooting and wobbling to rest.
               const centerX = DESIGN_W / 2 - cardSize / 2
               const centerY = DESIGN_H / 2 - cardSize / 2
 
-              // Opacity fades in LATER than position starts — card is invisible during flight,
-              // only materializes near its final spot with a hint of remaining drift
-              const opacityDelay = (phase === "intro" ? delay + 0.35 : 0)
-              const posDelay     = (phase === "intro" ? delay : 0)
+              const posDelay = phase === "intro" ? delay : 0
 
               return (
                 <motion.div
                   key={card.id}
-                  style={{ pointerEvents: "auto" }}
+                  style={{ pointerEvents: "auto", position: "absolute", left: 0, top: 0 }}
                   initial={{
                     opacity: 0,
-                    scale: 0.7,
+                    scale: 0.92,
                     x: centerX,
                     y: centerY,
                     rotate: entrance.startRot,
@@ -238,23 +237,24 @@ export default function MindgardenScene() {
                     rotate: pos.rot,
                   }}
                   transition={{
-                    // Position: spring starts early (card flies invisibly)
-                    x: { type: "spring", stiffness: 90, damping: 16, mass: 1.2, delay: posDelay },
-                    y: { type: "spring", stiffness: 90, damping: 16, mass: 1.2, delay: posDelay },
-                    // Scale: gentle scale-up timed with opacity
-                    scale: { type: "spring", stiffness: 200, damping: 22, delay: opacityDelay },
-                    // Rotation: settles with position
-                    rotate: { type: "spring", stiffness: 90, damping: 16, delay: posDelay },
-                    // Opacity: delayed so card only appears near final position
-                    opacity: { duration: 0.4, ease: EASE_OUT, delay: opacityDelay },
+                    // Position: bouncy spring (low damping) → overshoot + wobble on landing
+                    x: { type: "spring", stiffness: 130, damping: 13, delay: posDelay },
+                    y: { type: "spring", stiffness: 130, damping: 13, delay: posDelay },
+                    // Rotation: spins from the dramatic launch angle to its resting tilt
+                    rotate: { type: "spring", stiffness: 120, damping: 12, delay: posDelay },
+                    scale: { type: "spring", stiffness: 200, damping: 18, delay: posDelay },
+                    // Opacity: snaps on just before the card leaves the stack
+                    opacity: { duration: 0.2, ease: EASE_OUT, delay: phase === "intro" ? Math.max(0, posDelay - 0.04) : 0 },
                   }}
                 >
                   <PolaroidCard
                     id={card.id}
                     label={card.label}
-                    x={0}
-                    y={0}
-                    rot={0}
+                    homeX={pos.x}
+                    homeY={pos.y}
+                    canvasW={DESIGN_W}
+                    canvasH={DESIGN_H}
+                    physics={!prefersReducedMotion}
                     size={cardSize}
                     behavior={card.behavior}
                     destination={card.destination}
@@ -283,10 +283,14 @@ export default function MindgardenScene() {
               return (
                 <motion.div
                   key={card.id}
-                  initial={{ opacity: 0, scale: 0.6 }}
+                  style={{ position: "absolute", left: 0, top: 0 }}
+                  initial={{ opacity: 0, scale: 0.6, x: pos.x, y: pos.y, rotate: pos.rot }}
                   animate={{
                     opacity: dimmed ? 0.2 : 1,
                     scale: 1,
+                    x: pos.x,
+                    y: pos.y,
+                    rotate: pos.rot,
                   }}
                   transition={{
                     ...SPRING_POP,
@@ -301,9 +305,11 @@ export default function MindgardenScene() {
                   <PolaroidCard
                     id={card.id}
                     label={card.label}
-                    x={pos.x}
-                    y={pos.y}
-                    rot={pos.rot}
+                    homeX={pos.x}
+                    homeY={pos.y}
+                    canvasW={viewSize.w}
+                    canvasH={viewSize.h}
+                    physics={false}
                     size={cardSize}
                     behavior={card.behavior}
                     destination={card.destination}
