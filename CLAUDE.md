@@ -218,3 +218,13 @@ Projects migrated from `patrickcaire.framer.website`. PDF case study decks in `/
 | Hero images for projects | Detail pages | Export from PDF decks |
 | LinkedIn posts to include | Written Things peek | TBD |
 | YouTube video IDs for Playing | Music Production peek | TBD |
+
+## Design Context (impeccable)
+
+Two root files capture the project's strategy and visual system for design work. Read them before any UI task.
+
+- **`PRODUCT.md`** — strategic source of truth. Register: `brand` (portfolio, design IS the product). Carries users, purpose, brand personality, anti-references, and 5 design principles (medium is the proof · a scene to explore · handmade over polished · one person's voice · fast skim + deep dive).
+- **`DESIGN.md`** — visual system in Google Stitch format. Creative North Star: **"The Mindgarden."** Tokens (the warm garden palette, Fraunces + Manrope, warm-diffuse shadows), component specs, and Do's/Don'ts. Frontmatter tokens mirror `globals.css @theme`.
+- `.impeccable/design.json` — machine sidecar for `/impeccable live` (renders real primitives). `.impeccable/live/config.json` — live mode injects into `app/layout.tsx`.
+
+Run `/impeccable <command>` (e.g. `critique`, `polish`, `live`) for design work; every command reads PRODUCT.md + DESIGN.md first.

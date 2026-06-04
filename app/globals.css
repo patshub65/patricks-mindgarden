@@ -72,40 +72,45 @@ html, body {
 }
 
 /* ── Garden background ───────────────────────────────────── */
-/* Radial: --base center → --sage edge. --bg-warmth (0–1) biases stops. */
+/* Late-afternoon light: warm golden pool up top → cream → richer green at the
+   edges (sage warmed with moss, not flat putty). Warmth carried by the surface. */
 .garden-bg {
   position: absolute;
   inset: 0;
   background:
     radial-gradient(
-      120% 90% at 50% 45%,
-      var(--color-base) 0%,
-      var(--color-base) calc(20% + var(--bg-warmth, 0.3) * 20%),
-      color-mix(in oklch, var(--color-base), var(--color-sage) 35%) calc(55% + var(--bg-warmth, 0.3) * 15%),
-      var(--color-sage) 100%
+      135% 105% at 50% 30%,
+      color-mix(in oklch, var(--color-base), var(--color-butter) 44%) 0%,
+      color-mix(in oklch, var(--color-base), var(--color-butter) 16%) 26%,
+      var(--color-base) 46%,
+      color-mix(in oklch, var(--color-sage), var(--color-moss) 24%) 82%,
+      color-mix(in oklch, var(--color-sage), var(--color-moss) 44%) 100%
     );
   overflow: hidden;
 }
 
-/* Soft organic blooms */
+/* Soft organic blooms — one warm (sun), one green (shadow), more saturated */
 .garden-bg::before,
 .garden-bg::after {
   content: "";
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(86px);
   pointer-events: none;
 }
+/* Warm coral-gold sun glow, upper-right */
 .garden-bg::before {
-  width: 42%; height: 60%;
-  top: -8%; right: -6%;
-  background: var(--color-sage);
+  width: 50%; height: 66%;
+  top: -10%; right: -8%;
+  background: color-mix(in oklch, var(--color-butter), var(--color-coral) 48%);
+  opacity: 0.58;
 }
+/* Green depth, lower-left */
 .garden-bg::after {
-  width: 36%; height: 50%;
-  bottom: -8%; left: -8%;
-  background: color-mix(in oklch, var(--color-base) 60%, var(--color-butter) 40%);
+  width: 46%; height: 58%;
+  bottom: -12%; left: -10%;
+  background: color-mix(in oklch, var(--color-sage), var(--color-moss) 38%);
+  opacity: 0.5;
 }
 
 /* Grain overlay — page feels tactile not flat */

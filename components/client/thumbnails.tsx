@@ -176,7 +176,7 @@ export function ThumbVisuals() {
 
 export function ThumbUXUI() {
   return (
-    <div style={{ ...wrap, background: '#3a4a6e', padding: 0 }}>
+    <div style={{ ...wrap, background: '#2c3526', padding: 0 }}>
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)',

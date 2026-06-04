@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-04T00:00:00.000Z",
+  "title": "Design System: Patrick's Mindgarden",
+  "extensions": {
+    "colorMeta": {
+      "moss": { "role": "primary", "displayName": "Moss", "canonical": "#4F6B28", "tonalRamp": ["#10160A", "#1E2A12", "#2D3F1B", "#3D5522", "#4F6B28", "#6B8C3E", "#94B06B", "#C5D4A8", "#E6EDD6"] },
+      "sage": { "role": "secondary", "displayName": "Sage", "canonical": "#C5D4A8", "tonalRamp": ["#2F361F", "#48522F", "#626F41", "#7E8D57", "#9CAB75", "#C5D4A8", "#D7E2C2", "#E9F0DC", "#F5F8EE"] },
+      "coral": { "role": "secondary", "displayName": "Coral Blush", "canonical": "#F0A488", "tonalRamp": ["#3A1C12", "#5A2C1D", "#7E3F2B", "#A5553C", "#C86E52", "#E08C6F", "#F0A488", "#F6C3AE", "#FBE2D7"] },
+      "butter": { "role": "secondary", "displayName": "Afternoon Butter", "canonical": "#F7DFA0", "tonalRamp": ["#3D3110", "#5C4B1A", "#7E6826", "#A58836", "#CBAA52", "#E6C878", "#F7DFA0", "#FBEBC2", "#FEF6E3"] },
+      "base": { "role": "neutral", "displayName": "Garden Cream", "canonical": "#F5EFE1", "tonalRamp": ["#2A2820", "#46422F", "#655F44", "#8A8262", "#B2A988", "#D6CDB2", "#F5EFE1", "#FAF6EE", "#FFFDF8"] },
+      "surface-raised": { "role": "neutral", "displayName": "Lifted White", "canonical": "#FFFFFF", "tonalRamp": ["#1A1A1A", "#3D3D3D", "#5E5E5E", "#828282", "#A8A8A8", "#CFCFCF", "#EAEAEA", "#F7F7F7", "#FFFFFF"] },
+      "ink": { "role": "neutral", "displayName": "Garden Ink", "canonical": "#141814", "tonalRamp": ["#141814", "#222922", "#333D33", "#4A584A", "#697A69", "#92A092", "#BCC6BC", "#DDE3DD", "#F0F3F0"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Fraunces Italic)", "purpose": "Page and detail headlines. Italic, opsz 72 / SOFT 20." },
+      "title": { "displayName": "Title / Peek Label", "purpose": "Card peek labels and section titles. Fraunces italic, soft." },
+      "body": { "displayName": "Body (Manrope)", "purpose": "All prose; cap measure at 65-75ch." },
+      "label": { "displayName": "Label / Eyebrow (Mono)", "purpose": "Rare tiny tracked uppercase structural label only." }
+    },
+    "shadows": [
+      { "name": "polaroid", "value": "0 1px 0 rgb(255 255 255 / 0.6) inset, 0 10px 24px -12px rgb(68 60 40 / 0.18), 0 30px 60px -30px rgb(68 60 40 / 0.22)", "purpose": "Signature polaroid card at rest — glossy paper on a warm desk." },
+      { "name": "polaroid-hover", "value": "0 1px 0 rgb(255 255 255 / 0.7) inset, 0 14px 30px -10px rgb(68 60 40 / 0.28), 0 40px 80px -28px rgb(68 60 40 / 0.32)", "purpose": "Card lifted on hover." },
+      { "name": "drag", "value": "0 32px 64px -16px rgb(76 60 30 / 0.22)", "purpose": "Dramatic floating lift while a card is grabbed." },
+      { "name": "pill", "value": "0 1px 0 rgb(255 255 255 / 0.8) inset, 0 2px 8px -2px rgb(68 60 40 / 0.10), 0 12px 28px -16px rgb(68 60 40 / 0.18)", "purpose": "Floating chrome: nav pill, chat bar." },
+      { "name": "corner", "value": "0 1px 0 rgb(255 255 255 / 0.8) inset, 0 6px 18px -8px rgb(68 60 40 / 0.22)", "purpose": "Corner buttons (CV, contact, music)." },
+      { "name": "lg", "value": "0 20px 48px -12px rgb(76 60 30 / 0.14)", "purpose": "Peek overlay card." }
+    ],
+    "motion": [
+      { "name": "ease-out-soft", "value": "ease-in-out", "purpose": "Idle card float keyframe (floaty), 8s loop, paused on hover." },
+      { "name": "state-transition", "value": "150ms", "purpose": "Hover/active color and shadow transitions on chrome." },
+      { "name": "spring-lift", "value": "transform 150ms + scale(1.06)", "purpose": "Springy hover lift on corner buttons and send button." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Send Button",
+      "kind": "button",
+      "refersTo": "button-send",
+      "description": "Moss circle send button on the chat bar — the one place the accent goes solid.",
+      "html": "<button class=\"ds-btn-send\" aria-label=\"Send message\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M223.69 42.18a8 8 0 0 0-9.87-9.87L33.83 84.45a8 8 0 0 0-1.4 14.9l77.91 39.31 39.31 77.91a8 8 0 0 0 14.9-1.4Z\"/></svg></button>",
+      "css": ".ds-btn-send { width: 34px; height: 34px; border-radius: 9999px; background: #4F6B28; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; transition: transform 150ms; } .ds-btn-send:hover { transform: scale(1.05); } .ds-btn-send:focus-visible { outline: 2px solid #4F6B28; outline-offset: 3px; }"
+    },
+    {
+      "name": "Corner Button",
+      "kind": "button",
+      "refersTo": "button-corner",
+      "description": "Floating white circular corner control (CV download, contact, music).",
+      "html": "<button class=\"ds-btn-corner\" aria-label=\"Download CV\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M224 152v56a16 16 0 0 1-16 16H48a16 16 0 0 1-16-16v-56a8 8 0 0 1 16 0v56h160v-56a8 8 0 0 1 16 0Zm-101.66 5.66a8 8 0 0 0 11.32 0l40-40a8 8 0 0 0-11.32-11.32L136 132.69V40a8 8 0 0 0-16 0v92.69l-26.34-26.35a8 8 0 0 0-11.32 11.32Z\"/></svg></button>",
+      "css": ".ds-btn-corner { width: 44px; height: 44px; border-radius: 9999px; background: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #141814; box-shadow: 0 1px 0 rgb(255 255 255 / 0.8) inset, 0 6px 18px -8px rgb(68 60 40 / 0.22); transition: box-shadow 150ms, transform 150ms; } .ds-btn-corner:hover { box-shadow: 0 8px 24px -4px rgb(76 60 30 / 0.10); transform: scale(1.06); } .ds-btn-corner:focus-visible { outline: 2px solid #4F6B28; outline-offset: 3px; }"
+    },
+    {
+      "name": "Nav Pill",
+      "kind": "nav",
+      "refersTo": "nav-pill-item",
+      "description": "Floating white pill of text nav items with a highlighted active state.",
+      "html": "<nav class=\"ds-nav-pill\"><a class=\"ds-nav-item ds-nav-item--active\">Creating</a><a class=\"ds-nav-item\">Playing</a><a class=\"ds-nav-item\">Thinking</a></nav>",
+      "css": ".ds-nav-pill { display: inline-flex; gap: 2px; background: #fff; border-radius: 9999px; padding: 5px; box-shadow: 0 1px 0 rgb(255 255 255 / 0.8) inset, 0 2px 8px -2px rgb(68 60 40 / 0.10), 0 12px 28px -16px rgb(68 60 40 / 0.18); } .ds-nav-item { font-family: Manrope, system-ui, sans-serif; font-size: 13px; font-weight: 500; color: rgb(20 24 20 / 0.55); padding: 6px 14px; border-radius: 9999px; cursor: pointer; text-decoration: none; transition: color 150ms, background 150ms; white-space: nowrap; } .ds-nav-item:hover { color: #141814; background: #F2EBD9; } .ds-nav-item--active { color: #141814; background: #FAF4E8; box-shadow: 0 1px 2px rgb(76 60 30 / 0.04); }"
+    },
+    {
+      "name": "Chat Bar",
+      "kind": "input",
+      "refersTo": "input-chatbar",
+      "description": "The hero interaction — a white rounded pill with a borderless input and a moss send button.",
+      "html": "<div class=\"ds-chatbar\"><input class=\"ds-chatbar-input\" placeholder=\"Ask me anything about Patrick…\" /><button class=\"ds-chatbar-send\" aria-label=\"Send\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M223.69 42.18a8 8 0 0 0-9.87-9.87L33.83 84.45a8 8 0 0 0-1.4 14.9l77.91 39.31 39.31 77.91a8 8 0 0 0 14.9-1.4Z\"/></svg></button></div>",
+      "css": ".ds-chatbar { display: flex; align-items: center; gap: 8px; background: #fff; border-radius: 9999px; padding: 8px 8px 8px 22px; box-shadow: 0 1px 0 rgb(255 255 255 / 0.8) inset, 0 2px 8px -2px rgb(68 60 40 / 0.10), 0 12px 28px -16px rgb(68 60 40 / 0.18); width: 380px; max-width: 100%; } .ds-chatbar-input { flex: 1; border: none; outline: none; background: transparent; font-family: Manrope, system-ui, sans-serif; font-size: 14px; color: #141814; } .ds-chatbar-input::placeholder { color: rgb(20 24 20 / 0.55); } .ds-chatbar-send { width: 34px; height: 34px; border-radius: 9999px; background: #4F6B28; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; transition: transform 150ms; } .ds-chatbar-send:hover { transform: scale(1.05); }"
+    },
+    {
+      "name": "Polaroid Card",
+      "kind": "card",
+      "refersTo": "card-polaroid",
+      "description": "The signature object: white paper with a fat bottom lip, soft warm shadow, slight rotation, draggable.",
+      "html": "<figure class=\"ds-polaroid\"><div class=\"ds-polaroid-thumb\"></div><figcaption class=\"ds-polaroid-label\">Music Production</figcaption></figure>",
+      "css": ".ds-polaroid { background: #fff; padding: 8px 8px 32px; border-radius: 4px; box-shadow: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 10px 24px -12px rgb(68 60 40 / 0.18), 0 30px 60px -30px rgb(68 60 40 / 0.22); width: 180px; transform: rotate(-3deg); cursor: grab; user-select: none; transition: box-shadow 200ms, transform 200ms; } .ds-polaroid:hover { box-shadow: 0 1px 0 rgb(255 255 255 / 0.7) inset, 0 14px 30px -10px rgb(68 60 40 / 0.28), 0 40px 80px -28px rgb(68 60 40 / 0.32); transform: rotate(-1deg) translateY(-4px); } .ds-polaroid-thumb { width: 100%; aspect-ratio: 1; border-radius: 2px; background: linear-gradient(135deg, #C5D4A8, #F7DFA0); } .ds-polaroid-label { margin-top: 14px; text-align: center; font-family: Fraunces, Georgia, serif; font-style: italic; font-size: 16px; color: #141814; }"
+    },
+    {
+      "name": "Peek Card",
+      "kind": "card",
+      "refersTo": "card-peek",
+      "description": "Overlay card that floats over a blurred dark scrim when a polaroid is opened.",
+      "html": "<div class=\"ds-peek\"><button class=\"ds-peek-close\" aria-label=\"Close\">×</button><div class=\"ds-peek-body\"><p>I'm Patrick — a designer, creative developer, and music nerd living in Berlin.</p></div><div class=\"ds-peek-label\">About</div></div>",
+      "css": ".ds-peek { position: relative; background: #fff; border-radius: 32px; box-shadow: 0 20px 48px -12px rgb(76 60 30 / 0.14); padding: 28px; width: min(560px, 100%); } .ds-peek-close { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border-radius: 9999px; background: #FAF4E8; border: 1px solid rgb(20 24 20 / 0.08); cursor: pointer; color: rgb(20 24 20 / 0.55); font-size: 18px; line-height: 1; transition: background 150ms, color 150ms; } .ds-peek-close:hover { background: #EFE7D4; color: #141814; } .ds-peek-body { font-family: Manrope, system-ui, sans-serif; font-size: 15px; line-height: 1.6; color: #141814; } .ds-peek-label { margin-top: 20px; text-align: center; font-family: Fraunces, Georgia, serif; font-style: italic; font-size: 20px; color: #141814; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Mindgarden",
+    "overview": "A living garden you wander through, not a page you read. Polaroid cards drift in warm late-afternoon light, bloom outward from center on first arrival, float gently at rest, and can be picked up and tossed around. The whole surface breathes: a soft radial wash from cream center to sage edge, blurred organic color blooms in the corners, and a faint multiply grain so nothing ever looks flat or screen-born. The personality is warm and human first, with confident craft underneath and a playful, springy streak in every interaction. The medium is the proof: the draggable scatter, the working motion, and the tactility are the case study for a designer who codes. It explicitly rejects the corporate-agency showreel, the editorial-magazine portfolio, the SaaS landing page, and cold techie cosplay. It is a garden, a desk, a scrapbook — never a dashboard.",
+    "keyCharacteristics": [
+      "Warm cream-to-sage garden surface, never a flat white screen",
+      "Polaroid cards as the primary object: paper, soft shadow, slight rotation, draggable",
+      "Springy, living motion — bloom, float, drift, spring-back — over static states",
+      "Moss green as the single anchor accent in a soft naturalistic palette",
+      "Fraunces italic for voice; Manrope for plain-spoken body; mono only for tiny labels",
+      "Tactile depth via warm diffuse shadows; hard crisp shadows are forbidden"
+    ],
+    "rules": [
+      { "name": "The Warm-Surface Rule", "body": "The page is never a flat white screen. Content sits on the cream garden wash (#F5EFE1 toward sage), and white (#FFFFFF) is reserved exclusively for objects that lift off it. A large flat white panel filling the viewport means the garden has been paved over.", "section": "colors" },
+      { "name": "The One-Green-Voice Rule", "body": "Moss (#4F6B28) is the only saturated accent that carries meaning, on a small fraction of any screen. Sage, coral, and butter are atmospheric seasoning, never primary CTAs.", "section": "colors" },
+      { "name": "The Transparency-Not-Gray Rule", "body": "Muted text is a transparency of ink (#141814 @ 55%), never a separately picked gray, which goes muddy on the warm surface.", "section": "colors" },
+      { "name": "The Italic-Voice Rule", "body": "Display and title type is Fraunces italic, not roman. The slant is the personality.", "section": "typography" },
+      { "name": "The Eyebrow-Restraint Rule", "body": "The tiny tracked mono uppercase label is permitted only as an occasional structural marker, never stacked above every section.", "section": "typography" },
+      { "name": "The Warm-Diffuse Rule", "body": "Every shadow is brown-warm and soft-blurred. Crisp, dark, neutral-gray shadows are forbidden.", "section": "elevation" },
+      { "name": "The Lift-Is-Alive Rule", "body": "Elevation responds to interaction: rest then hover then drag escalates the shadow each step.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep content on the warm garden surface (#F5EFE1); reserve pure white (#FFFFFF) for objects that lift off it.",
+      "Do use moss (#4F6B28) as the single meaningful accent, on a small fraction of any screen.",
+      "Do set display and title type in Fraunces italic with the opsz/SOFT axes; let weight and slant carry hierarchy.",
+      "Do make depth warm, soft, and diffuse, and escalate it across rest, hover, drag.",
+      "Do give interactions a springy, living response — bloom, float, drift, spring-back.",
+      "Do honor prefers-reduced-motion with calm/instant fallbacks for bloom, float, and peek transitions.",
+      "Do treat muted text as a transparency of ink (#141814 @ 55%) and verify body/placeholder text clears WCAG AA on cream."
+    ],
+    "donts": [
+      "Don't pave the garden with a large flat white panel filling the viewport.",
+      "Don't build the corporate-agency showreel — no cinematic scroll-hijack, no full-bleed video spectacle.",
+      "Don't default to the editorial-magazine lane: roman display-serif slab + tracked uppercase eyebrow on every section + broadsheet grid.",
+      "Don't introduce SaaS landing-page clichés — feature grids, hero-metric templates, testimonial carousels, CTA stacks.",
+      "Don't dress it in cold techie costume — no monospace-everything, terminal tropes, or dark-mode-because-coding.",
+      "Don't use crisp, dark, or neutral-gray shadows; warm and diffuse only.",
+      "Don't stack tiny uppercase tracked eyebrows as section grammar.",
+      "Don't pick a separate gray for muted text.",
+      "Don't set headlines in upright Fraunces; the italic slant is the brand voice."
+    ]
+  }
+}
