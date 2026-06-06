@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic:
+      - generic:
+        - heading "I design, create and play." [level=1]
+        - paragraph: I’m Patrick, a designer with 8+ years in the industry, developer in training, AI-native creative and budding musician.
+    - generic:
+      - generic [ref=e6]:
+        - img "Web Design"
+        - generic:
+          - generic: Web Design
+      - generic [ref=e10]:
+        - img "Product Building"
+        - generic:
+          - generic: Product Building
+      - generic [ref=e14]:
+        - img "UX UI Design"
+        - generic:
+          - generic: UX UI Design
+      - generic [ref=e18]:
+        - img "Read & Written"
+        - generic:
+          - generic: Read & Written
+      - generic [ref=e22]:
+        - img "Art & Brand"
+        - generic:
+          - generic: Art & Brand
+      - generic [ref=e26]:
+        - img "Experiments"
+        - generic:
+          - generic: Experiments
+  - button "About Patrick" [ref=e28] [cursor=pointer]:
+    - img [ref=e29]
+  - link "Download CV" [ref=e32] [cursor=pointer]:
+    - /url: /cv-patrick-caire.pdf
+    - img [ref=e33]
+  - button "Contact" [ref=e37] [cursor=pointer]:
+    - img [ref=e38]
+  - button "Play music" [ref=e41] [cursor=pointer]:
+    - img [ref=e42]
+  - button "Open Next.js Dev Tools" [ref=e49] [cursor=pointer]:
+    - img [ref=e50]
+  - alert [ref=e53]
