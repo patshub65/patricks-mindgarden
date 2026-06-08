@@ -3,7 +3,11 @@
     "allow": [
       "Bash(npm --version)",
       "Bash(npx create-next-app@latest . --typescript --no-tailwind --app --no-src-dir --import-alias \"@/*\" --eslint --yes)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_wait_for"
     ]
   }
 }

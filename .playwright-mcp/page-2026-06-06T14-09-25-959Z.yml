@@ -1,0 +1,180 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic:
+      - generic:
+        - heading "I design, create and play." [level=1]
+        - paragraph: I’m Patrick, a designer with 8+ years in the industry, developer in training, AI-native creative and budding musician.
+    - generic:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - img "Web Design"
+          - generic:
+            - generic: Web Design
+        - generic:
+          - button "Close": ×
+          - generic:
+            - link "frachtwerk Frachtwerk":
+              - /url: /creating/frachtwerk
+              - generic:
+                - img "frachtwerk"
+                - generic: Frachtwerk
+            - link "mxc MXC":
+              - /url: /creating/mxc
+              - generic:
+                - img "mxc"
+                - generic: MXC
+            - link "stetig-wandel Stetig & Wandel":
+              - /url: /creating/stetig-wandel
+              - generic:
+                - img "stetig-wandel"
+                - generic: Stetig & Wandel
+            - link "green-visions Green Visions":
+              - /url: /creating/green-visions
+              - generic:
+                - img "green-visions"
+                - generic: Green Visions
+          - generic:
+            - generic: Web Design
+            - generic: Crafting digital experiences that are thoughtful, clear and impactful.
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - img "Product Building"
+          - generic:
+            - generic: Product Building
+        - generic:
+          - button "Close": ×
+          - generic:
+            - link "sponti Sponti":
+              - /url: /creating/sponti
+              - generic:
+                - img "sponti"
+                - generic: Sponti
+            - link "GitHub":
+              - /url: https://github.com/patshub65
+              - generic:
+                - generic: GitHub
+          - generic:
+            - generic: Product Building
+            - generic: Things I've designed and shipped — from weekend experiments to live apps.
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - img "UX UI Design"
+          - generic:
+            - generic: UX UI Design
+        - generic:
+          - button "Close": ×
+          - generic:
+            - link "autonomies Autonomies":
+              - /url: /creating/autonomies
+              - generic:
+                - img "autonomies"
+                - generic: Autonomies
+            - link "sponti Sponti":
+              - /url: /creating/sponti
+              - generic:
+                - img "sponti"
+                - generic: Sponti
+          - generic:
+            - generic: UX UI Design
+            - generic: Product design and research — from first principles to shipped interfaces.
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - img "Read & Written"
+          - generic:
+            - generic: Read & Written
+        - generic:
+          - button "Close": ×
+          - generic:
+            - generic:
+              - generic: "2025"
+              - generic: Design is a conversation with time
+              - generic: On why every design decision is also a prediction.
+            - generic:
+              - generic: "2024"
+              - generic: The tools are not neutral
+              - generic: AI in the design workflow — what it changes and what it doesn't.
+            - generic:
+              - generic: "2024"
+              - generic: Berlin is a brief
+              - generic: The city as constraint. What designing here teaches you.
+          - generic:
+            - generic: Read & Written
+            - generic: Thinking out loud — mostly on design, craft, and the city.
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - img "Art & Brand"
+          - generic:
+            - generic: Art & Brand
+        - generic:
+          - button "Close": ×
+          - generic:
+            - link "afar AFAR":
+              - /url: /creating/afar
+              - generic:
+                - img "afar"
+                - generic: AFAR
+            - link "chikai Chikai":
+              - /url: /creating/chikai
+              - generic:
+                - img "chikai"
+                - generic: Chikai
+            - link "keyko Keyko":
+              - /url: /creating/keyko
+              - generic:
+                - img "keyko"
+                - generic: Keyko
+            - link "loominate Loominate":
+              - /url: /creating/loominate
+              - generic:
+                - img "loominate"
+                - generic: Loominate
+            - link "bananas-are-berries Bananas Are Berries":
+              - /url: /creating/bananas-are-berries
+              - generic:
+                - img "bananas-are-berries"
+                - generic: Bananas Are Berries
+          - generic:
+            - generic: Art & Brand
+            - generic: Logos, visual systems, and creative direction across brands.
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - img "Experiments"
+          - generic:
+            - generic: Experiments
+        - generic:
+          - button "Close": ×
+          - generic:
+            - generic:
+              - generic:
+                - img
+            - generic:
+              - generic:
+                - img
+            - generic:
+              - generic:
+                - img
+            - generic:
+              - generic:
+                - img
+            - generic:
+              - generic:
+                - img
+            - generic:
+              - generic:
+                - img
+          - generic:
+            - generic: Experiments
+            - generic: Visual play — motion, collage, and things without a brief.
+  - button "About Patrick" [ref=e28] [cursor=pointer]:
+    - img [ref=e29]
+  - generic [ref=e31]:
+    - generic: Download my portfolio
+    - img [ref=e32]
+    - link "Download CV" [ref=e35] [cursor=pointer]:
+      - /url: /cv-patrick-caire.pdf
+      - img [ref=e36]
+  - button "Contact" [ref=e40] [cursor=pointer]:
+    - img [ref=e41]
+  - button "Play music" [ref=e44] [cursor=pointer]:
+    - img [ref=e45]
+  - alert [ref=e47]

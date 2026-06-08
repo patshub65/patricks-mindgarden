@@ -1,0 +1,39 @@
+[     826ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14537
+[    1516ms] [WARNING] Image with src "/images/cards/card-product.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
+Read more: https://nextjs.org/docs/api-reference/next/image#priority @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:968
+[    2182ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/music/track.mp3:0
+[  979648ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5949
+[  979786ms] [LOG] [Fast Refresh] done in 241ms @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5809
+[ 2031949ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.png&w=256&q=75:0
+[ 2032056ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.jpg&w=256&q=75:0
+[ 2032196ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.webp&w=256&q=75:0
+[ 2048514ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5949
+[ 2048518ms] [LOG] [Fast Refresh] done in 108ms @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5809
+[ 2077339ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14537
+[ 2077405ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/music/track.mp3:0
+[ 2077543ms] [WARNING] Image with src "/images/cards/card-web.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
+Read more: https://nextjs.org/docs/api-reference/next/image#priority @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:968
+[ 2077615ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5949
+[ 2077744ms] [LOG] [Fast Refresh] done in 229ms @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5809
+[ 2092830ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.png&w=256&q=75:0
+[ 2092928ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.jpg&w=256&q=75:0
+[ 2092981ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.webp&w=256&q=75:0
+[ 2119771ms] [ERROR] WebSocket connection to 'ws://localhost:3001/_next/webpack-hmr' failed:  @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5696
+[ 2143999ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.png&w=256&q=75:0
+[ 2144001ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.jpg&w=256&q=75:0
+[ 2144002ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.webp&w=256&q=75:0
+[ 2147132ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.png&w=256&q=75:0
+[ 2147134ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.jpg&w=256&q=75:0
+[ 2147137ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fsponti%2Fhero.webp&w=256&q=75:0
+[ 2148911ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Ffrachtwerk%2Fhero.png&w=256&q=75:0
+[ 2148911ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fmxc%2Fhero.png&w=256&q=75:0
+[ 2148911ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fstetig-wandel%2Fhero.png&w=256&q=75:0
+[ 2148912ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fgreen-visions%2Fhero.png&w=256&q=75:0
+[ 2148912ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Ffrachtwerk%2Fhero.jpg&w=256&q=75:0
+[ 2148913ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fmxc%2Fhero.jpg&w=256&q=75:0
+[ 2148913ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fstetig-wandel%2Fhero.jpg&w=256&q=75:0
+[ 2148913ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fgreen-visions%2Fhero.jpg&w=256&q=75:0
+[ 2148914ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Ffrachtwerk%2Fhero.webp&w=256&q=75:0
+[ 2148915ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fmxc%2Fhero.webp&w=256&q=75:0
+[ 2148915ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fstetig-wandel%2Fhero.webp&w=256&q=75:0
+[ 2148915ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/image?url=%2Fimages%2Fcreating%2Fgreen-visions%2Fhero.webp&w=256&q=75:0
