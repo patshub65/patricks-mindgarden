@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { X } from "@phosphor-icons/react"
 import Link from "next/link"
+import Image from "next/image"
 
 interface PeekOverlayProps {
   id: string | null
@@ -335,27 +336,77 @@ function PeekMusicVideo() {
 
 // ── Visuals ──────────────────────────────────────────────────────────────────
 
+const VISUAL_IMAGES: [string, number, number][] = [
+  ['01.webp', 1024, 564],
+  ['02.jpg', 684, 1024],
+  ['03.jpg', 1024, 693],
+  ['04.jpg', 1024, 1024],
+  ['05.png', 1024, 533],
+  ['06.png', 1024, 784],
+  ['07.jpg', 1024, 683],
+  ['08.jpg', 1024, 683],
+  ['09.png', 819, 1024],
+  ['10.png', 1024, 680],
+  ['11.png', 1024, 1024],
+  ['12.jpg', 1024, 576],
+  ['13.jpg', 1024, 576],
+  ['14.jpg', 1024, 577],
+  ['15.jpg', 1024, 683],
+  ['16.jpg', 1024, 931],
+  ['17.jpg', 703, 1024],
+  ['18.jpg', 1024, 725],
+  ['19.jpg', 1024, 725],
+  ['20.png', 1024, 725],
+  ['21.jpg', 920, 1024],
+  ['22.jpg', 1024, 385],
+  ['23.png', 483, 482],
+  ['24.png', 1024, 512],
+  ['25.png', 1024, 576],
+  ['26.jpg', 1024, 681],
+  ['27.jpg', 1024, 576],
+  ['28.png', 1024, 576],
+  ['29.jpg', 725, 1024],
+  ['30.png', 1024, 574],
+  ['31.jpg', 1024, 683],
+  ['32.jpg', 900, 900],
+  ['33.png', 1024, 1024],
+  ['34.png', 300, 300],
+  ['35.jpg', 1024, 682],
+  ['36.png', 1024, 533],
+  ['37.png', 1024, 1024],
+  ['38.jpg', 1024, 682],
+  ['39.jpg', 1024, 680],
+  ['40.jpg', 737, 1024],
+  ['41.jpg', 704, 973],
+  ['42.png', 1024, 1024],
+  ['43.jpg', 1024, 682],
+  ['44.jpg', 700, 467],
+  ['45.jpg', 724, 1024],
+  ['46.jpg', 724, 1024],
+  ['47.jpg', 683, 1024],
+  ['48.jpg', 1024, 682],
+]
+
 function PeekVisuals() {
-  const tiles = [
-    { bg: 'var(--coral)', h: 180, shape: <svg viewBox="0 0 60 60"><circle cx="30" cy="26" r="18" fill="var(--ink)" /><rect x="6" y="46" width="48" height="10" fill="var(--butter)" /></svg> },
-    { bg: 'var(--moss)', h: 140, shape: <svg viewBox="0 0 60 60"><path d="M10 50 L30 10 L50 50 Z" fill="var(--butter)" /></svg> },
-    { bg: 'var(--butter)', h: 160, shape: <svg viewBox="0 0 60 60"><rect x="14" y="14" width="32" height="32" fill="var(--coral)" /><circle cx="30" cy="30" r="8" fill="var(--ink)" /></svg> },
-    { bg: 'var(--sage)', h: 200, shape: <svg viewBox="0 0 60 60"><path d="M0 40 Q15 10 30 40 T60 40 L60 60 L0 60 Z" fill="var(--moss)" /></svg> },
-    { bg: '#2a3620', h: 150, shape: <svg viewBox="0 0 60 60"><circle cx="20" cy="20" r="10" fill="var(--butter)" /><circle cx="40" cy="40" r="14" fill="var(--coral)" /></svg> },
-    { bg: 'var(--surface)', h: 170, shape: <svg viewBox="0 0 60 60"><rect x="10" y="10" width="18" height="18" fill="var(--moss)" /><rect x="32" y="10" width="18" height="18" fill="var(--coral)" /><rect x="10" y="32" width="18" height="18" fill="var(--butter)" /><rect x="32" y="32" width="18" height="18" fill="var(--sage)" /></svg> },
-    { bg: 'var(--ink)', h: 140, shape: <svg viewBox="0 0 60 60"><text x="30" y="36" textAnchor="middle" fontFamily="var(--font-display)" fontStyle="italic" fontSize="20" fill="var(--butter)">form</text></svg> },
-    { bg: 'var(--coral)', h: 170, shape: <svg viewBox="0 0 60 60"><path d="M10 30 Q30 5 50 30 Q30 55 10 30 Z" fill="var(--ink)" /></svg> },
-    { bg: 'var(--moss)', h: 180, shape: <svg viewBox="0 0 60 60"><rect x="8" y="28" width="44" height="4" fill="var(--butter)" /><rect x="28" y="8" width="4" height="44" fill="var(--butter)" /></svg> },
-  ]
   return (
-    <div className="peek-masonry">
-      {tiles.map((t, i) => (
-        <div key={i} className="peek-tile" style={{ background: t.bg, height: t.h }}>
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '70%', height: '70%' }}>{t.shape}</div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-ink-muted)', lineHeight: 1.55 }}>
+        Motion, collage, brand work, and things without a brief.
+      </p>
+      <div className="peek-masonry">
+        {VISUAL_IMAGES.map(([file, w, h]) => (
+          <div key={file} className="peek-tile">
+            <Image
+              src={`/images/visuals/${file}`}
+              alt=""
+              width={w}
+              height={h}
+              sizes="(max-width: 600px) 45vw, 240px"
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }
