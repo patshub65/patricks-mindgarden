@@ -10,7 +10,7 @@ interface DetailPageProps {
 
 function H1(props: React.HTMLAttributes<HTMLHeadingElement>) {
   return <h1 style={{
-    fontFamily: 'var(--font-display)', fontStyle: 'italic',
+    fontFamily: 'var(--font-display)', fontStyle: 'normal',
     fontVariationSettings: '"opsz" 72, "SOFT" 20',
     fontSize: 'clamp(36px, 5vw, 60px)', lineHeight: 1.05,
     letterSpacing: '-0.02em', color: 'var(--color-ink)', margin: '0 0 28px',
@@ -19,7 +19,7 @@ function H1(props: React.HTMLAttributes<HTMLHeadingElement>) {
 
 function H2(props: React.HTMLAttributes<HTMLHeadingElement>) {
   return <h2 style={{
-    fontFamily: 'var(--font-display)', fontStyle: 'italic',
+    fontFamily: 'var(--font-display)', fontStyle: 'normal',
     fontVariationSettings: '"opsz" 36, "SOFT" 40',
     fontSize: 'clamp(22px, 3vw, 32px)', lineHeight: 1.1,
     color: 'var(--color-ink)', margin: '48px 0 16px',
@@ -62,7 +62,7 @@ function Blockquote(props: React.HTMLAttributes<HTMLQuoteElement>) {
   return <blockquote style={{
     borderLeft: '3px solid var(--color-moss)', paddingLeft: 20,
     margin: '28px 0', color: 'var(--color-ink-muted)',
-    fontFamily: 'var(--font-display)', fontStyle: 'italic',
+    fontFamily: 'var(--font-display)', fontStyle: 'normal',
     fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, lineHeight: 1.5,
   }} {...props} />
 }
@@ -139,7 +139,7 @@ export default function DetailPage({ meta, content, backNav, footerNav }: Detail
 
         {/* Title */}
         <h1 style={{
-          fontFamily: 'var(--font-display)', fontStyle: 'italic',
+          fontFamily: 'var(--font-display)', fontStyle: 'normal',
           fontVariationSettings: '"opsz" 72, "SOFT" 20',
           fontSize: 'clamp(42px, 6vw, 72px)', lineHeight: 1.0,
           letterSpacing: '-0.02em', color: 'var(--color-ink)',

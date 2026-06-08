@@ -92,7 +92,7 @@ export default function MusicPlayer() {
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
                 <div style={{
                   fontFamily: "var(--font-display)",
-                  fontStyle: "italic",
+                  fontStyle: "normal",
                   fontVariationSettings: '"opsz" 14, "SOFT" 80',
                   fontSize: 13,
                   color: "var(--color-ink)",

@@ -13,6 +13,7 @@ import type { PanInfo } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import type { CardProject } from "@/lib/cards"
+import { WRITING_POSTS } from "@/lib/cards"
 
 const FRICTION = 1.6
 const RESTITUTION = 0.6
@@ -63,9 +64,9 @@ function ProjectThumb({ project }: { project: CardProject }) {
   const inner = (
     <div style={{
       flexShrink: 0,
-      width: 140,
-      height: 96,
-      borderRadius: 10,
+      width: 184,
+      height: 124,
+      borderRadius: 12,
       background: hasImage ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.18)',
       display: 'flex',
       flexDirection: 'column',
@@ -95,11 +96,11 @@ function ProjectThumb({ project }: { project: CardProject }) {
         background: 'rgba(255,255,255,0.92)',
         color: '#141814',
         fontFamily: 'var(--font-mono)',
-        fontSize: 9,
+        fontSize: 10,
         fontWeight: 600,
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
-        padding: '3px 8px',
+        padding: '4px 9px',
         borderRadius: 5,
         lineHeight: 1.4,
         maxWidth: '100%',
@@ -145,10 +146,10 @@ function ProjectHeroImage({ slug }: { slug: string }) {
       src={`/images/creating/${slug}/hero.${extensions[ext]}`}
       alt={slug}
       fill
-      sizes="140px"
+      sizes="184px"
       style={{
         objectFit: 'cover',
-        borderRadius: 10,
+        borderRadius: 12,
         opacity: loaded ? 1 : 0,
         transition: 'opacity 200ms',
         zIndex: 1,
@@ -166,6 +167,9 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
   const isDraggingRef = useRef(false)
   const startXRef = useRef(0)
   const scrollLeftRef = useRef(0)
+  // Tracks whether the pointer moved enough to count as a drag (vs a click).
+  // Used to swallow the click that would otherwise navigate a child link.
+  const movedRef = useRef(false)
 
   return (
     <div
@@ -177,10 +181,15 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         scrollbarWidth: 'none',
         paddingBottom: 2,
         cursor: 'grab',
+        touchAction: 'pan-x',
         WebkitOverflowScrolling: 'touch',
       }}
+      // Kill the browser's native link/image ghost-drag, which hijacks the
+      // press-drag-to-scroll gesture on the text-and-link cards.
+      onDragStart={e => e.preventDefault()}
       onMouseDown={e => {
         isDraggingRef.current = true
+        movedRef.current = false
         startXRef.current = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
         scrollLeftRef.current = scrollRef.current?.scrollLeft ?? 0
         if (scrollRef.current) scrollRef.current.style.cursor = 'grabbing'
@@ -189,7 +198,9 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         if (!isDraggingRef.current || !scrollRef.current) return
         e.preventDefault()
         const x = e.pageX - scrollRef.current.offsetLeft
-        scrollRef.current.scrollLeft = scrollLeftRef.current - (x - startXRef.current)
+        const delta = x - startXRef.current
+        if (Math.abs(delta) > 4) movedRef.current = true
+        scrollRef.current.scrollLeft = scrollLeftRef.current - delta
       }}
       onMouseUp={() => {
         isDraggingRef.current = false
@@ -199,44 +210,65 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         isDraggingRef.current = false
         if (scrollRef.current) scrollRef.current.style.cursor = 'grab'
       }}
+      // If the gesture was a drag, swallow the click so child links don't fire.
+      onClickCapture={e => {
+        if (movedRef.current) {
+          e.preventDefault()
+          e.stopPropagation()
+          movedRef.current = false
+        }
+      }}
     >
       {children}
     </div>
   )
 }
 
-const WRITING_POSTS = [
-  { title: 'Design is a conversation with time', date: '2025', note: 'On why every design decision is also a prediction.' },
-  { title: 'The tools are not neutral', date: '2024', note: 'AI in the design workflow — what it changes and what it doesn\'t.' },
-  { title: 'Berlin is a brief', date: '2024', note: 'The city as constraint. What designing here teaches you.' },
-]
-
 function WritingGallery() {
   return (
     <ScrollStrip>
       {WRITING_POSTS.map(p => (
-        <div key={p.title} style={{
-          flexShrink: 0,
-          width: 180,
-          padding: '12px 14px',
-          background: 'rgba(255,255,255,0.75)',
-          borderRadius: 12,
-          border: '1px solid rgba(20,24,20,0.06)',
-        }}>
+        <a
+          key={p.title}
+          href={p.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={e => e.stopPropagation()}
+          style={{
+            flexShrink: 0,
+            width: 248,
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '14px 16px',
+            background: 'rgba(255,255,255,0.78)',
+            borderRadius: 14,
+            border: '1px solid rgba(20,24,20,0.06)',
+            textDecoration: 'none',
+            transition: 'background 150ms',
+          }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.95)')}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.78)')}
+        >
+          {p.date && (
+            <div style={{
+              fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+              color: 'rgba(20,24,20,0.45)', textTransform: 'uppercase', marginBottom: 6,
+            }}>{p.date}</div>
+          )}
           <div style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
-            color: 'rgba(20,24,20,0.45)', textTransform: 'uppercase', marginBottom: 6,
-          }}>{p.date}</div>
-          <div style={{
-            fontFamily: 'var(--font-display)', fontStyle: 'italic',
+            fontFamily: 'var(--font-display)', fontStyle: 'normal',
             fontVariationSettings: '"opsz" 14, "SOFT" 80',
-            fontSize: 14, lineHeight: 1.2, color: 'rgba(20,24,20,0.85)',
+            fontSize: 15, lineHeight: 1.2, color: 'rgba(20,24,20,0.88)',
           }}>{p.title}</div>
           <div style={{
-            fontFamily: 'var(--font-body)', fontSize: 11, lineHeight: 1.45,
-            color: 'rgba(20,24,20,0.5)', marginTop: 6,
-          }}>{p.note}</div>
-        </div>
+            fontFamily: 'var(--font-body)', fontSize: 11.5, lineHeight: 1.5,
+            color: 'rgba(20,24,20,0.55)', marginTop: 7,
+          }}>{p.excerpt}</div>
+          <div style={{
+            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.06em',
+            color: 'var(--color-moss)', marginTop: 10,
+          }}>Read on LinkedIn ↗</div>
+        </a>
       ))}
     </ScrollStrip>
   )
@@ -407,7 +439,7 @@ export default function IllustrationCard({
             overflow: 'hidden',
             cursor: isExpanded ? 'default' : 'grab',
             userSelect: 'none',
-            touchAction: 'none',
+            touchAction: isExpanded ? 'auto' : 'none',
           }}
         >
           {/* Illustration — always absolute so it never reflows; fades out when expanded */}
@@ -455,7 +487,7 @@ export default function IllustrationCard({
             >
               <span style={{
                 fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
+                fontStyle: 'normal',
                 fontVariationSettings: '"opsz" 14, "SOFT" 100',
                 fontSize: Math.max(13, size * 0.09),
                 lineHeight: 1.1,
@@ -529,7 +561,7 @@ export default function IllustrationCard({
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingRight: 32 }}>
                   <div style={{
                     fontFamily: 'var(--font-display)',
-                    fontStyle: 'italic',
+                    fontStyle: 'normal',
                     fontVariationSettings: '"opsz" 36, "SOFT" 60',
                     fontSize: 26,
                     lineHeight: 1.0,

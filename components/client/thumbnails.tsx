@@ -43,7 +43,7 @@ export function ThumbBrand() {
       <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
         <circle cx="50" cy="50" r="38" fill="none" stroke="var(--butter)" strokeWidth="2.5" />
         <text x="50" y="58" textAnchor="middle"
-          fontFamily="var(--font-display)" fontStyle="italic" fontSize="22" fill="var(--butter)">
+          fontFamily="var(--font-display)" fontStyle="normal" fontSize="22" fill="var(--butter)">
           art
         </text>
       </svg>
@@ -55,7 +55,7 @@ export function ThumbWriting() {
   return (
     <div style={{ ...wrap, background: '#F5EAD6', flexDirection: 'column', justifyContent: 'center', padding: '0 18px', gap: 12 }}>
       <div style={{
-        fontFamily: 'var(--font-display)', fontStyle: 'italic',
+        fontFamily: 'var(--font-display)', fontStyle: 'normal',
         fontSize: 22, color: 'var(--ink)', lineHeight: 1.1,
       }}>
         on craft.

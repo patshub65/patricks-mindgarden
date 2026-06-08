@@ -87,7 +87,7 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
                 }}>
                   <span style={{
                     fontFamily: 'var(--font-display)',
-                    fontStyle: 'italic',
+                    fontStyle: 'normal',
                     fontSize: 36,
                     color: 'var(--color-butter)',
                     fontVariationSettings: '"opsz" 36, "SOFT" 100',
@@ -106,7 +106,7 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{
                   fontFamily: 'var(--font-display)',
-                  fontStyle: 'italic',
+                  fontStyle: 'normal',
                   fontVariationSettings: '"opsz" 36, "SOFT" 60',
                   fontSize: 26,
                   lineHeight: 1.1,

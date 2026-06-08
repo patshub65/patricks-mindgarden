@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import { X } from "@phosphor-icons/react"
 import Link from "next/link"
 import Image from "next/image"
+import { WRITING_POSTS } from "@/lib/cards"
 
 interface PeekOverlayProps {
   id: string | null
@@ -36,8 +37,8 @@ export default function PeekOverlay({ id, label, onClose }: PeekOverlayProps) {
         >
           <motion.div
             className="peek-card"
-            initial={{ opacity: 0, y: 24, scale: 0.96, rotate: 1 }}
-            animate={{ opacity: 1, y: 0, scale: 1, rotate: 1 }}
+            initial={{ opacity: 0, y: 24, scale: 0.96, rotate: -2 }}
+            animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 180, damping: 22 }}
           >
@@ -90,7 +91,7 @@ function ProjectTile({ slug, title, sub, accent, from }: { slug: string; title: 
       onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
       onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
     >
-      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-ink)', lineHeight: 1.1 }}>{title}</div>
+      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-ink)', lineHeight: 1.1 }}>{title}</div>
       <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-ink-muted)', marginTop: 4 }}>{sub}</div>
     </Link>
   )
@@ -104,7 +105,7 @@ function ComingSoonTile({ title, sub }: { title: string; sub: string }) {
       borderRadius: 14,
       border: '1px dashed var(--color-ink-faint)',
     }}>
-      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-ink)', lineHeight: 1.1 }}>{title}</div>
+      <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-ink)', lineHeight: 1.1 }}>{title}</div>
       <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-ink-muted)', marginTop: 4 }}>{sub}</div>
     </div>
   )
@@ -184,7 +185,7 @@ function PeekProduct() {
         onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
         onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
       >
-        <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-ink)', lineHeight: 1.1 }}>Sponti ↗</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-ink)', lineHeight: 1.1 }}>Sponti ↗</div>
         <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-ink-muted)', marginTop: 4 }}>Live app · spontaneous local events</div>
       </a>
       <a
@@ -199,7 +200,7 @@ function PeekProduct() {
         onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
         onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
       >
-        <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-sage)', lineHeight: 1.1 }}>GitHub ↗</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 18, color: 'var(--color-sage)', lineHeight: 1.1 }}>GitHub ↗</div>
         <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(197,212,168,0.6)', marginTop: 4 }}>Source code + side projects</div>
       </a>
       <ComingSoonTile title="This site" sub="Next.js · Framer Motion · mindgarden concept" />
@@ -210,27 +211,40 @@ function PeekProduct() {
 // ── Written Things ───────────────────────────────────────────────────────────
 
 function PeekWriting() {
-  const posts = [
-    { title: 'Design is a conversation with time', date: '2025', note: 'On why every design decision is also a prediction.' },
-    { title: 'The tools are not neutral', date: '2024', note: 'AI in the design workflow — what it changes and what it doesn\'t.' },
-    { title: 'Berlin is a brief', date: '2024', note: 'The city as constraint. What designing here teaches you.' },
-  ]
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--color-ink-muted)', lineHeight: 1.55 }}>
-        Thinking out loud — mostly on design, craft, and the city.
+        Thinking out loud on design, code, and the jump between them — over on{' '}
+        <a href="https://www.linkedin.com/in/patrickcaire/" target="_blank" rel="noopener noreferrer"
+          style={{ color: 'var(--color-moss)', textDecoration: 'none', borderBottom: '1px solid var(--color-moss)' }}>
+          LinkedIn
+        </a>.
       </p>
-      {posts.map(p => (
-        <div key={p.title} style={{
-          padding: '14px 16px',
-          background: 'var(--color-surface)',
-          borderRadius: 14,
-          border: '1px solid var(--color-ink-hair)',
-        }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--color-ink-muted)', textTransform: 'uppercase', marginBottom: 4 }}>{p.date}</div>
-          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 16, color: 'var(--color-ink)', lineHeight: 1.2 }}>{p.title}</div>
-          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-ink-muted)', marginTop: 4, lineHeight: 1.5 }}>{p.note}</div>
-        </div>
+      {WRITING_POSTS.map(p => (
+        <a
+          key={p.title}
+          href={p.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block',
+            padding: '14px 16px',
+            background: 'var(--color-surface)',
+            borderRadius: 14,
+            border: '1px solid var(--color-ink-hair)',
+            textDecoration: 'none',
+            transition: 'opacity 150ms',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+        >
+          {p.date && (
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', color: 'var(--color-ink-muted)', textTransform: 'uppercase', marginBottom: 4 }}>{p.date}</div>
+          )}
+          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 16, color: 'var(--color-ink)', lineHeight: 1.2 }}>{p.title}</div>
+          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-ink-muted)', marginTop: 6, lineHeight: 1.5 }}>{p.excerpt}</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.06em', color: 'var(--color-moss)', marginTop: 8 }}>Read on LinkedIn ↗</div>
+        </a>
       ))}
     </div>
   )
@@ -254,7 +268,7 @@ function PeekMusic() {
           </svg>
         </div>
         <div>
-          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 20, lineHeight: 1.1, color: 'var(--color-ink)' }}>Originals</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 20, lineHeight: 1.1, color: 'var(--color-ink)' }}>Originals</div>
           <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--color-ink-muted)', marginTop: 4 }}>Electronic, ambient, bits of everything — recorded in Berlin</div>
         </div>
       </div>
@@ -277,7 +291,7 @@ function PeekMusic() {
           </svg>
         </div>
         <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 14, "SOFT" 80', fontSize: 13, color: 'var(--color-ink)' }}>untitled — Patrick Caire</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 14, "SOFT" 80', fontSize: 13, color: 'var(--color-ink)' }}>untitled — Patrick Caire</div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--color-ink-muted)', marginTop: 2 }}>Hit play in the corner ↘</div>
         </div>
       </div>
@@ -318,7 +332,7 @@ function PeekMusicVideo() {
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 16, padding: '0 4px' }}>
         <div>
-          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 22, lineHeight: 1.1, color: 'var(--color-ink)' }}>Nachtgarten</div>
+          <div style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 36, "SOFT" 60', fontSize: 22, lineHeight: 1.1, color: 'var(--color-ink)' }}>Nachtgarten</div>
           <div style={{ fontSize: 12, color: 'var(--color-ink-muted)', marginTop: 4 }}>Patrick Caire · Berlin</div>
         </div>
         <a
@@ -434,7 +448,7 @@ function PeekAbout() {
         }}>
           <span style={{
             fontFamily: 'var(--font-display)',
-            fontStyle: 'italic',
+            fontStyle: 'normal',
             fontSize: 36,
             color: 'var(--color-butter)',
             fontVariationSettings: '"opsz" 36, "SOFT" 100',
@@ -453,7 +467,7 @@ function PeekAbout() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{
           fontFamily: 'var(--font-display)',
-          fontStyle: 'italic',
+          fontStyle: 'normal',
           fontVariationSettings: '"opsz" 36, "SOFT" 60',
           fontSize: 26,
           lineHeight: 1.1,
@@ -494,7 +508,7 @@ function PeekAbout() {
           lineHeight: 1.5,
         }}>
           Want to know more?{' '}
-          <em style={{ fontFamily: 'var(--font-display)', fontStyle: 'italic', fontVariationSettings: '"opsz" 14, "SOFT" 100', color: 'var(--color-ink)' }}>
+          <em style={{ fontFamily: 'var(--font-display)', fontStyle: 'normal', fontVariationSettings: '"opsz" 14, "SOFT" 100', color: 'var(--color-ink)' }}>
             Ask below ↓
           </em>
         </div>

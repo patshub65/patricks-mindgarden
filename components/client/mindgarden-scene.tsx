@@ -97,7 +97,7 @@ export default function MindgardenScene() {
           <h1 style={{
             margin: 0,
             fontFamily: "var(--font-display)",
-            fontStyle: "italic",
+            fontStyle: "normal",
             fontVariationSettings: '"opsz" 72, "SOFT" 20',
             fontSize: isMobile ? "clamp(36px, 10vw, 52px)" : "clamp(44px, 4.5vw, 68px)",
             lineHeight: 1.0,
@@ -170,7 +170,7 @@ export default function MindgardenScene() {
                 scale: 1,
                 x: targetX,
                 y: card.y,
-                rotate: card.rot,
+                rotate: isExpanded ? 0 : card.rot,
               }}
               transition={transition}
             >

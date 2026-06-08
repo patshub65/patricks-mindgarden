@@ -110,10 +110,10 @@ export default function CornerNav() {
             }}>
               Download my portfolio
             </span>
-            {/* curvy arrow */}
-            <svg width="22" height="16" viewBox="0 0 22 16" fill="none" style={{ flexShrink: 0, opacity: 0.7 }}>
-              <path d="M1 4 C4 1 9 1 12 4 C15 7 16 10 20 10" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-              <path d="M17 7 L20 10 L17 13" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            {/* curvy arrow pointing to the download button */}
+            <svg width="30" height="18" viewBox="0 0 30 18" fill="none" style={{ flexShrink: 0, opacity: 0.85 }}>
+              <path d="M2 3C9 1 16 2 21 8C23.5 11 24.5 12.5 26 13.5" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+              <path d="M20.6 12.6 26 13.5 23 8.9" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
             </svg>
           </>
         )}

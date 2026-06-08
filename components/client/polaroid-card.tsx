@@ -52,7 +52,7 @@ function labelStyle(size: number): React.CSSProperties {
     WebkitBoxOrient: 'vertical',
     alignContent: 'center',
     fontFamily: 'var(--font-display)',
-    fontStyle: 'italic',
+    fontStyle: 'normal',
     fontVariationSettings: '"opsz" 14, "SOFT" 100',
     fontSize,
     lineHeight: 1.08,

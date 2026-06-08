@@ -111,7 +111,7 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
             <div style={{ paddingTop: 4, marginBottom: 20, paddingRight: 40 }}>
               <div style={{
                 fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
+                fontStyle: 'normal',
                 fontVariationSettings: '"opsz" 36, "SOFT" 60',
                 fontSize: 28,
                 lineHeight: 1.0,

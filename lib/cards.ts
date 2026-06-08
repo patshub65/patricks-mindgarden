@@ -79,8 +79,8 @@ export const HOME_CARDS: HomeCard[] = [
   },
   {
     id: 'writing',
-    label: 'Read & Written',
-    description: 'Thinking out loud — mostly on design, craft, and the city.',
+    label: 'Written Things',
+    description: 'Thinking out loud on design, code, and the jump between them.',
     accentBg: '#B8CCA0',
     baseSize: 230,
     behavior: 'peek',
@@ -118,6 +118,50 @@ export const HOME_CARDS: HomeCard[] = [
     mobile:  { fx: 0.72, fy: 0.80, rot: 6 },
     entrance: { rank: 1, startRot: 32 },
     projects: [],
+  },
+]
+
+// ── Written Things (LinkedIn posts) ──────────────────────────────────────────
+
+export interface WritingPost {
+  /** Short label, e.g. "Apr 2025". Optional — omit until confirmed. */
+  date?: string
+  /** Headline crafted for the card (not the LinkedIn title). */
+  title: string
+  /** 1–2 sentence pull-quote from the post. */
+  excerpt: string
+  /** Full LinkedIn post URL. */
+  href: string
+}
+
+// TODO: swap each `href` for the individual LinkedIn post URL (currently the
+// profile activity feed as a fallback). Add `date` labels once confirmed.
+const LINKEDIN_ACTIVITY = 'https://www.linkedin.com/in/patrickcaire/recent-activity/all/'
+
+export const WRITING_POSTS: WritingPost[] = [
+  {
+    title: 'Why designers should understand code',
+    excerpt:
+      'The point was never to become a developer. It was to stop being the person who has to trust everyone else’s definition of “that’s not technically feasible.”',
+    href: LINKEDIN_ACTIVITY,
+  },
+  {
+    title: 'Design generalists fit the Zeitgeist',
+    excerpt:
+      'I don’t see how being great at one thing only cuts it anymore. Through the amalgamation of many forays, I’ve built an approach, an eye, and the ability to move from the highest abstraction down to the tiniest detail.',
+    href: LINKEDIN_ACTIVITY,
+  },
+  {
+    title: 'AI clears the fog — you still walk the trail',
+    excerpt:
+      'AI shows us the path, but it doesn’t walk it for us. My job as a design engineer is to understand the terrain well enough to survive the hike.',
+    href: LINKEDIN_ACTIVITY,
+  },
+  {
+    title: 'The ugliest website I’ve ever made',
+    excerpt:
+      'The first site I coded from scratch was the ugliest thing I’ve ever created — Times New Roman, clashing colors, zero alignment. But when the layout was actually responsive? Felt pretty good.',
+    href: LINKEDIN_ACTIVITY,
   },
 ]
 
