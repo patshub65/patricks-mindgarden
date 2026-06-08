@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { resolveLayout } from "@/lib/cards"
 import IllustrationCard from "@/components/client/illustration-card"
+import GalleryOverlay from "@/components/client/gallery-overlay"
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
@@ -13,6 +14,7 @@ const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 1200
 
 export default function MindgardenScene() {
   const [expandedId, setExpandedId]   = useState<string | null>(null)
+  const [galleryOpen, setGalleryOpen] = useState(false)
   const [viewSize, setViewSize]       = useState({ w: 1440, h: 800 })
   const [mounted, setMounted]         = useState(false)
   const [phase, setPhase]             = useState<"intro" | "done">("intro")
@@ -190,11 +192,14 @@ export default function MindgardenScene() {
                 isDimmed={isDimmed}
                 onExpand={setExpandedId}
                 onCollapse={() => setExpandedId(null)}
+                onOverlay={card.id === 'visuals' ? () => setGalleryOpen(true) : undefined}
               />
             </motion.div>
           )
         })}
       </div>
+
+      <GalleryOverlay open={galleryOpen} onClose={() => setGalleryOpen(false)} />
     </div>
   )
 }

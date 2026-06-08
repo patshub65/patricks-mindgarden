@@ -53,6 +53,7 @@ interface IllustrationCardProps {
   isDimmed: boolean
   onExpand: (id: string) => void
   onCollapse: () => void
+  onOverlay?: () => void
 }
 
 function ProjectThumb({ project }: { project: CardProject }) {
@@ -241,42 +242,12 @@ function WritingGallery() {
   )
 }
 
-const VISUAL_TILES = [
-  { bg: 'var(--coral)', shape: <svg viewBox="0 0 60 60"><circle cx="30" cy="26" r="18" fill="var(--ink)" /><rect x="6" y="46" width="48" height="10" fill="var(--butter)" /></svg> },
-  { bg: 'var(--moss)', shape: <svg viewBox="0 0 60 60"><path d="M10 50 L30 10 L50 50 Z" fill="var(--butter)" /></svg> },
-  { bg: 'var(--butter)', shape: <svg viewBox="0 0 60 60"><rect x="14" y="14" width="32" height="32" fill="var(--coral)" /><circle cx="30" cy="30" r="8" fill="var(--ink)" /></svg> },
-  { bg: 'var(--sage)', shape: <svg viewBox="0 0 60 60"><path d="M0 40 Q15 10 30 40 T60 40 L60 60 L0 60 Z" fill="var(--moss)" /></svg> },
-  { bg: '#2a3620', shape: <svg viewBox="0 0 60 60"><circle cx="20" cy="20" r="10" fill="var(--butter)" /><circle cx="40" cy="40" r="14" fill="var(--coral)" /></svg> },
-  { bg: 'var(--surface)', shape: <svg viewBox="0 0 60 60"><rect x="10" y="10" width="18" height="18" fill="var(--moss)" /><rect x="32" y="10" width="18" height="18" fill="var(--coral)" /><rect x="10" y="32" width="18" height="18" fill="var(--butter)" /><rect x="32" y="32" width="18" height="18" fill="var(--sage)" /></svg> },
-]
-
-function VisualsGallery() {
-  return (
-    <ScrollStrip>
-      {VISUAL_TILES.map((t, i) => (
-        <div key={i} style={{
-          flexShrink: 0,
-          width: 96,
-          height: 96,
-          borderRadius: 10,
-          background: t.bg,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-        }}>
-          <div style={{ width: '70%', height: '70%' }}>{t.shape}</div>
-        </div>
-      ))}
-    </ScrollStrip>
-  )
-}
 
 export default function IllustrationCard({
   id, label, description, accentBg, projects,
   size, homeX, homeY, canvasW, canvasH, physics,
   floatDelay, floatDur,
-  isExpanded, isDimmed, onExpand, onCollapse,
+  isExpanded, isDimmed, onExpand, onCollapse, onOverlay,
 }: IllustrationCardProps) {
   const prefersReducedMotion = useReducedMotion()
   const mx = useMotionValue(0)
@@ -418,6 +389,7 @@ export default function IllustrationCard({
           onClick={() => {
             if (hasDragged.current) return
             if (isExpanded) return
+            if (onOverlay) { onOverlay(); return }
             onExpand(id)
           }}
           animate={{
@@ -552,9 +524,6 @@ export default function IllustrationCard({
 
                 {/* Writing card — post gallery */}
                 {id === 'writing' && <WritingGallery />}
-
-                {/* Experiments card — visual gallery */}
-                {id === 'visuals' && <VisualsGallery />}
 
                 {/* Title + description */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingRight: 32 }}>
