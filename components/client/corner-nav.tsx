@@ -1,11 +1,22 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react"
+import { m, AnimatePresence } from "framer-motion"
 import { EnvelopeSimple, LinkedinLogo, DownloadSimple, ShareNetwork, User } from "@phosphor-icons/react"
 import AboutOverlay from "@/components/client/about-overlay"
 
 const SPRING = { type: "spring" as const, stiffness: 300, damping: 28 }
+
+const LABEL_STYLE = {
+  fontFamily: "var(--font-body)",
+  fontSize: 13,
+  color: "rgba(255,255,255,0.82)",
+  letterSpacing: "0.01em",
+  pointerEvents: "none" as const,
+  userSelect: "none" as const,
+  textShadow: "0 1px 3px rgba(0,0,0,0.18)",
+  whiteSpace: "nowrap" as const,
+}
 
 const CONTACT_ITEMS = [
   {
@@ -23,12 +34,13 @@ const CONTACT_ITEMS = [
 
 function ContactFan() {
   const [open, setOpen] = useState(false)
+  const [hovered, setHovered] = useState(false)
 
   return (
     <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
       <AnimatePresence>
         {open && CONTACT_ITEMS.map(({ href, label, Icon, external }, i) => (
-          <motion.a
+          <m.a
             key={label}
             href={href}
             aria-label={label}
@@ -43,48 +55,76 @@ function ContactFan() {
             onClick={() => setOpen(false)}
           >
             <Icon size={20} weight="light" />
-          </motion.a>
+          </m.a>
         ))}
       </AnimatePresence>
 
-      <motion.button
-        className="corner-btn"
-        aria-label="Contact"
-        aria-expanded={open}
-        onClick={() => setOpen(o => !o)}
-        animate={{ rotate: open ? 45 : 0 }}
-        transition={SPRING}
-        style={{ display: "flex" }}
-      >
-        <ShareNetwork size={20} weight="light" />
-      </motion.button>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <m.button
+          type="button"
+          className="corner-btn"
+          aria-label="Contact"
+          aria-expanded={open}
+          onClick={() => setOpen(o => !o)}
+          onHoverStart={() => setHovered(true)}
+          onHoverEnd={() => setHovered(false)}
+          animate={{ rotate: open ? 45 : 0 }}
+          transition={SPRING}
+          style={{ display: "flex" }}
+        >
+          <ShareNetwork size={20} weight="light" />
+        </m.button>
+        <AnimatePresence>
+          {hovered && !open && (
+            <m.span
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.15 }}
+              style={LABEL_STYLE}
+            >
+              reach out
+            </m.span>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
 
 export default function CornerNav() {
   const [aboutOpen, setAboutOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 700)
-    check()
-    window.addEventListener("resize", check)
-    return () => window.removeEventListener("resize", check)
-  }, [])
+  const [aboutHovered, setAboutHovered] = useState(false)
+  const [downloadHovered, setDownloadHovered] = useState(false)
 
   return (
     <>
       {/* Top-left: About */}
-      <div style={{ position: "fixed", top: 28, left: 28, zIndex: 150 }}>
+      <div style={{ position: "fixed", top: 28, left: 28, zIndex: 150, display: "flex", alignItems: "center", gap: 10 }}>
         <button
+          type="button"
           className="corner-btn"
           aria-label="About Patrick"
           onClick={() => setAboutOpen(true)}
+          onMouseEnter={() => setAboutHovered(true)}
+          onMouseLeave={() => setAboutHovered(false)}
           style={{ display: "flex" }}
         >
           <User size={20} weight="light" />
         </button>
+        <AnimatePresence>
+          {aboutHovered && (
+            <m.span
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.15 }}
+              style={LABEL_STYLE}
+            >
+              about me
+            </m.span>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Top-right: Download portfolio */}
@@ -97,32 +137,27 @@ export default function CornerNav() {
         alignItems: "center",
         gap: 10,
       }}>
-        {!isMobile && (
-          <>
-            <span style={{
-              fontFamily: "var(--font-body)",
-              fontSize: 13,
-              color: "rgba(255,255,255,0.82)",
-              letterSpacing: "0.01em",
-              pointerEvents: "none",
-              userSelect: "none",
-              textShadow: "0 1px 3px rgba(0,0,0,0.18)",
-            }}>
-              Download my portfolio
-            </span>
-            {/* curvy arrow */}
-            <svg width="22" height="16" viewBox="0 0 22 16" fill="none" style={{ flexShrink: 0, opacity: 0.7 }}>
-              <path d="M1 4 C4 1 9 1 12 4 C15 7 16 10 20 10" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-              <path d="M17 7 L20 10 L17 13" stroke="rgba(255,255,255,0.8)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </>
-        )}
+        <AnimatePresence>
+          {downloadHovered && (
+            <m.span
+              initial={{ opacity: 0, x: 4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 4 }}
+              transition={{ duration: 0.15 }}
+              style={LABEL_STYLE}
+            >
+              download portfolio
+            </m.span>
+          )}
+        </AnimatePresence>
         <a
           href="/cv-patrick-caire.pdf"
           download
           className="corner-btn"
           aria-label="Download CV"
           style={{ display: "flex" }}
+          onMouseEnter={() => setDownloadHovered(true)}
+          onMouseLeave={() => setDownloadHovered(false)}
         >
           <DownloadSimple size={20} weight="light" />
         </a>

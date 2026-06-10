@@ -27,8 +27,7 @@ export default async function CaseStudy({
   params: Promise<{ slug: string }>
   searchParams: Promise<Record<string, string>>
 }) {
-  const { slug } = await params
-  const { from } = await searchParams
+  const [{ slug }, { from }] = await Promise.all([params, searchParams])
   const slugs = getProjectSlugs()
   if (!slugs.includes(slug)) notFound()
 

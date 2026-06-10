@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useVelocity,
@@ -13,6 +13,7 @@ import type { PanInfo } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import type { CardProject } from "@/lib/cards"
+import { WRITING_POSTS } from "@/lib/cards"
 
 const FRICTION = 1.6
 const RESTITUTION = 0.6
@@ -20,12 +21,6 @@ const STOP_SPEED = 16
 
 const EXPANDED_W = 360
 
-// One easing curve for the whole morph. width, height, borderRadius,
-// backgroundColor and boxShadow are ALL animated by Framer on a single
-// timeline, so every property reaches target on the same frame. Height is
-// animated to a measured pixel value (never 'auto') — animating to 'auto'
-// makes Framer re-measure a reflowing box mid-animation, which is what caused
-// the height to pop on open and snap on close (and dragged the shadow with it).
 const EASE_MORPH = [0.32, 0.72, 0, 1] as const
 const SHELL_OPEN  = { duration: 0.42, ease: EASE_MORPH }
 const SHELL_CLOSE = { duration: 0.34, ease: EASE_MORPH }
@@ -53,6 +48,7 @@ interface IllustrationCardProps {
   isDimmed: boolean
   onExpand: (id: string) => void
   onCollapse: () => void
+  onOverlay?: () => void
 }
 
 function ProjectThumb({ project }: { project: CardProject }) {
@@ -62,9 +58,9 @@ function ProjectThumb({ project }: { project: CardProject }) {
   const inner = (
     <div style={{
       flexShrink: 0,
-      width: 140,
-      height: 96,
-      borderRadius: 10,
+      width: 184,
+      height: 124,
+      borderRadius: 12,
       background: hasImage ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.18)',
       display: 'flex',
       flexDirection: 'column',
@@ -94,11 +90,11 @@ function ProjectThumb({ project }: { project: CardProject }) {
         background: 'rgba(255,255,255,0.92)',
         color: '#141814',
         fontFamily: 'var(--font-mono)',
-        fontSize: 9,
+        fontSize: 12,
         fontWeight: 600,
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
-        padding: '3px 8px',
+        padding: '4px 9px',
         borderRadius: 5,
         lineHeight: 1.4,
         maxWidth: '100%',
@@ -144,10 +140,10 @@ function ProjectHeroImage({ slug }: { slug: string }) {
       src={`/images/creating/${slug}/hero.${extensions[ext]}`}
       alt={slug}
       fill
-      sizes="140px"
+      sizes="184px"
       style={{
         objectFit: 'cover',
-        borderRadius: 10,
+        borderRadius: 12,
         opacity: loaded ? 1 : 0,
         transition: 'opacity 200ms',
         zIndex: 1,
@@ -165,6 +161,7 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
   const isDraggingRef = useRef(false)
   const startXRef = useRef(0)
   const scrollLeftRef = useRef(0)
+  const movedRef = useRef(false)
 
   return (
     <div
@@ -176,10 +173,13 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         scrollbarWidth: 'none',
         paddingBottom: 2,
         cursor: 'grab',
+        touchAction: 'pan-x',
         WebkitOverflowScrolling: 'touch',
       }}
+      onDragStart={e => e.preventDefault()}
       onMouseDown={e => {
         isDraggingRef.current = true
+        movedRef.current = false
         startXRef.current = e.pageX - (scrollRef.current?.offsetLeft ?? 0)
         scrollLeftRef.current = scrollRef.current?.scrollLeft ?? 0
         if (scrollRef.current) scrollRef.current.style.cursor = 'grabbing'
@@ -188,7 +188,9 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         if (!isDraggingRef.current || !scrollRef.current) return
         e.preventDefault()
         const x = e.pageX - scrollRef.current.offsetLeft
-        scrollRef.current.scrollLeft = scrollLeftRef.current - (x - startXRef.current)
+        const delta = x - startXRef.current
+        if (Math.abs(delta) > 4) movedRef.current = true
+        scrollRef.current.scrollLeft = scrollLeftRef.current - delta
       }}
       onMouseUp={() => {
         isDraggingRef.current = false
@@ -198,85 +200,75 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         isDraggingRef.current = false
         if (scrollRef.current) scrollRef.current.style.cursor = 'grab'
       }}
+      onClickCapture={e => {
+        if (movedRef.current) {
+          e.preventDefault()
+          e.stopPropagation()
+          movedRef.current = false
+        }
+      }}
     >
       {children}
     </div>
   )
 }
 
-const WRITING_POSTS = [
-  { title: 'Design is a conversation with time', date: '2025', note: 'On why every design decision is also a prediction.' },
-  { title: 'The tools are not neutral', date: '2024', note: 'AI in the design workflow — what it changes and what it doesn\'t.' },
-  { title: 'Berlin is a brief', date: '2024', note: 'The city as constraint. What designing here teaches you.' },
-]
-
 function WritingGallery() {
   return (
     <ScrollStrip>
       {WRITING_POSTS.map(p => (
-        <div key={p.title} style={{
-          flexShrink: 0,
-          width: 180,
-          padding: '12px 14px',
-          background: 'rgba(255,255,255,0.75)',
-          borderRadius: 12,
-          border: '1px solid rgba(20,24,20,0.06)',
-        }}>
+        <a
+          key={p.title}
+          href={p.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={e => e.stopPropagation()}
+          style={{
+            flexShrink: 0,
+            width: 248,
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '14px 16px',
+            background: 'rgba(255,255,255,0.78)',
+            borderRadius: 14,
+            border: '1px solid rgba(20,24,20,0.06)',
+            textDecoration: 'none',
+            transition: 'background 150ms',
+          }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.95)')}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.78)')}
+        >
+          {p.date && (
+            <div style={{
+              fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.1em',
+              color: 'rgba(20,24,20,0.45)', textTransform: 'uppercase', marginBottom: 6,
+            }}>{p.date}</div>
+          )}
           <div style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
-            color: 'rgba(20,24,20,0.45)', textTransform: 'uppercase', marginBottom: 6,
-          }}>{p.date}</div>
-          <div style={{
-            fontFamily: 'var(--font-display)', fontStyle: 'italic',
+            fontFamily: 'var(--font-display)', fontStyle: 'normal',
             fontVariationSettings: '"opsz" 14, "SOFT" 80',
-            fontSize: 14, lineHeight: 1.2, color: 'rgba(20,24,20,0.85)',
+            fontSize: 15, lineHeight: 1.2, color: 'rgba(20,24,20,0.88)',
           }}>{p.title}</div>
           <div style={{
-            fontFamily: 'var(--font-body)', fontSize: 11, lineHeight: 1.45,
-            color: 'rgba(20,24,20,0.5)', marginTop: 6,
-          }}>{p.note}</div>
-        </div>
+            fontFamily: 'var(--font-body)', fontSize: 12, lineHeight: 1.5,
+            color: 'rgba(20,24,20,0.55)', marginTop: 7,
+          }}>{p.excerpt}</div>
+          <div style={{
+            fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.06em',
+            color: 'var(--color-moss)', marginTop: 10,
+          }}>Read on LinkedIn ↗</div>
+        </a>
       ))}
     </ScrollStrip>
   )
 }
 
-const VISUAL_TILES = [
-  { bg: 'var(--coral)', shape: <svg viewBox="0 0 60 60"><circle cx="30" cy="26" r="18" fill="var(--ink)" /><rect x="6" y="46" width="48" height="10" fill="var(--butter)" /></svg> },
-  { bg: 'var(--moss)', shape: <svg viewBox="0 0 60 60"><path d="M10 50 L30 10 L50 50 Z" fill="var(--butter)" /></svg> },
-  { bg: 'var(--butter)', shape: <svg viewBox="0 0 60 60"><rect x="14" y="14" width="32" height="32" fill="var(--coral)" /><circle cx="30" cy="30" r="8" fill="var(--ink)" /></svg> },
-  { bg: 'var(--sage)', shape: <svg viewBox="0 0 60 60"><path d="M0 40 Q15 10 30 40 T60 40 L60 60 L0 60 Z" fill="var(--moss)" /></svg> },
-  { bg: '#2a3620', shape: <svg viewBox="0 0 60 60"><circle cx="20" cy="20" r="10" fill="var(--butter)" /><circle cx="40" cy="40" r="14" fill="var(--coral)" /></svg> },
-  { bg: 'var(--surface)', shape: <svg viewBox="0 0 60 60"><rect x="10" y="10" width="18" height="18" fill="var(--moss)" /><rect x="32" y="10" width="18" height="18" fill="var(--coral)" /><rect x="10" y="32" width="18" height="18" fill="var(--butter)" /><rect x="32" y="32" width="18" height="18" fill="var(--sage)" /></svg> },
-]
-
-function VisualsGallery() {
-  return (
-    <ScrollStrip>
-      {VISUAL_TILES.map((t, i) => (
-        <div key={i} style={{
-          flexShrink: 0,
-          width: 96,
-          height: 96,
-          borderRadius: 10,
-          background: t.bg,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-        }}>
-          <div style={{ width: '70%', height: '70%' }}>{t.shape}</div>
-        </div>
-      ))}
-    </ScrollStrip>
-  )
-}
 
 export default function IllustrationCard({
   id, label, description, accentBg, projects,
   size, homeX, homeY, canvasW, canvasH, physics,
   floatDelay, floatDur,
-  isExpanded, isDimmed, onExpand, onCollapse,
+  isExpanded, isDimmed, onExpand, onCollapse, onOverlay,
 }: IllustrationCardProps) {
   const prefersReducedMotion = useReducedMotion()
   const mx = useMotionValue(0)
@@ -285,11 +277,6 @@ export default function IllustrationCard({
   const [isHovered, setIsHovered] = useState(false)
   const hasDragged = useRef(false)
 
-  // Measure the expanded content's natural height so the morph animates to a
-  // concrete pixel value instead of 'auto'. A child's offsetHeight is not
-  // clamped by the parent's overflow:hidden, so this reads correctly even
-  // while the card is collapsed. ResizeObserver keeps it fresh across font/
-  // image load and viewport resize.
   const contentRef = useRef<HTMLDivElement>(null)
   const [expandedH, setExpandedH] = useState(size)
   useEffect(() => {
@@ -374,12 +361,11 @@ export default function IllustrationCard({
         rotate: { duration: floatDur, delay: floatDelay, repeat: Infinity, ease: 'easeInOut' as const },
       }
 
-  // Clamp expanded card width so it doesn't run off screen
   const expandW = Math.min(EXPANDED_W, canvasW - 48)
   const expandedZIndex = isExpanded ? 150 : isDimmed ? 1 : 1
 
   return (
-    <motion.div
+    <m.div
       drag={!isExpanded}
       dragConstraints={constraints}
       dragElastic={0}
@@ -402,7 +388,7 @@ export default function IllustrationCard({
       animate={{ opacity: isDimmed ? 0.18 : 1 }}
       transition={{ duration: 0.25 }}
     >
-      <motion.div
+      <m.div
         animate={isExpanded
           ? { y: 0, rotate: 0, scale: 1 }
           : (isDragging ? { y: 0, rotate: 0, scale: 1.05 } : floatAnimate)
@@ -414,11 +400,22 @@ export default function IllustrationCard({
         style={{ originX: '50%', originY: '50%' }}
       >
         {/* Card shell — animates from square illustration to expanded panel */}
-        <motion.div
+        <m.div
+          role="button"
+          tabIndex={isExpanded ? -1 : 0}
           onClick={() => {
             if (hasDragged.current) return
             if (isExpanded) return
+            if (onOverlay) { onOverlay(); return }
             onExpand(id)
+          }}
+          onKeyDown={(e) => {
+            if (isExpanded || hasDragged.current) return
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              if (onOverlay) { onOverlay(); return }
+              onExpand(id)
+            }
           }}
           animate={{
             width:  isExpanded ? expandW : size,
@@ -435,11 +432,11 @@ export default function IllustrationCard({
             overflow: 'hidden',
             cursor: isExpanded ? 'default' : 'grab',
             userSelect: 'none',
-            touchAction: 'none',
+            touchAction: isExpanded ? 'auto' : 'none',
           }}
         >
           {/* Illustration — always absolute so it never reflows; fades out when expanded */}
-          <motion.div
+          <m.div
             animate={{ opacity: isExpanded ? 0 : 1 }}
             onHoverStart={() => { if (!isExpanded && !isDragging) setIsHovered(true) }}
             onHoverEnd={() => setIsHovered(false)}
@@ -467,7 +464,7 @@ export default function IllustrationCard({
             />
 
             {/* Hover title overlay */}
-            <motion.div
+            <m.div
               animate={{ opacity: isHovered && !isExpanded ? 1 : 0 }}
               transition={{ duration: 0.18 }}
               style={{
@@ -483,7 +480,7 @@ export default function IllustrationCard({
             >
               <span style={{
                 fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
+                fontStyle: 'normal',
                 fontVariationSettings: '"opsz" 14, "SOFT" 100',
                 fontSize: Math.max(13, size * 0.09),
                 lineHeight: 1.1,
@@ -493,11 +490,11 @@ export default function IllustrationCard({
               } as React.CSSProperties}>
                 {label}
               </span>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Expanded content — always mounted; opacity/pointerEvents gate show/hide */}
-          <motion.div
+          <m.div
             ref={contentRef}
             animate={{ opacity: isExpanded ? 1 : 0 }}
             transition={isExpanded
@@ -515,6 +512,7 @@ export default function IllustrationCard({
           >
                 {/* Close button */}
                 <button
+                  type="button"
                   onClick={e => { e.stopPropagation(); onCollapse() }}
                   aria-label="Close"
                   style={{
@@ -553,14 +551,11 @@ export default function IllustrationCard({
                 {/* Writing card — post gallery */}
                 {id === 'writing' && <WritingGallery />}
 
-                {/* Experiments card — visual gallery */}
-                {id === 'visuals' && <VisualsGallery />}
-
                 {/* Title + description */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, paddingRight: 32 }}>
                   <div style={{
                     fontFamily: 'var(--font-display)',
-                    fontStyle: 'italic',
+                    fontStyle: 'normal',
                     fontVariationSettings: '"opsz" 36, "SOFT" 60',
                     fontSize: 26,
                     lineHeight: 1.0,
@@ -580,9 +575,9 @@ export default function IllustrationCard({
                     {description}
                   </div>
                 </div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+          </m.div>
+        </m.div>
+      </m.div>
+    </m.div>
   )
 }
