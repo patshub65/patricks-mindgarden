@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext } from "react"
+import { createContext, use } from "react"
 
 export const DetailExitContext = createContext<(() => void) | null>(null)
-export const useDetailExit = () => useContext(DetailExitContext)
+export const useDetailExit = () => use(DetailExitContext)

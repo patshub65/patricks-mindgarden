@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, AnimatePresence } from "framer-motion"
+import { m, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { X } from "@phosphor-icons/react"
 import Image from "next/image"
@@ -40,7 +40,7 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <m.div
           style={{
             position: 'fixed',
             inset: 0,
@@ -59,7 +59,7 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
           transition={{ duration: 0.25 }}
           onPointerDown={(e) => { if (e.target === e.currentTarget) onClose() }}
         >
-          <motion.div
+          <m.div
             style={{
               position: 'relative',
               background: 'var(--color-surface-raised)',
@@ -78,6 +78,7 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
           >
             {/* Close */}
             <button
+              type="button"
               onClick={onClose}
               aria-label="Close gallery"
               style={{
@@ -111,7 +112,7 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
             <div style={{ paddingTop: 4, marginBottom: 20, paddingRight: 40 }}>
               <div style={{
                 fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
+                fontStyle: 'normal',
                 fontVariationSettings: '"opsz" 36, "SOFT" 60',
                 fontSize: 28,
                 lineHeight: 1.0,
@@ -154,8 +155,8 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
                 </div>
               ))}
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

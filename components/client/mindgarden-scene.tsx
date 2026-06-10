@@ -1,16 +1,25 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { motion, useReducedMotion } from "framer-motion"
+import { m, useReducedMotion } from "framer-motion"
 import { resolveLayout } from "@/lib/cards"
 import IllustrationCard from "@/components/client/illustration-card"
 import GalleryOverlay from "@/components/client/gallery-overlay"
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
-const CARD_STAGGER_S = 0.1
+const CARD_STAGGER_S = 0.24
 const TOTAL_CARDS = 6
-const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 1200
+const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 2400
+
+const ORBIT: Record<string, { r: number; dur: number; delay: number; reverse?: boolean }> = {
+  web:     { r: 12, dur: 55, delay: 0 },
+  product: { r: 9,  dur: 72, delay: -18 },
+  'ux-ui': { r: 14, dur: 60, delay: -35 },
+  writing: { r: 8,  dur: 85, delay: -50, reverse: true },
+  brand:   { r: 11, dur: 65, delay: -8, reverse: true },
+  visuals: { r: 13, dur: 52, delay: -28, reverse: true },
+}
 
 export default function MindgardenScene() {
   const [expandedId, setExpandedId]   = useState<string | null>(null)
@@ -72,6 +81,7 @@ export default function MindgardenScene() {
       {/* Click-outside to collapse expanded card */}
       {expandedId && (
         <div
+          aria-hidden="true"
           style={{ position: "absolute", inset: 0, zIndex: 80, cursor: "default" }}
           onClick={() => setExpandedId(null)}
         />
@@ -89,7 +99,7 @@ export default function MindgardenScene() {
         zIndex: 3,
         pointerEvents: "none",
       }}>
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: introDone ? 1 : 0, y: introDone ? 0 : 10 }}
           transition={{ duration: 0.7, ease: EASE_OUT, delay: introDone ? 0.2 : 0 }}
@@ -97,7 +107,7 @@ export default function MindgardenScene() {
           <h1 style={{
             margin: 0,
             fontFamily: "var(--font-display)",
-            fontStyle: "italic",
+            fontStyle: "normal",
             fontVariationSettings: '"opsz" 72, "SOFT" 20',
             fontSize: isMobile ? "clamp(36px, 10vw, 52px)" : "clamp(44px, 4.5vw, 68px)",
             lineHeight: 1.0,
@@ -124,7 +134,7 @@ export default function MindgardenScene() {
           } as React.CSSProperties}>
             I&rsquo;m Patrick, a designer with 8+ years in the industry, developer in training, AI-native creative and budding musician.
           </p>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* Card scatter */}
@@ -140,7 +150,7 @@ export default function MindgardenScene() {
 
           const initial = isMobile
             ? { opacity: 0, scale: 0.6, x: card.x, y: card.y, rotate: card.rot }
-            : { opacity: 0, scale: 0.9, x: centerX, y: centerY, rotate: card.entrance.startRot }
+            : { opacity: 0, scale: 0.08, x: centerX, y: centerY + 40, rotate: card.entrance.startRot, filter: "blur(14px)" }
 
           const transition = isMobile
             ? {
@@ -149,10 +159,12 @@ export default function MindgardenScene() {
                 opacity: { duration: 0.3, ease: EASE_OUT, delay: posDelay },
               }
             : {
-                x: { type: "spring" as const, stiffness: 130, damping: 13, delay: posDelay },
-                y: { type: "spring" as const, stiffness: 130, damping: 13, delay: posDelay },
-                rotate: { type: "spring" as const, stiffness: 120, damping: 12, delay: posDelay },
-                scale: { type: "spring" as const, stiffness: 200, damping: 18, delay: posDelay },
+                // Loose, low-damping springs → cards fling outward and overshoot before settling
+                x: { type: "spring" as const, stiffness: 60, damping: 9, mass: 1.1, delay: posDelay },
+                y: { type: "spring" as const, stiffness: 60, damping: 9, mass: 1.1, delay: posDelay },
+                rotate: { type: "spring" as const, stiffness: 45, damping: 8, mass: 1.1, delay: posDelay },
+                scale: { type: "spring" as const, stiffness: 130, damping: 10, delay: posDelay },
+                filter: { duration: 0.5, ease: EASE_OUT, delay: posDelay },
                 opacity: { duration: 0.2, ease: EASE_OUT, delay: phase === "intro" ? Math.max(0, posDelay - 0.04) : 0 },
               }
 
@@ -160,8 +172,11 @@ export default function MindgardenScene() {
           const expandW = Math.min(360, layout.stageW - 48)
           const targetX = isExpanded && isMobile ? (layout.stageW - expandW) / 2 : card.x
 
+          const orbit = ORBIT[card.id] ?? { r: 10, dur: 60, delay: 0 }
+          const orbitActive = introDone && !isExpanded && !prefersReducedMotion
+
           return (
-            <motion.div
+            <m.div
               key={card.id}
               style={{ pointerEvents: "auto", position: "absolute", left: 0, top: 0, zIndex: isExpanded ? 90 : 8 }}
               initial={initial}
@@ -170,31 +185,43 @@ export default function MindgardenScene() {
                 scale: 1,
                 x: targetX,
                 y: card.y,
-                rotate: card.rot,
+                rotate: isExpanded ? 0 : card.rot,
+                filter: "blur(0px)",
               }}
               transition={transition}
             >
-              <IllustrationCard
-                id={card.id}
-                label={card.label}
-                description={card.description}
-                accentBg={card.accentBg}
-                projects={card.projects}
-                homeX={card.x}
-                homeY={card.y}
-                canvasW={layout.stageW}
-                canvasH={layout.stageH}
-                physics={!isMobile && !prefersReducedMotion}
-                size={card.size}
-                floatDelay={card.entrance.rank * 0.6}
-                floatDur={7 + (card.entrance.rank % 4)}
-                isExpanded={isExpanded}
-                isDimmed={isDimmed}
-                onExpand={setExpandedId}
-                onCollapse={() => setExpandedId(null)}
-                onOverlay={card.id === 'visuals' ? () => setGalleryOpen(true) : undefined}
-              />
-            </motion.div>
+              <div
+                className="card-orbit"
+                style={{
+                  '--orbit-r': orbitActive ? `${orbit.r}px` : '0px',
+                  '--orbit-dur': `${orbit.dur}s`,
+                  '--orbit-delay': `${orbit.delay}s`,
+                  animationDirection: orbit.reverse ? 'reverse' : 'normal',
+                  animationPlayState: isExpanded ? 'paused' : 'running',
+                } as React.CSSProperties}
+              >
+                <IllustrationCard
+                  id={card.id}
+                  label={card.label}
+                  description={card.description}
+                  accentBg={card.accentBg}
+                  projects={card.projects}
+                  homeX={card.x}
+                  homeY={card.y}
+                  canvasW={layout.stageW}
+                  canvasH={layout.stageH}
+                  physics={!isMobile && !prefersReducedMotion}
+                  size={card.size}
+                  floatDelay={card.entrance.rank * 0.6}
+                  floatDur={7 + (card.entrance.rank % 4)}
+                  isExpanded={isExpanded}
+                  isDimmed={isDimmed}
+                  onExpand={setExpandedId}
+                  onCollapse={() => setExpandedId(null)}
+                  onOverlay={card.id === 'visuals' ? () => setGalleryOpen(true) : undefined}
+                />
+              </div>
+            </m.div>
           )
         })}
       </div>

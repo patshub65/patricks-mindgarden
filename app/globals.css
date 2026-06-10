@@ -110,9 +110,28 @@ html, body {
   animation-play-state: paused;
 }
 
+/* ── Card orbit (post-intro slow drift around headline) ──── */
+@property --orbit-r {
+  syntax: '<length>';
+  initial-value: 0px;
+  inherits: false;
+}
+
+@keyframes card-orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-r)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(var(--orbit-r)) rotate(-360deg); }
+}
+
+.card-orbit {
+  animation: card-orbit var(--orbit-dur, 60s) linear infinite;
+  animation-delay: var(--orbit-delay, 0s);
+  transition: --orbit-r 4s ease-out;
+}
+
 /* ── Reduce motion ───────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .card-float {
+  .card-float,
+  .card-orbit {
     animation: none;
   }
 }
@@ -190,24 +209,31 @@ html, body {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(76, 52, 12, 0.46);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 210, 130, 0.20);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(60, 40, 8, 0.24);
   transition: background 150ms, box-shadow 150ms, transform 150ms;
   text-decoration: none;
 }
 
 .corner-btn:hover {
-  background: rgba(255, 255, 255, 0.32);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  background: rgba(76, 52, 12, 0.62);
+  box-shadow: 0 6px 22px rgba(60, 40, 8, 0.32);
   transform: scale(1.06);
+}
+
+@media (max-width: 700px) {
+  .corner-btn {
+    background: rgba(76, 52, 12, 0.58);
+    border-color: rgba(255, 210, 130, 0.28);
+  }
 }
 
 
@@ -263,7 +289,7 @@ html, body {
 .peek-label {
   margin-top: 20px;
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-variation-settings: '"opsz" 14, "SOFT" 100';
   font-size: 20px;
   color: var(--color-ink);
@@ -294,7 +320,7 @@ html, body {
 
 /* ── Font utilities ──────────────────────────────────────── */
 .font-italic {
-  font-style: italic;
+  font-style: normal;
 }
 
 /* ── Cluster page header ─────────────────────────────────── */
@@ -320,7 +346,7 @@ html, body {
 
 .subpage-h1 {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-variation-settings: '"opsz" 72, "SOFT" 20';
   font-size: clamp(52px, 7vw, 88px);
   line-height: 1.0;
@@ -371,7 +397,7 @@ html, body {
 
 .patrick-mark-label {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-variation-settings: '"opsz" 14, "SOFT" 80';
   font-size: 14px;
   color: var(--color-ink);
