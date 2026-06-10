@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { useEffect, useState, useCallback, useRef } from "react"
 import { DetailExitContext } from "./detail-exit-context"
 
@@ -77,13 +77,13 @@ export default function DetailPageWrapper({
   if (!hasOrigin) {
     return (
       <DetailExitContext.Provider value={triggerExit}>
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: exiting ? 0 : 1 }}
           transition={{ duration: 0.3, ease: EASE_FM }}
         >
           {children}
-        </motion.div>
+        </m.div>
       </DetailExitContext.Provider>
     )
   }
@@ -101,7 +101,7 @@ export default function DetailPageWrapper({
 
   return (
     <DetailExitContext.Provider value={triggerExit}>
-      <motion.div
+      <m.div
         style={{
           position: "fixed",
           inset: 0,
@@ -113,7 +113,7 @@ export default function DetailPageWrapper({
         transition={{ duration: exiting ? 0.3 : 0.45, ease: EASE_FM }}
       />
 
-      <motion.div
+      <m.div
         style={{
           position: "fixed",
           top: INSET,
@@ -125,7 +125,6 @@ export default function DetailPageWrapper({
           background: "var(--color-base)",
           zIndex: 50,
           boxShadow: "0 24px 80px -16px rgba(20, 24, 20, 0.25)",
-          willChange: "clip-path",
         }}
         initial={{ clipPath: clipFrom, opacity: 0.85 }}
         animate={{
@@ -150,7 +149,7 @@ export default function DetailPageWrapper({
         >
           {children}
         </div>
-      </motion.div>
+      </m.div>
     </DetailExitContext.Provider>
   )
 }

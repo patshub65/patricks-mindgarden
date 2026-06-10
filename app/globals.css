@@ -62,7 +62,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-base);
+  background-color: #D078B0;
   color: var(--color-ink);
   font-family: var(--font-body);
   font-size: 15px;
@@ -72,30 +72,12 @@ html, body {
 }
 
 /* ── Garden background ───────────────────────────────────── */
-/* Late-afternoon light: warm golden pool up top → cream → richer green at the
-   edges (sage warmed with moss, not flat putty). Warmth carried by the surface. */
 .garden-bg {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(
-      135% 105% at 50% 30%,
-      color-mix(in oklch, var(--color-base), var(--color-butter) 44%) 0%,
-      color-mix(in oklch, var(--color-base), var(--color-butter) 16%) 26%,
-      var(--color-base) 46%,
-      color-mix(in oklch, var(--color-sage), var(--color-moss) 24%) 82%,
-      color-mix(in oklch, var(--color-sage), var(--color-moss) 44%) 100%
-    );
-  overflow: hidden;
-}
-
-/* Soft organic blooms — one warm (sun), one green (shadow), more saturated */
-.garden-bg::before,
-.garden-bg::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(86px);
+  background-image: url('/images/homepage-bg.jpg');
+  background-size: cover;
+  background-position: center;
   pointer-events: none;
 }
 /* Warm coral-gold sun glow, upper-right */
@@ -116,12 +98,12 @@ html, body {
   animation-delay: -9s;
 }
 
-/* Grain overlay — page feels tactile not flat */
+/* Grain overlay — subtle on top of the photo grain */
 .garden-grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.08;
+  opacity: 0.03;
   mix-blend-mode: multiply;
   background-image:
     radial-gradient(rgb(20 24 20 / 0.5) 1px, transparent 1px),
@@ -158,9 +140,28 @@ html, body {
   animation-play-state: paused;
 }
 
+/* ── Card orbit (post-intro slow drift around headline) ──── */
+@property --orbit-r {
+  syntax: '<length>';
+  initial-value: 0px;
+  inherits: false;
+}
+
+@keyframes card-orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-r)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(var(--orbit-r)) rotate(-360deg); }
+}
+
+.card-orbit {
+  animation: card-orbit var(--orbit-dur, 60s) linear infinite;
+  animation-delay: var(--orbit-delay, 0s);
+  transition: --orbit-r 4s ease-out;
+}
+
 /* ── Reduce motion ───────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .card-float,
+  .card-orbit,
   .garden-bg::before,
   .garden-bg::after {
     animation: none;
@@ -187,33 +188,18 @@ html, body {
   --ink-hair:  var(--color-ink-hair);
 }
 
-/* ── Polaroid card ───────────────────────────────────────── */
-.polaroid {
-  background: #ffffff;
-  padding: 8px 8px 32px;
-  border-radius: 4px;
-  box-shadow: var(--shadow-polaroid);
+/* ── Illustration card ───────────────────────────────────── */
+.illus-card {
+  border-radius: 22px;
+  overflow: hidden;
   will-change: transform;
   user-select: none;
   touch-action: none;
   cursor: grab;
 }
 
-.polaroid:hover {
-  box-shadow: var(--shadow-polaroid-hover);
-}
-
-.polaroid.dragging {
+.illus-card:active {
   cursor: grabbing;
-  box-shadow: var(--shadow-drag);
-}
-
-.polaroid .thumb {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
 }
 
 /* ── Navigation pill ─────────────────────────────────────── */
@@ -255,66 +241,33 @@ html, body {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-full);
-  background: var(--color-surface-raised);
-  border: none;
+  background: rgba(76, 52, 12, 0.46);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 210, 130, 0.20);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-ink);
-  box-shadow: var(--shadow-corner);
-  transition: box-shadow 150ms, transform 150ms;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(60, 40, 8, 0.24);
+  transition: background 150ms, box-shadow 150ms, transform 150ms;
+  text-decoration: none;
 }
 
 .corner-btn:hover {
-  box-shadow: var(--shadow-md);
+  background: rgba(76, 52, 12, 0.62);
+  box-shadow: 0 6px 22px rgba(60, 40, 8, 0.32);
   transform: scale(1.06);
 }
 
-/* ── Chat bar ────────────────────────────────────────────── */
-.chatbar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--color-surface-raised);
-  border-radius: var(--radius-full);
-  padding: 8px 8px 8px 22px;
-  box-shadow: var(--shadow-pill);
-  width: 380px;
+@media (max-width: 700px) {
+  .corner-btn {
+    background: rgba(76, 52, 12, 0.58);
+    border-color: rgba(255, 210, 130, 0.28);
+  }
 }
 
-.chatbar input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--color-ink);
-}
-
-.chatbar input::placeholder {
-  color: var(--color-ink-muted);
-}
-
-.chatbar-send {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-full);
-  background: var(--color-moss);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  flex-shrink: 0;
-  transition: transform 150ms;
-}
-
-.chatbar-send:hover {
-  transform: scale(1.05);
-}
 
 /* ── Peek overlay ────────────────────────────────────────── */
 .peek-scrim {
@@ -368,7 +321,7 @@ html, body {
 .peek-label {
   margin-top: 20px;
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-variation-settings: '"opsz" 14, "SOFT" 100';
   font-size: 20px;
   color: var(--color-ink);
@@ -399,7 +352,7 @@ html, body {
 
 /* ── Font utilities ──────────────────────────────────────── */
 .font-italic {
-  font-style: italic;
+  font-style: normal;
 }
 
 /* ── Cluster page header ─────────────────────────────────── */
@@ -425,7 +378,7 @@ html, body {
 
 .subpage-h1 {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-variation-settings: '"opsz" 72, "SOFT" 20';
   font-size: clamp(52px, 7vw, 88px);
   line-height: 1.0;
@@ -476,7 +429,7 @@ html, body {
 
 .patrick-mark-label {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-variation-settings: '"opsz" 14, "SOFT" 80';
   font-size: 14px;
   color: var(--color-ink);

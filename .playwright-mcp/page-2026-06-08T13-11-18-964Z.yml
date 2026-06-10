@@ -1,0 +1,106 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - navigation [ref=e6]:
+      - generic [ref=e7]:
+        - link "Patrick Caire Multidisciplinary Designer" [ref=e10] [cursor=pointer]:
+          - /url: ./
+          - generic [ref=e13]:
+            - paragraph [ref=e15]: Patrick Caire
+            - paragraph [ref=e17]: Multidisciplinary Designer
+        - generic [ref=e18]:
+          - generic [ref=e19]:
+            - link "Home" [ref=e21] [cursor=pointer]:
+              - /url: ./
+              - paragraph [ref=e24]: Home
+            - link "About" [ref=e27] [cursor=pointer]:
+              - /url: ./about
+              - paragraph [ref=e30]: About
+            - link "Projects" [ref=e33] [cursor=pointer]:
+              - /url: ./projects
+              - paragraph [ref=e36]: Projects
+            - link "Case Studies" [ref=e39] [cursor=pointer]:
+              - /url: ./case-studies
+              - paragraph [ref=e42]: Case Studies
+            - link "Visual Gallery" [ref=e45]:
+              - /url: ./gallery
+              - paragraph [ref=e48]: Visual Gallery
+            - link "Contact" [ref=e53] [cursor=pointer]:
+              - /url: ./contact
+              - paragraph [ref=e56]: Contact
+          - generic [ref=e59]:
+            - link "LinkedIn" [ref=e61] [cursor=pointer]:
+              - /url: https://www.linkedin.com/in/patrickcaire/
+              - paragraph [ref=e64]: LinkedIn
+            - link "Dribbble" [ref=e67] [cursor=pointer]:
+              - /url: https://dribbble.com/pcaire
+              - paragraph [ref=e70]: Dribbble
+    - main [ref=e72]:
+      - generic [ref=e74]:
+        - generic [ref=e77]:
+          - generic [ref=e78]:
+            - heading "Visual Gallery" [level=1] [ref=e80]
+            - paragraph [ref=e87]: Available for Projects
+          - link "Contact Me Contact Me" [ref=e89] [cursor=pointer]:
+            - /url: ./contact
+            - generic [ref=e90]:
+              - paragraph [ref=e92]: Contact Me
+              - paragraph [ref=e94]: Contact Me
+        - generic [ref=e96]:
+          - paragraph [ref=e97]: This gallery features professional work and personal projects across music and culture. I bring the same energy to solving corporate challenges as I do to helping the band next door (especially when their music's actually good). The magic happens when those two worlds collide stylistically—that's where things get interesting.
+          - paragraph [ref=e98]:
+            - strong [ref=e99]: "Core competencies include:"
+          - list [ref=e100]:
+            - listitem [ref=e101]:
+              - text: •
+              - paragraph [ref=e102]: Graphic design & art direction
+            - listitem [ref=e103]:
+              - text: •
+              - paragraph [ref=e104]: Print & digital design
+            - listitem [ref=e105]:
+              - text: •
+              - paragraph [ref=e106]: Illustration & photography
+            - listitem [ref=e107]:
+              - text: •
+              - paragraph [ref=e108]: Videography & AI imagery
+            - listitem [ref=e109]:
+              - text: •
+              - paragraph [ref=e110]: Logo & brand identity design
+            - listitem [ref=e111]:
+              - text: •
+              - paragraph [ref=e112]: Web banners & key visuals
+            - listitem [ref=e113]:
+              - text: •
+              - paragraph [ref=e114]: Poster & album cover design
+            - listitem [ref=e115]:
+              - text: •
+              - paragraph [ref=e116]: Event marketing materials
+      - generic [ref=e371]:
+        - heading "Do you have any project idea you want to discuss about?" [level=2] [ref=e375]
+        - generic [ref=e378] [cursor=pointer]:
+          - paragraph [ref=e380]: Contact Me
+          - paragraph [ref=e382]: Contact Me
+      - generic [ref=e387]:
+        - generic [ref=e388]:
+          - generic [ref=e389]:
+            - paragraph [ref=e391]: © Copyright
+            - paragraph [ref=e393]: "2026"
+          - generic [ref=e394]:
+            - paragraph [ref=e396]: by
+            - paragraph [ref=e398]: Patrick Caire
+        - paragraph [ref=e400]: "|"
+        - generic [ref=e401]:
+          - link "Privacy Policy" [ref=e403] [cursor=pointer]:
+            - /url: ./legal/privacy-policy
+            - paragraph [ref=e405]: Privacy Policy
+          - link "Cookie Policy" [ref=e407] [cursor=pointer]:
+            - /url: ./legal/cookie-policy
+            - paragraph [ref=e409]: Cookie Policy
+        - paragraph [ref=e411]: "|"
+        - generic [ref=e412]:
+          - paragraph [ref=e414]: Created in
+          - link "Framer" [ref=e416] [cursor=pointer]:
+            - /url: https://framer.link/8uw76
+            - paragraph [ref=e419]: Framer
+  - link "Create a free website with Framer, the website builder loved by startups, designers and agencies." [ref=e420] [cursor=pointer]:
+    - /url: https://www.framer.com
+    - paragraph [ref=e425]: Create a free website with Framer, the website builder loved by startups, designers and agencies.

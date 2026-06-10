@@ -1,10 +1,22 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { EnvelopeSimple, LinkedinLogo, DownloadSimple, ShareNetwork } from "@phosphor-icons/react"
+import { m, AnimatePresence } from "framer-motion"
+import { EnvelopeSimple, LinkedinLogo, DownloadSimple, ShareNetwork, User } from "@phosphor-icons/react"
+import AboutOverlay from "@/components/client/about-overlay"
 
 const SPRING = { type: "spring" as const, stiffness: 300, damping: 28 }
+
+const LABEL_STYLE = {
+  fontFamily: "var(--font-body)",
+  fontSize: 13,
+  color: "rgba(255,255,255,0.82)",
+  letterSpacing: "0.01em",
+  pointerEvents: "none" as const,
+  userSelect: "none" as const,
+  textShadow: "0 1px 3px rgba(0,0,0,0.18)",
+  whiteSpace: "nowrap" as const,
+}
 
 const CONTACT_ITEMS = [
   {
@@ -20,80 +32,153 @@ const CONTACT_ITEMS = [
   },
 ]
 
+const BTN = 44
+const GAP = 8
+
 function ContactFan() {
   const [open, setOpen] = useState(false)
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-      {/* Fan items — slide up above the trigger */}
+    <div style={{ position: "relative" }}>
+      {/* Fan items float above the button, out of document flow */}
       <AnimatePresence>
         {open && CONTACT_ITEMS.map(({ href, label, Icon, external }, i) => (
-          <motion.a
+          <m.a
             key={label}
             href={href}
             aria-label={label}
             target={external ? "_blank" : undefined}
             rel={external ? "noopener noreferrer" : undefined}
             className="corner-btn"
-            initial={{ opacity: 0, y: 12, scale: 0.85 }}
+            initial={{ opacity: 0, y: 8, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.9 }}
             transition={{ ...SPRING, delay: i * 0.05 }}
-            style={{ display: "flex", order: -(CONTACT_ITEMS.length - i) }}
+            style={{
+              display: "flex",
+              position: "absolute",
+              bottom: (i + 1) * (BTN + GAP),
+              left: 0,
+            }}
             onClick={() => setOpen(false)}
           >
             <Icon size={20} weight="light" />
-          </motion.a>
+          </m.a>
         ))}
       </AnimatePresence>
 
-      {/* Trigger button */}
-      <motion.button
-        className="corner-btn"
-        aria-label="Contact"
-        aria-expanded={open}
-        onClick={() => setOpen(o => !o)}
-        animate={{ rotate: open ? 45 : 0 }}
-        transition={SPRING}
-        style={{ display: "flex" }}
-      >
-        <ShareNetwork size={20} weight="light" />
-      </motion.button>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <m.button
+          type="button"
+          className="corner-btn"
+          aria-label="Contact"
+          aria-expanded={open}
+          onClick={() => setOpen(o => !o)}
+          onHoverStart={() => setHovered(true)}
+          onHoverEnd={() => setHovered(false)}
+          animate={{ rotate: open ? 45 : 0 }}
+          transition={SPRING}
+          style={{ display: "flex" }}
+        >
+          <ShareNetwork size={20} weight="light" />
+        </m.button>
+        <AnimatePresence>
+          {hovered && !open && (
+            <m.span
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.15 }}
+              style={LABEL_STYLE}
+            >
+              reach out
+            </m.span>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
 
 export default function CornerNav() {
+  const [aboutOpen, setAboutOpen] = useState(false)
+  const [aboutHovered, setAboutHovered] = useState(false)
+  const [downloadHovered, setDownloadHovered] = useState(false)
+
   return (
     <>
-      {/* Top-right: Download CV */}
-      <div style={{ position: "fixed", top: 32, right: 32, zIndex: 150 }}>
+      {/* Top-left: About */}
+      <div style={{ position: "fixed", top: 28, left: 28, zIndex: 150, display: "flex", alignItems: "center", gap: 10 }}>
+        <button
+          type="button"
+          className="corner-btn"
+          aria-label="About Patrick"
+          onClick={() => setAboutOpen(true)}
+          onMouseEnter={() => setAboutHovered(true)}
+          onMouseLeave={() => setAboutHovered(false)}
+          style={{ display: "flex" }}
+        >
+          <User size={20} weight="light" />
+        </button>
+        <AnimatePresence>
+          {aboutHovered && (
+            <m.span
+              initial={{ opacity: 0, x: -4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -4 }}
+              transition={{ duration: 0.15 }}
+              style={LABEL_STYLE}
+            >
+              about me
+            </m.span>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Top-right: Download portfolio */}
+      <div style={{
+        position: "fixed",
+        top: 28,
+        right: 28,
+        zIndex: 150,
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+      }}>
+        <AnimatePresence>
+          {downloadHovered && (
+            <m.span
+              initial={{ opacity: 0, x: 4 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 4 }}
+              transition={{ duration: 0.15 }}
+              style={LABEL_STYLE}
+            >
+              download portfolio
+            </m.span>
+          )}
+        </AnimatePresence>
         <a
           href="/cv-patrick-caire.pdf"
           download
           className="corner-btn"
           aria-label="Download CV"
           style={{ display: "flex" }}
+          onMouseEnter={() => setDownloadHovered(true)}
+          onMouseLeave={() => setDownloadHovered(false)}
         >
           <DownloadSimple size={20} weight="light" />
         </a>
       </div>
 
       {/* Bottom-left: Contact fan-out */}
-      <div style={{
-        position: "fixed",
-        bottom: 32,
-        left: 32,
-        zIndex: 150,
-        display: "flex",
-        flexDirection: "column-reverse",
-        alignItems: "center",
-        gap: 8,
-      }}>
+      <div style={{ position: "fixed", bottom: 28, left: 28, zIndex: 150 }}>
         <ContactFan />
       </div>
 
-      {/* Bottom-right: MusicPlayer — rendered via site layout */}
+      {/* About overlay */}
+      <AboutOverlay open={aboutOpen} onClose={() => setAboutOpen(false)} />
     </>
   )
 }

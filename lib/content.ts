@@ -34,9 +34,6 @@ export function getProjectMeta(slug: string): ProjectMeta {
   return { slug, ...data } as ProjectMeta
 }
 
-export function getAllProjectMeta(): ProjectMeta[] {
-  return getProjectSlugs().map(getProjectMeta)
-}
 
 export function getProjectSource(slug: string): string {
   const filePath = path.join(CONTENT_DIR, `${slug}.mdx`)
