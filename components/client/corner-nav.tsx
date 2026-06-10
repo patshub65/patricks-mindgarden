@@ -32,12 +32,16 @@ const CONTACT_ITEMS = [
   },
 ]
 
+const BTN = 44
+const GAP = 8
+
 function ContactFan() {
   const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
 
   return (
-    <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+    <div style={{ position: "relative" }}>
+      {/* Fan items float above the button, out of document flow */}
       <AnimatePresence>
         {open && CONTACT_ITEMS.map(({ href, label, Icon, external }, i) => (
           <m.a
@@ -47,11 +51,16 @@ function ContactFan() {
             target={external ? "_blank" : undefined}
             rel={external ? "noopener noreferrer" : undefined}
             className="corner-btn"
-            initial={{ opacity: 0, y: 12, scale: 0.85 }}
+            initial={{ opacity: 0, y: 8, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.9 }}
             transition={{ ...SPRING, delay: i * 0.05 }}
-            style={{ display: "flex", order: -(CONTACT_ITEMS.length - i) }}
+            style={{
+              display: "flex",
+              position: "absolute",
+              bottom: (i + 1) * (BTN + GAP),
+              left: 0,
+            }}
             onClick={() => setOpen(false)}
           >
             <Icon size={20} weight="light" />
@@ -164,16 +173,7 @@ export default function CornerNav() {
       </div>
 
       {/* Bottom-left: Contact fan-out */}
-      <div style={{
-        position: "fixed",
-        bottom: 28,
-        left: 28,
-        zIndex: 150,
-        display: "flex",
-        flexDirection: "column-reverse",
-        alignItems: "center",
-        gap: 8,
-      }}>
+      <div style={{ position: "fixed", bottom: 28, left: 28, zIndex: 150 }}>
         <ContactFan />
       </div>
 

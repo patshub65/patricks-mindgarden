@@ -12,22 +12,14 @@ const CARD_STAGGER_S = 0.24
 const TOTAL_CARDS = 6
 const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 2400
 
-const ORBIT: Record<string, { r: number; dur: number; delay: number; reverse?: boolean }> = {
-  web:     { r: 12, dur: 55, delay: 0 },
-  product: { r: 9,  dur: 72, delay: -18 },
-  'ux-ui': { r: 14, dur: 60, delay: -35 },
-  writing: { r: 8,  dur: 85, delay: -50, reverse: true },
-  brand:   { r: 11, dur: 65, delay: -8, reverse: true },
-  visuals: { r: 13, dur: 52, delay: -28, reverse: true },
-}
 
 export default function MindgardenScene() {
-  const [expandedId, setExpandedId]   = useState<string | null>(null)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
   const [galleryOpen, setGalleryOpen] = useState(false)
-  const [viewSize, setViewSize]       = useState({ w: 1440, h: 800 })
-  const [mounted, setMounted]         = useState(false)
-  const [phase, setPhase]             = useState<"intro" | "done">("intro")
-  const prefersReducedMotion          = useReducedMotion()
+  const [viewSize, setViewSize] = useState({ w: 1440, h: 800 })
+  const [mounted, setMounted] = useState(false)
+  const [phase, setPhase] = useState<"intro" | "done">("intro")
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
     const update = () => setViewSize({ w: window.innerWidth, h: window.innerHeight })
@@ -172,9 +164,6 @@ export default function MindgardenScene() {
           const expandW = Math.min(360, layout.stageW - 48)
           const targetX = isExpanded && isMobile ? (layout.stageW - expandW) / 2 : card.x
 
-          const orbit = ORBIT[card.id] ?? { r: 10, dur: 60, delay: 0 }
-          const orbitActive = introDone && !isExpanded && !prefersReducedMotion
-
           return (
             <m.div
               key={card.id}
@@ -190,37 +179,26 @@ export default function MindgardenScene() {
               }}
               transition={transition}
             >
-              <div
-                className="card-orbit"
-                style={{
-                  '--orbit-r': orbitActive ? `${orbit.r}px` : '0px',
-                  '--orbit-dur': `${orbit.dur}s`,
-                  '--orbit-delay': `${orbit.delay}s`,
-                  animationDirection: orbit.reverse ? 'reverse' : 'normal',
-                  animationPlayState: isExpanded ? 'paused' : 'running',
-                } as React.CSSProperties}
-              >
-                <IllustrationCard
-                  id={card.id}
-                  label={card.label}
-                  description={card.description}
-                  accentBg={card.accentBg}
-                  projects={card.projects}
-                  homeX={card.x}
-                  homeY={card.y}
-                  canvasW={layout.stageW}
-                  canvasH={layout.stageH}
-                  physics={!isMobile && !prefersReducedMotion}
-                  size={card.size}
-                  floatDelay={card.entrance.rank * 0.6}
-                  floatDur={7 + (card.entrance.rank % 4)}
-                  isExpanded={isExpanded}
-                  isDimmed={isDimmed}
-                  onExpand={setExpandedId}
-                  onCollapse={() => setExpandedId(null)}
-                  onOverlay={card.id === 'visuals' ? () => setGalleryOpen(true) : undefined}
-                />
-              </div>
+              <IllustrationCard
+                id={card.id}
+                label={card.label}
+                description={card.description}
+                accentBg={card.accentBg}
+                projects={card.projects}
+                homeX={card.x}
+                homeY={card.y}
+                canvasW={layout.stageW}
+                canvasH={layout.stageH}
+                physics={!isMobile && !prefersReducedMotion}
+                size={card.size}
+                floatDelay={card.entrance.rank * 0.6}
+                floatDur={7 + (card.entrance.rank % 4)}
+                isExpanded={isExpanded}
+                isDimmed={isDimmed}
+                onExpand={setExpandedId}
+                onCollapse={() => setExpandedId(null)}
+                onOverlay={card.id === 'visuals' ? () => setGalleryOpen(true) : undefined}
+              />
             </m.div>
           )
         })}
