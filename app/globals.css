@@ -104,6 +104,7 @@ html, body {
   top: -10%; right: -8%;
   background: color-mix(in oklch, var(--color-butter), var(--color-coral) 48%);
   opacity: 0.58;
+  animation: orb-warm 18s ease-in-out infinite;
 }
 /* Green depth, lower-left */
 .garden-bg::after {
@@ -111,6 +112,8 @@ html, body {
   bottom: -12%; left: -10%;
   background: color-mix(in oklch, var(--color-sage), var(--color-moss) 38%);
   opacity: 0.5;
+  animation: orb-green 22s ease-in-out infinite;
+  animation-delay: -9s;
 }
 
 /* Grain overlay — page feels tactile not flat */
@@ -125,6 +128,19 @@ html, body {
     radial-gradient(rgb(20 24 20 / 0.3) 1px, transparent 1px);
   background-size: 3px 3px, 7px 7px;
   background-position: 0 0, 1px 2px;
+}
+
+/* ── Ambient background orb drift ───────────────────────── */
+@keyframes orb-warm {
+  0%, 100% { transform: translate(0, 0) scale(1);       opacity: 0.58; }
+  30%       { transform: translate(-4%, 5%) scale(1.07); opacity: 0.46; }
+  65%       { transform: translate(6%, -3%) scale(0.93); opacity: 0.66; }
+}
+
+@keyframes orb-green {
+  0%, 100% { transform: translate(0, 0) scale(1);        opacity: 0.50; }
+  38%       { transform: translate(5%, -6%) scale(1.09);  opacity: 0.40; }
+  72%       { transform: translate(-4%, 4%) scale(0.94);  opacity: 0.58; }
 }
 
 /* ── Idle card float (CSS-only, paused on hover/drag) ─────── */
@@ -144,7 +160,9 @@ html, body {
 
 /* ── Reduce motion ───────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .card-float {
+  .card-float,
+  .garden-bg::before,
+  .garden-bg::after {
     animation: none;
   }
 }
