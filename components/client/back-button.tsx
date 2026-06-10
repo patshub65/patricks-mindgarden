@@ -27,6 +27,7 @@ export default function BackButton({
   if (variant === 'footer') {
     return (
       <button
+        type="button"
         onClick={() => triggerExit?.()}
         style={{
           background: 'none',
@@ -50,6 +51,7 @@ export default function BackButton({
 
   return (
     <button
+      type="button"
       onClick={() => triggerExit?.()}
       aria-label={`Back to ${label}`}
       style={{

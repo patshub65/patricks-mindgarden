@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useVelocity,
@@ -21,12 +21,6 @@ const STOP_SPEED = 16
 
 const EXPANDED_W = 360
 
-// One easing curve for the whole morph. width, height, borderRadius,
-// backgroundColor and boxShadow are ALL animated by Framer on a single
-// timeline, so every property reaches target on the same frame. Height is
-// animated to a measured pixel value (never 'auto') — animating to 'auto'
-// makes Framer re-measure a reflowing box mid-animation, which is what caused
-// the height to pop on open and snap on close (and dragged the shadow with it).
 const EASE_MORPH = [0.32, 0.72, 0, 1] as const
 const SHELL_OPEN  = { duration: 0.42, ease: EASE_MORPH }
 const SHELL_CLOSE = { duration: 0.34, ease: EASE_MORPH }
@@ -96,7 +90,7 @@ function ProjectThumb({ project }: { project: CardProject }) {
         background: 'rgba(255,255,255,0.92)',
         color: '#141814',
         fontFamily: 'var(--font-mono)',
-        fontSize: 10,
+        fontSize: 12,
         fontWeight: 600,
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
@@ -167,8 +161,6 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
   const isDraggingRef = useRef(false)
   const startXRef = useRef(0)
   const scrollLeftRef = useRef(0)
-  // Tracks whether the pointer moved enough to count as a drag (vs a click).
-  // Used to swallow the click that would otherwise navigate a child link.
   const movedRef = useRef(false)
 
   return (
@@ -184,8 +176,6 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         touchAction: 'pan-x',
         WebkitOverflowScrolling: 'touch',
       }}
-      // Kill the browser's native link/image ghost-drag, which hijacks the
-      // press-drag-to-scroll gesture on the text-and-link cards.
       onDragStart={e => e.preventDefault()}
       onMouseDown={e => {
         isDraggingRef.current = true
@@ -210,7 +200,6 @@ function ScrollStrip({ children }: { children: React.ReactNode }) {
         isDraggingRef.current = false
         if (scrollRef.current) scrollRef.current.style.cursor = 'grab'
       }}
-      // If the gesture was a drag, swallow the click so child links don't fire.
       onClickCapture={e => {
         if (movedRef.current) {
           e.preventDefault()
@@ -251,7 +240,7 @@ function WritingGallery() {
         >
           {p.date && (
             <div style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+              fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.1em',
               color: 'rgba(20,24,20,0.45)', textTransform: 'uppercase', marginBottom: 6,
             }}>{p.date}</div>
           )}
@@ -261,11 +250,11 @@ function WritingGallery() {
             fontSize: 15, lineHeight: 1.2, color: 'rgba(20,24,20,0.88)',
           }}>{p.title}</div>
           <div style={{
-            fontFamily: 'var(--font-body)', fontSize: 11.5, lineHeight: 1.5,
+            fontFamily: 'var(--font-body)', fontSize: 12, lineHeight: 1.5,
             color: 'rgba(20,24,20,0.55)', marginTop: 7,
           }}>{p.excerpt}</div>
           <div style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.06em',
+            fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.06em',
             color: 'var(--color-moss)', marginTop: 10,
           }}>Read on LinkedIn ↗</div>
         </a>
@@ -288,11 +277,6 @@ export default function IllustrationCard({
   const [isHovered, setIsHovered] = useState(false)
   const hasDragged = useRef(false)
 
-  // Measure the expanded content's natural height so the morph animates to a
-  // concrete pixel value instead of 'auto'. A child's offsetHeight is not
-  // clamped by the parent's overflow:hidden, so this reads correctly even
-  // while the card is collapsed. ResizeObserver keeps it fresh across font/
-  // image load and viewport resize.
   const contentRef = useRef<HTMLDivElement>(null)
   const [expandedH, setExpandedH] = useState(size)
   useEffect(() => {
@@ -377,12 +361,11 @@ export default function IllustrationCard({
         rotate: { duration: floatDur, delay: floatDelay, repeat: Infinity, ease: 'easeInOut' as const },
       }
 
-  // Clamp expanded card width so it doesn't run off screen
   const expandW = Math.min(EXPANDED_W, canvasW - 48)
   const expandedZIndex = isExpanded ? 150 : isDimmed ? 1 : 1
 
   return (
-    <motion.div
+    <m.div
       drag={!isExpanded}
       dragConstraints={constraints}
       dragElastic={0}
@@ -405,7 +388,7 @@ export default function IllustrationCard({
       animate={{ opacity: isDimmed ? 0.18 : 1 }}
       transition={{ duration: 0.25 }}
     >
-      <motion.div
+      <m.div
         animate={isExpanded
           ? { y: 0, rotate: 0, scale: 1 }
           : (isDragging ? { y: 0, rotate: 0, scale: 1.05 } : floatAnimate)
@@ -417,12 +400,22 @@ export default function IllustrationCard({
         style={{ originX: '50%', originY: '50%' }}
       >
         {/* Card shell — animates from square illustration to expanded panel */}
-        <motion.div
+        <m.div
+          role="button"
+          tabIndex={isExpanded ? -1 : 0}
           onClick={() => {
             if (hasDragged.current) return
             if (isExpanded) return
             if (onOverlay) { onOverlay(); return }
             onExpand(id)
+          }}
+          onKeyDown={(e) => {
+            if (isExpanded || hasDragged.current) return
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              if (onOverlay) { onOverlay(); return }
+              onExpand(id)
+            }
           }}
           animate={{
             width:  isExpanded ? expandW : size,
@@ -443,7 +436,7 @@ export default function IllustrationCard({
           }}
         >
           {/* Illustration — always absolute so it never reflows; fades out when expanded */}
-          <motion.div
+          <m.div
             animate={{ opacity: isExpanded ? 0 : 1 }}
             onHoverStart={() => { if (!isExpanded && !isDragging) setIsHovered(true) }}
             onHoverEnd={() => setIsHovered(false)}
@@ -471,7 +464,7 @@ export default function IllustrationCard({
             />
 
             {/* Hover title overlay */}
-            <motion.div
+            <m.div
               animate={{ opacity: isHovered && !isExpanded ? 1 : 0 }}
               transition={{ duration: 0.18 }}
               style={{
@@ -497,11 +490,11 @@ export default function IllustrationCard({
               } as React.CSSProperties}>
                 {label}
               </span>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Expanded content — always mounted; opacity/pointerEvents gate show/hide */}
-          <motion.div
+          <m.div
             ref={contentRef}
             animate={{ opacity: isExpanded ? 1 : 0 }}
             transition={isExpanded
@@ -519,6 +512,7 @@ export default function IllustrationCard({
           >
                 {/* Close button */}
                 <button
+                  type="button"
                   onClick={e => { e.stopPropagation(); onCollapse() }}
                   aria-label="Close"
                   style={{
@@ -581,9 +575,9 @@ export default function IllustrationCard({
                     {description}
                   </div>
                 </div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </motion.div>
+          </m.div>
+        </m.div>
+      </m.div>
+    </m.div>
   )
 }

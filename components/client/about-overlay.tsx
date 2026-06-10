@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, AnimatePresence } from "framer-motion"
+import { m, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { X } from "@phosphor-icons/react"
 
@@ -20,7 +20,7 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <m.div
           role="dialog"
           aria-modal="true"
           aria-label="About Patrick"
@@ -42,7 +42,7 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
             padding: '24px',
           }}
         >
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
@@ -60,6 +60,7 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
             }}
           >
             <button
+              type="button"
               className="peek-close"
               onClick={onClose}
               aria-label="Close"
@@ -95,7 +96,7 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
                 </div>
                 <div style={{
                   position: 'absolute', bottom: 14, left: 16,
-                  fontFamily: 'var(--font-mono)', fontSize: 10,
+                  fontFamily: 'var(--font-mono)', fontSize: 12,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
                   color: 'var(--color-ink-muted)',
                 }}>
@@ -136,8 +137,8 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
                 </p>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

@@ -121,7 +121,7 @@ export default function DetailPage({ meta, content, backNav, footerNav }: Detail
 
         {/* Eyebrow */}
         <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 11,
+          fontFamily: 'var(--font-mono)', fontSize: 12,
           letterSpacing: '0.14em', textTransform: 'uppercase',
           color: 'var(--color-ink-muted)', marginBottom: 20,
           display: 'flex', alignItems: 'center', gap: 12,
@@ -183,7 +183,7 @@ export default function DetailPage({ meta, content, backNav, footerNav }: Detail
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 48 }}>
             {meta.tags.map(tag => (
               <span key={tag} style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10,
+                fontFamily: 'var(--font-mono)', fontSize: 12,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
                 color: 'var(--color-ink-muted)', padding: '4px 10px',
                 background: 'var(--color-surface)', borderRadius: 'var(--radius-full)',
@@ -227,7 +227,7 @@ export default function DetailPage({ meta, content, backNav, footerNav }: Detail
           {footerNav}
           {meta.category && (
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 10,
+              fontFamily: 'var(--font-mono)', fontSize: 12,
               letterSpacing: '0.1em', textTransform: 'uppercase',
               color: 'var(--color-ink-faint)',
             }}>

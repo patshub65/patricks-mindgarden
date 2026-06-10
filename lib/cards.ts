@@ -26,8 +26,7 @@ export interface HomeCard {
   projects: CardProject[]
 }
 
-export const DESIGN_W = 1440
-export const DESIGN_H = 900
+const DESIGN_W = 1440
 
 export const HOME_CARDS: HomeCard[] = [
   {
@@ -37,14 +36,13 @@ export const HOME_CARDS: HomeCard[] = [
     accentBg: '#C4B4E4',
     baseSize: 240,
     behavior: 'peek',
-    desktop: { fx: 0.13, fy: 0.22, rot: -5 },
+    desktop: { fx: 0.19, fy: 0.23, rot: -5 },
     mobile:  { fx: 0.28, fy: 0.34, rot: -6 },
-    entrance: { rank: 2, startRot: -35 },
+    entrance: { rank: 2, startRot: -75 },
     projects: [
-      { slug: 'frachtwerk', title: 'Frachtwerk' },
-      { slug: 'mxc', title: 'MXC' },
       { slug: 'stetig-wandel', title: 'Stetig & Wandel' },
       { slug: 'green-visions', title: 'Green Visions' },
+      { slug: 'mxc', title: 'MXC' },
     ],
   },
   {
@@ -54,9 +52,9 @@ export const HOME_CARDS: HomeCard[] = [
     accentBg: '#ECC8A8',
     baseSize: 220,
     behavior: 'peek',
-    desktop: { fx: 0.46, fy: 0.12, rot: 4 },
+    desktop: { fx: 0.44, fy: 0.16, rot: 4 },
     mobile:  { fx: 0.72, fy: 0.28, rot: 5 },
-    entrance: { rank: 0, startRot: 16 },
+    entrance: { rank: 0, startRot: 50 },
     projects: [
       { slug: 'sponti', title: 'Sponti' },
       { title: 'GitHub', href: 'https://github.com/patshub65' },
@@ -69,10 +67,11 @@ export const HOME_CARDS: HomeCard[] = [
     accentBg: '#E8DED0',
     baseSize: 235,
     behavior: 'peek',
-    desktop: { fx: 0.84, fy: 0.20, rot: 6 },
+    desktop: { fx: 0.76, fy: 0.22, rot: 6 },
     mobile:  { fx: 0.72, fy: 0.60, rot: 4 },
-    entrance: { rank: 3, startRot: -24 },
+    entrance: { rank: 3, startRot: -60 },
     projects: [
+      { slug: 'frachtwerk', title: 'Frachtwerk' },
       { slug: 'autonomies', title: 'Autonomies' },
       { slug: 'sponti', title: 'Sponti' },
     ],
@@ -84,9 +83,9 @@ export const HOME_CARDS: HomeCard[] = [
     accentBg: '#B8CCA0',
     baseSize: 230,
     behavior: 'peek',
-    desktop: { fx: 0.12, fy: 0.64, rot: -8 },
+    desktop: { fx: 0.14, fy: 0.62, rot: -8 },
     mobile:  { fx: 0.28, fy: 0.60, rot: -5 },
-    entrance: { rank: 4, startRot: -28 },
+    entrance: { rank: 4, startRot: -65 },
     projects: [],
   },
   {
@@ -96,9 +95,9 @@ export const HOME_CARDS: HomeCard[] = [
     accentBg: '#B8C8E4',
     baseSize: 230,
     behavior: 'peek',
-    desktop: { fx: 0.46, fy: 0.76, rot: -3 },
+    desktop: { fx: 0.44, fy: 0.82, rot: -3 },
     mobile:  { fx: 0.50, fy: 0.80, rot: -4 },
-    entrance: { rank: 5, startRot: 22 },
+    entrance: { rank: 5, startRot: 55 },
     projects: [
       { slug: 'afar', title: 'AFAR' },
       { slug: 'chikai', title: 'Chikai' },
@@ -114,9 +113,9 @@ export const HOME_CARDS: HomeCard[] = [
     accentBg: '#E4C4C8',
     baseSize: 230,
     behavior: 'peek',
-    desktop: { fx: 0.86, fy: 0.64, rot: 7 },
+    desktop: { fx: 0.84, fy: 0.58, rot: 7 },
     mobile:  { fx: 0.72, fy: 0.80, rot: 6 },
-    entrance: { rank: 1, startRot: 32 },
+    entrance: { rank: 1, startRot: 70 },
     projects: [],
   },
 ]
@@ -191,14 +190,14 @@ export interface StageLayout {
 
 const clampN = (min: number, v: number, max: number) => Math.max(min, Math.min(v, max))
 
-export const MOBILE_MAX = 700
+const MOBILE_MAX = 700
 
 export function resolveLayout(vw: number, vh: number): StageLayout {
   const mode: LayoutMode = vw < MOBILE_MAX ? 'mobile' : 'wide'
 
   if (mode === 'wide') {
-    const bleedX = -40
-    const bleedY = -40
+    const bleedX = 24
+    const bleedY = 24
     const layoutW = Math.min(vw, 1600)
     const layoutH = Math.min(vh, 960)
     const offsetX = (vw - layoutW) / 2
