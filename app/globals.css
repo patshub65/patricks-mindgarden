@@ -71,58 +71,140 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
-/* ── Garden background ───────────────────────────────────── */
+/* ── Fuchsia flare background ────────────────────────────── */
+/* Drifting purple/fuchsia light blobs over the #D078B0 body so the
+   edges blend seamlessly into the page. Adapted from FlareBackground. */
 .garden-bg {
   position: absolute;
   inset: 0;
-  background-image: url('/images/homepage-bg.jpg');
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
   pointer-events: none;
-}
-/* Warm coral-gold sun glow, upper-right */
-.garden-bg::before {
-  width: 50%; height: 66%;
-  top: -10%; right: -8%;
-  background: color-mix(in oklch, var(--color-butter), var(--color-coral) 48%);
-  opacity: 0.58;
-  animation: orb-warm 18s ease-in-out infinite;
-}
-/* Green depth, lower-left */
-.garden-bg::after {
-  width: 46%; height: 58%;
-  bottom: -12%; left: -10%;
-  background: color-mix(in oklch, var(--color-sage), var(--color-moss) 38%);
-  opacity: 0.5;
-  animation: orb-green 22s ease-in-out infinite;
-  animation-delay: -9s;
+  /* subtle vertical depth gradient layered over the fuchsia body */
+  background:
+    radial-gradient(120% 90% at 50% -10%, oklch(0.66 0.17 330 / 0.55), transparent 60%),
+    radial-gradient(120% 90% at 50% 110%, oklch(0.42 0.16 318 / 0.6), transparent 55%);
 }
 
-/* Grain overlay — subtle on top of the photo grain */
+/* Shared blob base */
+.flare-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  will-change: transform;
+  mix-blend-mode: screen;
+}
+/* Bright fuchsia, upper-center */
+.flare-1 {
+  width: 46%; height: 56%;
+  top: 2%; left: 50%;
+  background: radial-gradient(ellipse at center,
+    oklch(0.8 0.17 350 / 0.6), oklch(0.62 0.2 338 / 0.2), transparent 70%);
+  animation: flare-drift-1 26s ease-in-out infinite, flare-pulse-1 13s ease-in-out infinite;
+}
+/* Deep violet, upper-right — darkens into a purple pool */
+.flare-2 {
+  width: 48%; height: 58%;
+  top: 8%; right: 18%;
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+  background: radial-gradient(ellipse at center,
+    oklch(0.5 0.19 305 / 0.85), oklch(0.42 0.17 298 / 0.3), transparent 72%);
+  animation: flare-drift-2 32s ease-in-out infinite, flare-pulse-2 16s ease-in-out infinite;
+}
+/* Soft magenta, lower-left */
+.flare-3 {
+  width: 40%; height: 50%;
+  bottom: 6%; left: 26%;
+  background: radial-gradient(ellipse at center,
+    oklch(0.74 0.18 342 / 0.45), oklch(0.6 0.18 332 / 0.12), transparent 70%);
+  animation: flare-drift-3 29s ease-in-out infinite, flare-pulse-1 19s ease-in-out infinite;
+}
+/* Deep magenta-violet, lower-left — darkens for depth */
+.flare-4 {
+  width: 40%; height: 50%;
+  top: 34%; left: 8%;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+  background: radial-gradient(ellipse at center,
+    oklch(0.52 0.18 322 / 0.8), oklch(0.44 0.16 312 / 0.25), transparent 72%);
+  animation: flare-drift-4 35s ease-in-out infinite, flare-pulse-2 11s ease-in-out infinite;
+}
+/* Hot pink, mid-right */
+.flare-5 {
+  width: 30%; height: 40%;
+  top: 46%; right: 12%;
+  background: radial-gradient(ellipse at center,
+    oklch(0.78 0.16 4 / 0.5), oklch(0.62 0.19 352 / 0.15), transparent 70%);
+  animation: flare-drift-5 23s ease-in-out infinite, flare-pulse-1 16s ease-in-out infinite;
+}
+
+/* Grain overlay — soft film noise over the gradient */
 .garden-grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.03;
-  mix-blend-mode: multiply;
-  background-image:
-    radial-gradient(rgb(20 24 20 / 0.5) 1px, transparent 1px),
-    radial-gradient(rgb(20 24 20 / 0.3) 1px, transparent 1px);
-  background-size: 3px 3px, 7px 7px;
-  background-position: 0 0, 1px 2px;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
 
-/* ── Ambient background orb drift ───────────────────────── */
-@keyframes orb-warm {
-  0%, 100% { transform: translate(0, 0) scale(1);       opacity: 0.58; }
-  30%       { transform: translate(-4%, 5%) scale(1.07); opacity: 0.46; }
-  65%       { transform: translate(6%, -3%) scale(0.93); opacity: 0.66; }
+/* ── Flare drift + pulse ─────────────────────────────────── */
+@keyframes flare-drift-1 {
+  0%, 100% { transform: translate(-50%, 0) rotate(0deg); }
+  14% { transform: translate(-20%, -30%) rotate(80deg); }
+  28% { transform: translate(-70%, 15%) rotate(160deg); }
+  42% { transform: translate(-25%, -10%) rotate(240deg); }
+  57% { transform: translate(-60%, 20%) rotate(300deg); }
+  71% { transform: translate(-35%, -25%) rotate(380deg); }
+  85% { transform: translate(-55%, 10%) rotate(440deg); }
+}
+@keyframes flare-drift-2 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  12% { transform: translate(30%, 25%) rotate(-90deg); }
+  25% { transform: translate(-25%, -20%) rotate(-180deg); }
+  37% { transform: translate(20%, 10%) rotate(-260deg); }
+  50% { transform: translate(-15%, -30%) rotate(-340deg); }
+  62% { transform: translate(25%, 20%) rotate(-420deg); }
+  75% { transform: translate(-10%, -15%) rotate(-500deg); }
+  87% { transform: translate(15%, 5%) rotate(-570deg); }
+}
+@keyframes flare-drift-3 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  16% { transform: translate(30%, -25%) rotate(100deg); }
+  33% { transform: translate(-20%, 20%) rotate(200deg); }
+  50% { transform: translate(25%, -15%) rotate(310deg); }
+  66% { transform: translate(-15%, 25%) rotate(420deg); }
+  83% { transform: translate(20%, -10%) rotate(520deg); }
+}
+@keyframes flare-drift-4 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  14% { transform: translate(-30%, 20%) rotate(-80deg); }
+  28% { transform: translate(20%, -25%) rotate(-170deg); }
+  42% { transform: translate(-15%, 30%) rotate(-260deg); }
+  57% { transform: translate(25%, -10%) rotate(-350deg); }
+  71% { transform: translate(-20%, 15%) rotate(-440deg); }
+  85% { transform: translate(10%, -20%) rotate(-530deg); }
+}
+@keyframes flare-drift-5 {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-25%, -20%) rotate(70deg); }
+  40% { transform: translate(20%, 25%) rotate(150deg); }
+  60% { transform: translate(-30%, 10%) rotate(240deg); }
+  80% { transform: translate(15%, -25%) rotate(330deg); }
+}
+@keyframes flare-pulse-1 {
+  0%, 100% { opacity: 0.45; filter: blur(80px); }
+  50% { opacity: 0.65; filter: blur(60px); }
+}
+@keyframes flare-pulse-2 {
+  0%, 100% { opacity: 0.5; filter: blur(75px); }
+  50% { opacity: 0.32; filter: blur(95px); }
 }
 
-@keyframes orb-green {
-  0%, 100% { transform: translate(0, 0) scale(1);        opacity: 0.50; }
-  38%       { transform: translate(5%, -6%) scale(1.09);  opacity: 0.40; }
-  72%       { transform: translate(-4%, 4%) scale(0.94);  opacity: 0.58; }
+@media (prefers-reduced-motion: reduce) {
+  .flare-blob { animation: none; }
 }
 
 /* ── Idle card float (CSS-only, paused on hover/drag) ─────── */
