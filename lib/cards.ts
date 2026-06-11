@@ -57,7 +57,7 @@ export const HOME_CARDS: HomeCard[] = [
     entrance: { rank: 0, startRot: 50 },
     projects: [
       { slug: 'sponti', title: 'Sponti' },
-      { title: 'GitHub', href: 'https://github.com/patshub65' },
+      { title: 'MovieTime' },
     ],
   },
   {
@@ -108,7 +108,7 @@ export const HOME_CARDS: HomeCard[] = [
   },
   {
     id: 'visuals',
-    label: 'Experiments',
+    label: 'Bits & Bobs',
     description: 'Visual play — motion, collage, and things without a brief.',
     accentBg: '#E4C4C8',
     baseSize: 230,
@@ -133,34 +133,30 @@ export interface WritingPost {
   href: string
 }
 
-// TODO: swap each `href` for the individual LinkedIn post URL (currently the
-// profile activity feed as a fallback). Add `date` labels once confirmed.
-const LINKEDIN_ACTIVITY = 'https://www.linkedin.com/in/patrickcaire/recent-activity/all/'
-
 export const WRITING_POSTS: WritingPost[] = [
   {
     title: 'Why designers should understand code',
     excerpt:
-      'The point was never to become a developer. It was to stop being the person who has to trust everyone else’s definition of “that’s not technically feasible.”',
-    href: LINKEDIN_ACTIVITY,
+      `The point was never to become a developer. It was to stop being the person who has to trust everyone else’s definition of “that’s not technically feasible.”`,
+    href: 'https://www.linkedin.com/posts/patrickcaire_fullstack-designtocode-uxengineering-activity-7469703247931383808-D7bf',
   },
   {
     title: 'Design generalists fit the Zeitgeist',
     excerpt:
-      'I don’t see how being great at one thing only cuts it anymore. Through the amalgamation of many forays, I’ve built an approach, an eye, and the ability to move from the highest abstraction down to the tiniest detail.',
-    href: LINKEDIN_ACTIVITY,
+      `I don’t see how being great at one thing only cuts it anymore. Through the amalgamation of many forays, I’ve built an approach, an eye, and the ability to move from the highest abstraction down to the tiniest detail.`,
+    href: 'https://www.linkedin.com/posts/patrickcaire_design-generalists-are-better-adapted-to-activity-7445501935887212545-T-3N',
   },
   {
     title: 'AI clears the fog — you still walk the trail',
     excerpt:
-      'AI shows us the path, but it doesn’t walk it for us. My job as a design engineer is to understand the terrain well enough to survive the hike.',
-    href: LINKEDIN_ACTIVITY,
+      `AI shows us the path, but it doesn’t walk it for us. My job as a design engineer is to understand the terrain well enough to survive the hike.`,
+    href: 'https://www.linkedin.com/posts/patrickcaire_designengineering-wbscodingschool-fullstack-activity-7442932721846325249-83KF',
   },
   {
-    title: 'The ugliest website I’ve ever made',
+    title: `The ugliest website I’ve ever made`,
     excerpt:
-      'The first site I coded from scratch was the ugliest thing I’ve ever created — Times New Roman, clashing colors, zero alignment. But when the layout was actually responsive? Felt pretty good.',
-    href: LINKEDIN_ACTIVITY,
+      `The first site I coded from scratch was the ugliest thing I’ve ever created — Times New Roman, clashing colors, zero alignment. But when the layout was actually responsive? Felt pretty good.`,
+    href: 'https://www.linkedin.com/posts/patrickcaire_designengineer-webdevelopment-uxui-activity-7430243855284719616-28sG',
   },
 ]
 

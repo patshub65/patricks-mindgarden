@@ -119,7 +119,7 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
                 color: 'var(--color-ink)',
                 marginBottom: 6,
               }}>
-                Experiments
+                Bits & Bobs
               </div>
               <p style={{
                 margin: 0,

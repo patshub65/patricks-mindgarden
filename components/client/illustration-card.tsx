@@ -223,6 +223,7 @@ function WritingGallery() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={e => e.stopPropagation()}
+          draggable={false}
           style={{
             flexShrink: 0,
             width: 248,
@@ -234,6 +235,8 @@ function WritingGallery() {
             border: '1px solid rgba(20,24,20,0.06)',
             textDecoration: 'none',
             transition: 'background 150ms',
+            cursor: 'inherit',
+            userSelect: 'none',
           }}
           onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.95)')}
           onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.78)')}

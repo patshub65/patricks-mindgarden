@@ -66,8 +66,14 @@ export default function MindgardenScene() {
         overflow: "hidden",
       }}
     >
-      {/* Full-bleed gradient background */}
-      <div className="garden-bg" />
+      {/* Full-bleed fuchsia flare background */}
+      <div className="garden-bg" aria-hidden="true">
+        <div className="flare-blob flare-1" />
+        <div className="flare-blob flare-2" />
+        <div className="flare-blob flare-3" />
+        <div className="flare-blob flare-4" />
+        <div className="flare-blob flare-5" />
+      </div>
       <div className="garden-grain" />
 
       {/* Click-outside to collapse expanded card */}
