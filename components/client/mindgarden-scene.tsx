@@ -115,7 +115,7 @@ export default function MindgardenScene() {
             textWrap: "balance",
             marginBottom: isMobile ? 10 : 14,
           } as React.CSSProperties}>
-            I design, create and play.
+            a versatile designer with an artistic edge.
           </h1>
           <p style={{
             margin: 0,
@@ -130,7 +130,7 @@ export default function MindgardenScene() {
             textWrap: "balance",
             textShadow: "0 1px 8px rgba(0,0,0,0.12)",
           } as React.CSSProperties}>
-            I&rsquo;m Patrick, a designer with 8+ years in the industry, developer in training, AI-native creative and budding musician.
+            Hi there! I'm Patrick, and I work at the intersection of web, UX/UI and branding. My experience spans 8+ years in the industry, working in agencies and freelancing for clients in the culture, tech and health sectors.
           </p>
         </m.div>
       </div>
