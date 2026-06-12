@@ -130,7 +130,7 @@ export default function MindgardenScene() {
             textWrap: "balance",
             textShadow: "0 1px 8px rgba(0,0,0,0.12)",
           } as React.CSSProperties}>
-            Hi there! I'm Patrick, and I work at the intersection of web, UX/UI and branding. My experience spans 8+ years in the industry, working in agencies and freelancing for clients in the culture, tech and health sectors.
+            Hi there! I&apos;m Patrick, and I work at the intersection of web, UX/UI and branding. My experience spans 8+ years in the industry, working in agencies and freelancing for clients in the culture, tech and health sectors.
           </p>
         </m.div>
       </div>
