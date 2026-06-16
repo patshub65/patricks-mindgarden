@@ -160,10 +160,10 @@ export default function CornerNav() {
           )}
         </AnimatePresence>
         <a
-          href="/cv-patrick-caire.pdf"
+          href="/patrick-caire-portfolio-2026-sm.pdf"
           download
           className="corner-btn"
-          aria-label="Download CV"
+          aria-label="Download portfolio"
           style={{ display: "flex" }}
           onMouseEnter={() => setDownloadHovered(true)}
           onMouseLeave={() => setDownloadHovered(false)}
