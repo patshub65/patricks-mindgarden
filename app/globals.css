@@ -533,3 +533,47 @@ html, body {
     radial-gradient(900px 700px at 10% 100%, rgb(197 212 168 / 0.22), transparent 65%);
   pointer-events: none;
 }
+
+/* ── Legal pages (Impressum / Datenschutz) ──────────────── */
+.legal-prose {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-ink-muted);
+}
+.legal-prose h2 {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 28, "SOFT" 50;
+  font-size: 21px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin: 40px 0 12px;
+}
+.legal-prose h2:first-child {
+  margin-top: 0;
+}
+.legal-prose p {
+  margin: 0 0 14px;
+}
+.legal-prose a {
+  color: var(--color-moss);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal-prose strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.legal-prose ul {
+  margin: 0 0 14px;
+  padding-left: 20px;
+}
+.legal-prose li {
+  margin-bottom: 6px;
+}
+.legal-prose .legal-meta {
+  font-size: 13px;
+  color: var(--color-ink-faint);
+  margin-top: 40px;
+}

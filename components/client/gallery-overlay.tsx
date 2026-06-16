@@ -1,7 +1,7 @@
 "use client"
 
 import { m, AnimatePresence } from "framer-motion"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { X } from "@phosphor-icons/react"
 import Image from "next/image"
 
@@ -30,6 +30,15 @@ interface GalleryOverlayProps {
 }
 
 export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const update = () => setIsMobile(window.innerWidth < 700)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -132,8 +141,8 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
               </p>
             </div>
 
-            {/* 3-col masonry grid */}
-            <div style={{ columns: 3, columnGap: 10 }}>
+            {/* Masonry grid — 2 columns on mobile, 3 on wider screens */}
+            <div style={{ columns: isMobile ? 2 : 3, columnGap: 10 }}>
               {GALLERY_IMAGES.map(([file, w, h]) => (
                 <div
                   key={file}
@@ -149,7 +158,7 @@ export default function GalleryOverlay({ open, onClose }: GalleryOverlayProps) {
                     alt=""
                     width={w}
                     height={h}
-                    sizes="(max-width: 860px) 30vw, 230px"
+                    sizes="(max-width: 700px) 45vw, (max-width: 860px) 30vw, 230px"
                     style={{ width: '100%', height: 'auto', display: 'block' }}
                   />
                 </div>

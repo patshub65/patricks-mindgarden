@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import HomeSceneLoader from "@/components/client/home-scene-loader"
+import SiteFooter from "@/components/server/site-footer"
 
 export const metadata: Metadata = {
   title: "Patrick Caire — Designer & Creative Developer",
@@ -12,5 +13,10 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  return <HomeSceneLoader />
+  return (
+    <>
+      <HomeSceneLoader />
+      <SiteFooter tone="light" />
+    </>
+  )
 }
