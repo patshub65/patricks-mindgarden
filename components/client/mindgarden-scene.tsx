@@ -10,7 +10,8 @@ const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
 const CARD_STAGGER_S = 0.24
 const TOTAL_CARDS = 6
-const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 2400
+// Hero text fades in shortly after the last card starts settling — not a long beat later.
+const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 700
 
 
 export default function MindgardenScene() {
@@ -119,7 +120,7 @@ export default function MindgardenScene() {
           </h1>
           <p style={{
             margin: 0,
-            maxWidth: isMobile ? 260 : 480,
+            maxWidth: isMobile ? 340 : 480,
             marginLeft: "auto",
             marginRight: "auto",
             fontSize: isMobile ? 13 : 14,
@@ -195,6 +196,7 @@ export default function MindgardenScene() {
                 homeY={card.y}
                 canvasW={layout.stageW}
                 canvasH={layout.stageH}
+                draggable={!isMobile}
                 physics={!isMobile && !prefersReducedMotion}
                 size={card.size}
                 floatDelay={card.entrance.rank * 0.6}

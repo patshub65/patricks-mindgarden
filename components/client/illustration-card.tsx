@@ -41,6 +41,7 @@ interface IllustrationCardProps {
   homeY: number
   canvasW: number
   canvasH: number
+  draggable: boolean
   physics: boolean
   floatDelay: number
   floatDur: number
@@ -269,7 +270,7 @@ function WritingGallery() {
 
 export default function IllustrationCard({
   id, label, description, accentBg, projects,
-  size, homeX, homeY, canvasW, canvasH, physics,
+  size, homeX, homeY, canvasW, canvasH, draggable, physics,
   floatDelay, floatDur,
   isExpanded, isDimmed, onExpand, onCollapse, onOverlay,
 }: IllustrationCardProps) {
@@ -369,7 +370,7 @@ export default function IllustrationCard({
 
   return (
     <m.div
-      drag={!isExpanded}
+      drag={!isExpanded && draggable}
       dragConstraints={constraints}
       dragElastic={0}
       dragMomentum={false}
@@ -380,7 +381,7 @@ export default function IllustrationCard({
         left: 0, top: 0,
         width: size,
         zIndex: isDragging ? 100 : expandedZIndex,
-        cursor: isExpanded ? 'default' : isDragging ? 'grabbing' : 'grab',
+        cursor: isExpanded ? 'default' : !draggable ? 'pointer' : isDragging ? 'grabbing' : 'grab',
       }}
       onDragStart={() => { stopInertia(); setIsDragging(true); hasDragged.current = true }}
       onDragEnd={(_, info: PanInfo) => {
@@ -433,9 +434,10 @@ export default function IllustrationCard({
           style={{
             position: 'relative',
             overflow: 'hidden',
-            cursor: isExpanded ? 'default' : 'grab',
+            cursor: isExpanded ? 'default' : draggable ? 'grab' : 'pointer',
             userSelect: 'none',
-            touchAction: isExpanded ? 'auto' : 'none',
+            // When dragging is off (mobile), allow vertical scroll to pass through the card.
+            touchAction: isExpanded ? 'auto' : draggable ? 'none' : 'pan-y',
           }}
         >
           {/* Illustration — always absolute so it never reflows; fades out when expanded */}
