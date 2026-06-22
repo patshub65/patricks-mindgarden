@@ -140,7 +140,7 @@ Real functional AI chat, not decorative.
 - Domain for system prompt: `patrickcaire.me`
 
 ### Corner nav
-- **Top-right**: download CV (`/public/cv-patrick-caire.pdf`)
+- **Top-right**: download portfolio (`/public/patrick-caire-portfolio-2026-sm.pdf`)
 - **Bottom-left**: contact hub — tap to fan out email (`mailto:patrick.caire@gmail.com`) then LinkedIn
 - **Bottom-right**: music player — HTML5 Audio, hardcoded MP3 from `/public`
 
