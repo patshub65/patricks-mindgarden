@@ -2,50 +2,74 @@
 title: "Sponti"
 kind: "case-study"
 category: "ux-ui"
-summary: "A mobile-first app for finding spontaneous local events — designed, built, and shipped solo. Because sometimes the best brief is the one you write yourself."
-tags: ["product design", "UX research", "mobile app", "Next.js", "solo project"]
-externalUrl: "https://sponti.app"
-date: "2024"
+summary: "A social app for spontaneous meetups. I led a four-person team from a blank Miro board to a shipped React PWA in 16 days — owning the product definition, the UX/UI, and a share of the frontend build."
+heroImage: "/images/creating/sponti/hero.webp"
+tags: ["product design", "UX/UI", "frontend", "AI-augmented", "PWA"]
+externalUrl: "https://sponti.fun"
+date: "2026"
 ---
 
 ## The problem
 
-Berlin runs on spontaneous plans. A friend texts: *there's something at Klunkerkranich tonight, want to come?* But finding those things yourself — without already being in the right group chat — is weirdly hard. Ticketing platforms optimise for planned events. Social networks optimise for followers. The gap is today, near me, low commitment.
+Five tools, ten threads, and no one wants to be first to ask. By the time a plan forms, the moment's gone — even though 1 in 4 adults say they have no close friends to call. Spontaneous plans die in the gap between *I'm free* and *who's in?*, because making the first move is socially expensive and logistically annoying.
 
-Sponti is an attempt to fill that gap.
+Sponti makes "I'm free, who's in?" a ten-second gesture. You light a flare, your circles see it, people join. That's the whole product.
 
 ## The role
 
-I designed and built this one end-to-end: user research, product strategy, visual design, frontend engineering. The dual role isn't incidental to the project — it's part of why it exists. A lot of the decisions that made Sponti what it is came from being able to move fluidly between design and code without a handoff in between.
+I was Product Owner, UX/UI designer, and a share of the frontend. I led a four-person team — design, frontend, backend, and PM/QA — from a blank Miro board to a shipped React PWA in **16 days**.
 
-## Research
+The point of owning both product definition and UX wasn't tidiness. It meant the thing we scoped on Monday and the thing we designed on Wednesday were the same thing, with no translation loss in between.
 
-I started by talking to people who go out regularly in Berlin: artists, freelancers, the chronically online. The consistent finding: they weren't missing information, they were missing *signal*. There's too much on every event aggregator, and none of it tells you how spontaneous, how casual, how worth leaving the couch this specific thing is.
+**Stack:** React · Next.js · TypeScript · PWA. **Status:** in user testing, 228+ commits and counting.
 
-Secondary insight: people are more likely to go to things that start soon. Temporal proximity is its own kind of filter. If it's happening in three hours, indecision doesn't have time to compound.
+## How I led the product
 
-## Design
+I ran the project as a tight three-step arc — discover, define, map — so we never designed ahead of what we'd actually agreed to build.
 
-The core UX principle was immediacy: show me what's happening *now* or *tonight*, nearby, without login friction. The browsing experience was designed to feel more like flipping through vinyl than searching a database — you see a card, you get a feel, you decide.
+**Discover.** I facilitated the scoping workshops that defined the core MVP and translated the output into a PRD. Decisions got made in the room, not in a backlog later.
 
-Key decisions:
+**Define.** From the MVP requirements I derived user stories, mapped the adjacent user tasks around each one, and prioritised the set for v1. Anything that wasn't load-bearing for the core loop got cut.
 
-**Radius-first navigation** — The default view isn't "Berlin" as a city, it's a radius from where you are. Events three blocks away feel different from events across town, and the interface should reflect that.
+**Map.** I laid the screens out as a sitemap tree and built user flows directly from the stories — so the structure of the app was a consequence of the journeys, not a guess.
 
-**Temporal sorting by default** — Soonest first, always. Not popularity, not rating — when it starts. The filter exists if you need it, but most users never touch it.
+![Discover, define, map: the Miro requirements board, the user storymap, and the sitemap with user flows](/images/creating/sponti/detail-01.webp)
 
-**Low-friction submission** — Organizers can post an event in under a minute. No venue database, no tag taxonomy, no required cover image. The friction for discovery is deliberately higher than the friction for submission.
+## The design system
 
-**Mobile as primary** — The entire design assumes you're making a decision while you're already on your way somewhere. Typography is large, tap targets are generous, loading states are invisible.
+The goal was to explore fast and ship consistent. I built Sponti's interface on **shadcn/ui** — accessible, unstyled primitives restyled to the brand. One source of truth for tokens kept every surface consistent while we moved quickly, and accessibility came for free rather than as a retrofit.
 
-## Build
+AI did the exploring before we committed to any one direction:
 
-Sponti is built with Next.js and Tailwind. The stack was chosen for speed of iteration more than anything else — I can design something in Figma at noon and have it deployed by evening. No separate API layer, no multi-environment pipeline to manage. Pragmatic, not precious.
+- **Variant** — scroll a feed of brand and layout directions and react to them, fast.
+- **Claude Design** — wireframe the key screens and generate variations.
+- **Figma Make** — turn a chosen direction into editable mockups.
 
-Being the designer and the engineer meant I could prototype at code-speed rather than mockup-speed. The real interaction felt different from the Figma prototype in ways that mattered, and I could respond to that immediately rather than writing a spec.
+![The Sponti design system — typography, components, and colour tokens — alongside the UI exploration board](/images/creating/sponti/detail-02.webp)
 
-## Live
+## Design to code
 
-Sponti is live at [sponti.app](https://sponti.app). It started as a Berlin-specific experiment. The codebase is on GitHub.
+AI did the bulk of the work. We did the steering — and that distinction is the whole story. This wasn't vibe coding. We used **Claude Code** and **Codex** to pressure-test the architecture and prototype the tricky components before building the real thing, then reviewed, corrected, and integrated everything by hand.
 
-The experience of building it changed how I think about product work: shipping something real, however small, teaches you things no user interview or design critique ever will.
+**What we built:**
+
+- Map and calendar in React — one data source, two views.
+- The "light a flare" creation flow, end to end.
+- The join-a-flare flow.
+- Send and accept connection requests.
+- Friend circles, including custom circles.
+- Privacy UI with re-share controls.
+- Notification and account preferences.
+
+![Three shipped screens — friend circles, the "light a flare" creation flow, and the calendar view](/images/creating/sponti/detail-03.webp)
+
+**How we steered the AI:**
+
+- Claude Code and Codex to define the architecture and spike components before implementing them for real.
+- AI-assisted tests and audits — accessibility and code review — before anything merged.
+
+## Outcome
+
+Sponti shipped as a working React PWA in 16 days and is currently in user testing, with 228+ commits and ongoing development. It's live at [sponti.fun](https://sponti.fun), and the code is on GitHub.
+
+The lesson stuck: with AI doing the bulk and a human doing the steering, a four-person team can take a product from blank board to shipped in the time it used to take to write the spec — *if* someone owns the definition tightly enough that the speed doesn't turn into drift.
