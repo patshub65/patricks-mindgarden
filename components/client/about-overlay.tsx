@@ -2,7 +2,14 @@
 
 import { m, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
+import Image from "next/image"
 import { X } from "@phosphor-icons/react"
+
+const linkStyle = {
+  color: 'var(--color-moss)',
+  textDecoration: 'none',
+  borderBottom: '1px solid var(--color-moss)',
+} as const
 
 interface AboutOverlayProps {
   open: boolean
@@ -72,35 +79,28 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
               {/* Avatar area */}
               <div style={{
                 width: '100%',
-                aspectRatio: '4/3',
+                aspectRatio: '1/1',
                 borderRadius: 16,
                 overflow: 'hidden',
                 background: 'var(--color-sage)',
                 position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
               }}>
-                <div style={{
-                  width: 80, height: 80, borderRadius: '50%',
-                  background: 'var(--color-moss)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <span style={{
-                    fontFamily: 'var(--font-display)',
-                    fontStyle: 'normal',
-                    fontSize: 36,
-                    color: 'var(--color-butter)',
-                    fontVariationSettings: '"opsz" 36, "SOFT" 100',
-                  }}>P</span>
-                </div>
+                <Image
+                  src="/images/about/patrick.jpg"
+                  alt="Patrick Caire"
+                  fill
+                  sizes="(max-width: 480px) 100vw, 480px"
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
+                  priority
+                />
                 <div style={{
                   position: 'absolute', bottom: 14, left: 16,
                   fontFamily: 'var(--font-mono)', fontSize: 12,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: 'var(--color-ink-muted)',
+                  color: 'var(--color-butter)',
+                  textShadow: '0 1px 6px rgba(0,0,0,0.4)',
                 }}>
-                  Berlin, 2025
+                  Berlin, 2026
                 </div>
               </div>
 
@@ -116,24 +116,41 @@ export default function AboutOverlay({ open, onClose }: AboutOverlayProps) {
                   Patrick Caire
                 </div>
                 <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.65, color: 'var(--color-ink)' }}>
-                  I&rsquo;m a designer, creative developer, and music nerd living in Berlin.
-                  I work across UX, web, brand, and code — usually at the point where the brief
-                  gets interesting and the tools start feeling like instruments.
+                  I&rsquo;m a Berlin-based designer who&rsquo;s spent the last seven-ish years refusing to
+                  pick one medium — brand, web, photography, video, illustration, the occasional record.
+                  I like the spots where disciplines overlap; that&rsquo;s usually where the work feels
+                  most meaningful.
                 </p>
                 <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.65, color: 'var(--color-ink)' }}>
-                  Currently open to new opportunities — especially teams where design and engineering sit at the same table.
+                  I grew up in France in a bilingual family, then lived in the UK, Canada, and now Berlin.
+                  My education wandered too — from PoliSci to Design Thinking before I specialised in
+                  visual communication. I cut my teeth at a couple of agencies, then ran my own studio
+                  for a few years.
                 </p>
                 <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.65, color: 'var(--color-ink)' }}>
-                  When I&rsquo;m not designing, I&rsquo;m making music, pressing vinyl, and DJing as{' '}
-                  <a
-                    href="https://soundcloud.com/uferkind"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: 'var(--color-moss)', textDecoration: 'none', borderBottom: '1px solid var(--color-moss)' }}
-                  >
+                  That broad background shapes how I work. Whatever the medium or industry, the process
+                  holds: discover, research, ideate, prototype, test, iterate. And in the age of AI,
+                  I&rsquo;ve made a point of folding these new tools into that process rather than around it.
+                </p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.65, color: 'var(--color-ink)' }}>
+                  Case in point: right now I&rsquo;m learning to code — partly to build my own ideas end to
+                  end instead of handing them off, partly so I actually know what I&rsquo;m steering when
+                  the tools do the heavy lifting.
+                </p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.65, color: 'var(--color-ink)' }}>
+                  The other half of my life is music: producing as{' '}
+                  <a href="https://www.instagram.com/motifs.music" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                    motifs.music
+                  </a>
+                  , DJing as{' '}
+                  <a href="https://soundcloud.com/uferkind" target="_blank" rel="noopener noreferrer" style={linkStyle}>
                     Uferkind
                   </a>
-                  .
+                  , and curating House music events for{' '}
+                  <a href="https://www.bananasrberries.com/" target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                    bananas are berries
+                  </a>
+                  , a series I co-create.
                 </p>
               </div>
             </div>
