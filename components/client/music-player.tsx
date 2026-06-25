@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from "react"
 import { m, AnimatePresence } from "framer-motion"
 import { Play, Pause, X } from "@phosphor-icons/react"
 
-const TRACK_SRC = "/music/track.mp3" // drop your MP3 here
-const TRACK_TITLE = "untitled — Patrick Caire"
+const TRACK_SRC = "/music/happily-exhausted.mp3"
+const TRACK_TITLE = "Happily Exhausted — Patrick Caire"
 
 const SPRING = { type: "spring" as const, stiffness: 260, damping: 28 }
 
