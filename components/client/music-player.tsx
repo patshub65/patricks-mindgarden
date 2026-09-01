@@ -3,22 +3,12 @@
 import { useState, useRef, useEffect } from "react"
 import { m, AnimatePresence } from "framer-motion"
 import { Play, Pause, X } from "@phosphor-icons/react"
+import { useCornerLabelStyle } from "@/components/client/use-corner-label-style"
 
-const TRACK_SRC = "/music/happily-exhausted.mp3"
-const TRACK_TITLE = "Happily Exhausted — Patrick Caire"
+const TRACK_SRC = "/music/uferkind-jigsaw.mp3"
+const TRACK_TITLE = "Jigsaw — UFERKIND"
 
 const SPRING = { type: "spring" as const, stiffness: 260, damping: 28 }
-
-const LABEL_STYLE = {
-  fontFamily: "var(--font-body)",
-  fontSize: 13,
-  color: "rgba(255,255,255,0.82)",
-  letterSpacing: "0.01em",
-  pointerEvents: "none" as const,
-  userSelect: "none" as const,
-  textShadow: "0 1px 3px rgba(0,0,0,0.18)",
-  whiteSpace: "nowrap" as const,
-}
 
 function fmt(s: number) {
   if (!s || isNaN(s)) return "0:00"
@@ -35,6 +25,7 @@ export default function MusicPlayer() {
   const [buttonHovered, setButtonHovered] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
   const rafRef = useRef<number>(0)
+  const labelStyle = useCornerLabelStyle()
 
   useEffect(() => {
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
@@ -89,6 +80,7 @@ export default function MusicPlayer() {
       <audio
         ref={audioRef}
         src={TRACK_SRC}
+        preload="metadata"
         aria-label={TRACK_TITLE}
         onLoadedMetadata={() => setDuration(audioRef.current?.duration ?? 0)}
         onEnded={() => { setPlaying(false); setProgress(0) }}
@@ -213,7 +205,7 @@ export default function MusicPlayer() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 4 }}
                 transition={{ duration: 0.15 }}
-                style={LABEL_STYLE}
+                style={labelStyle}
               >
                 play my music
               </m.span>
