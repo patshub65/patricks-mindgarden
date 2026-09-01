@@ -15,9 +15,9 @@ export default function DatenschutzPage() {
         <br />
         Patrick Caire
         <br />
-      [Schwedenstr. 3A]
+        Schwedenstr. 3A
         <br />
-        [13357 Berlin]
+        13357 Berlin
         <br />
         Deutschland
         <br />

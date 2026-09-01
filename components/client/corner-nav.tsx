@@ -4,19 +4,9 @@ import { useState } from "react"
 import { m, AnimatePresence } from "framer-motion"
 import { EnvelopeSimple, LinkedinLogo, DownloadSimple, ShareNetwork, User } from "@phosphor-icons/react"
 import AboutOverlay from "@/components/client/about-overlay"
+import { useCornerLabelStyle } from "@/components/client/use-corner-label-style"
 
 const SPRING = { type: "spring" as const, stiffness: 300, damping: 28 }
-
-const LABEL_STYLE = {
-  fontFamily: "var(--font-body)",
-  fontSize: 13,
-  color: "rgba(255,255,255,0.82)",
-  letterSpacing: "0.01em",
-  pointerEvents: "none" as const,
-  userSelect: "none" as const,
-  textShadow: "0 1px 3px rgba(0,0,0,0.18)",
-  whiteSpace: "nowrap" as const,
-}
 
 const CONTACT_ITEMS = [
   {
@@ -38,6 +28,7 @@ const GAP = 8
 function ContactFan() {
   const [open, setOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
+  const labelStyle = useCornerLabelStyle()
 
   return (
     <div style={{ position: "relative" }}>
@@ -90,7 +81,7 @@ function ContactFan() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -4 }}
               transition={{ duration: 0.15 }}
-              style={LABEL_STYLE}
+              style={labelStyle}
             >
               reach out
             </m.span>
@@ -105,6 +96,7 @@ export default function CornerNav() {
   const [aboutOpen, setAboutOpen] = useState(false)
   const [aboutHovered, setAboutHovered] = useState(false)
   const [downloadHovered, setDownloadHovered] = useState(false)
+  const labelStyle = useCornerLabelStyle()
 
   return (
     <>
@@ -128,7 +120,7 @@ export default function CornerNav() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -4 }}
               transition={{ duration: 0.15 }}
-              style={LABEL_STYLE}
+              style={labelStyle}
             >
               about me
             </m.span>
@@ -153,7 +145,7 @@ export default function CornerNav() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 4 }}
               transition={{ duration: 0.15 }}
-              style={LABEL_STYLE}
+              style={labelStyle}
             >
               download portfolio
             </m.span>
