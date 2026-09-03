@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { m, useReducedMotion } from "framer-motion"
 import { resolveLayout } from "@/lib/cards"
 import IllustrationCard from "@/components/client/illustration-card"
@@ -16,6 +16,10 @@ const DONE_DELAY_MS = TOTAL_CARDS * CARD_STAGGER_S * 1000 + 700
 
 export default function MindgardenScene() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  // Cards all share a resting z-index, so paint order falls back to DOM order.
+  // Dragging one over a later sibling would bury it and swallow its pointer
+  // events, so track the order cards were last touched in and restack them.
+  const [stackOrder, setStackOrder] = useState<string[]>([])
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [viewSize, setViewSize] = useState({ w: 1440, h: 800 })
   const [mounted, setMounted] = useState(false)
@@ -49,6 +53,24 @@ export default function MindgardenScene() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [expandedId])
+
+  const raiseCard = useCallback((id: string) => {
+    setStackOrder(prev =>
+      prev[prev.length - 1] === id ? prev : [...prev.filter(x => x !== id), id]
+    )
+  }, [])
+
+  // Bounded band: 8 (untouched) .. 8 + card count, always below the
+  // click-outside scrim (80) and the expanded card (90).
+  const restingZ = useCallback((id: string) => {
+    const i = stackOrder.indexOf(id)
+    return i === -1 ? 8 : 9 + i
+  }, [stackOrder])
+
+  const expandCard = useCallback((id: string) => {
+    raiseCard(id)
+    setExpandedId(id)
+  }, [raiseCard])
 
   const introDone = phase === "done"
   const layout    = useMemo(() => resolveLayout(viewSize.w, viewSize.h), [viewSize])
@@ -174,7 +196,7 @@ export default function MindgardenScene() {
           return (
             <m.div
               key={card.id}
-              style={{ pointerEvents: "auto", position: "absolute", left: 0, top: 0, zIndex: isExpanded ? 90 : 8 }}
+              style={{ pointerEvents: "auto", position: "absolute", left: 0, top: 0, zIndex: isExpanded ? 90 : restingZ(card.id) }}
               initial={initial}
               animate={{
                 opacity: 1,
@@ -203,7 +225,8 @@ export default function MindgardenScene() {
                 floatDur={7 + (card.entrance.rank % 4)}
                 isExpanded={isExpanded}
                 isDimmed={isDimmed}
-                onExpand={setExpandedId}
+                onExpand={expandCard}
+                onRaise={() => raiseCard(card.id)}
                 onCollapse={() => setExpandedId(null)}
                 onOverlay={card.id === 'visuals' ? () => setGalleryOpen(true) : undefined}
               />
