@@ -50,6 +50,8 @@ interface IllustrationCardProps {
   onExpand: (id: string) => void
   onCollapse: () => void
   onOverlay?: () => void
+  /** Lift this card above its siblings — the scene owns cross-card paint order. */
+  onRaise?: () => void
 }
 
 function ProjectThumb({ project }: { project: CardProject }) {
@@ -272,7 +274,7 @@ export default function IllustrationCard({
   id, label, description, accentBg, projects,
   size, homeX, homeY, canvasW, canvasH, draggable, physics,
   floatDelay, floatDur,
-  isExpanded, isDimmed, onExpand, onCollapse, onOverlay,
+  isExpanded, isDimmed, onExpand, onCollapse, onOverlay, onRaise,
 }: IllustrationCardProps) {
   const prefersReducedMotion = useReducedMotion()
   const mx = useMotionValue(0)
@@ -383,7 +385,7 @@ export default function IllustrationCard({
         zIndex: isDragging ? 100 : expandedZIndex,
         cursor: isExpanded ? 'default' : !draggable ? 'pointer' : isDragging ? 'grabbing' : 'grab',
       }}
-      onDragStart={() => { stopInertia(); setIsDragging(true); hasDragged.current = true }}
+      onDragStart={() => { stopInertia(); onRaise?.(); setIsDragging(true); hasDragged.current = true }}
       onDragEnd={(_, info: PanInfo) => {
         setIsDragging(false)
         if (physics) startInertia(info.velocity.x, info.velocity.y)
@@ -456,6 +458,11 @@ export default function IllustrationCard({
               position: 'absolute',
               top: 0, left: 0,
               width: size, height: size,
+              // Absolutely positioned, so it paints above the in-flow expanded
+              // content. Once faded out it must stop taking hits, or it swallows
+              // clicks and drags over the top-left `size`x`size` of the open panel
+              // — which is exactly where the scroll strips sit.
+              pointerEvents: isExpanded ? 'none' : 'auto',
             }}
           >
             <Image
