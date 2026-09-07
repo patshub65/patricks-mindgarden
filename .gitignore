@@ -36,3 +36,6 @@ next-env.d.ts
 
 # raw source assets (PDFs, source images) — converted into /public, not deployed
 content/raw/
+
+# browser-automation debris from local tooling
+.playwright-mcp/

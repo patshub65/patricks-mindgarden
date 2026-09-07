@@ -1,6 +1,0 @@
-[    1198ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14537
-[    1756ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/music/track.mp3:0
-[    1802ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/favicon.ico:0
-[    2271ms] [WARNING] Image with src "/images/cards/card-writing.png" was detected as the Largest Contentful Paint (LCP). Please add the "priority" property if this image is above the fold.
-Read more: https://nextjs.org/docs/api-reference/next/image#priority @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_b0daae9a._.js:968
-[   85913ms] [ERROR] WebSocket connection to 'ws://localhost:3001/_next/webpack-hmr' failed:  @ http://localhost:3001/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5696
