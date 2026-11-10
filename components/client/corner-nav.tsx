@@ -152,7 +152,7 @@ export default function CornerNav() {
           )}
         </AnimatePresence>
         <a
-          href="/patrick-caire-portfolio-2026-sm.pdf"
+          href="/patrick-caire-portfolio-2026-web.pdf"
           download
           className="corner-btn"
           aria-label="Download portfolio"
