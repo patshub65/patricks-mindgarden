@@ -12,10 +12,10 @@ Patrick Caire's portfolio — Berlin-based product/UX/UI designer who codes. Dom
 
 ## Stack
 
-- **Next.js 15** (App Router, RSC default) — use `next dev --turbopack` for local dev
+- **Next.js 16** (App Router, RSC default, Turbopack by default) — `npm run dev`; lint with `npm run lint` (ESLint CLI, `next lint` is gone)
 - **React 19**
 - **Tailwind v4** (`@theme` block for tokens; no legacy `tailwind.config.js`)
-- **Framer Motion v12** — primary motion library
+- **Framer Motion v14** — primary motion library
 - **MDX** — content in `/content/creating/{slug}.mdx`
 - **`next/font/google`** — Fraunces + Manrope
 - **`@phosphor-icons/react`** — icons, strokeWidth 1.5 globally
